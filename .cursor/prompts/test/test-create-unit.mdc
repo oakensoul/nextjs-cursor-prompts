@@ -1,0 +1,152 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Create Unit Tests
+
+**FOCUS: Unit tests for components, server actions, API routes, utilities, and hooks**
+
+**FOLLOW MINIMAL CHANGE PRINCIPLES: When creating tests, preserve existing code patterns and architecture. Do not modify working code - only add tests alongside existing functionality.**
+
+Please create comprehensive unit test coverage for the code I'm working on, following our vitest-based testing standards.
+
+## 🧪 **MANDATORY TESTING FRAMEWORK REQUIREMENTS**
+
+### Testing Stack (NO EXCEPTIONS)
+- **Primary Framework**: vitest (NEVER Jest)
+- **DOM Environment**: happy-dom  
+- **Component Testing**: @testing-library/react
+- **User Interactions**: @testing-library/user-event
+- **Mocking**: Built-in vitest mocking capabilities
+
+### File Structure & Naming (STRICTLY ENFORCED)
+- **Location**: Co-located in `__tests__/` subdirectories next to components
+- **Unit Tests**: `ComponentName.test.tsx` or `function-name.test.ts`
+
+## 📋 **UNIT TEST REQUIREMENTS**
+
+### Components Must Test:
+- [ ] Basic rendering with default props
+- [ ] All prop variations and combinations
+- [ ] User interactions (clicks, form input, etc.)
+- [ ] Error states and error boundaries
+- [ ] Loading states (if applicable)
+- [ ] Conditional rendering logic
+- [ ] Event handlers and callbacks
+
+### Server Actions Must Test:
+- [ ] Success cases with valid input
+- [ ] Error handling and validation
+- [ ] Input sanitization and validation
+- [ ] Return value structure and types
+- [ ] Side effects (database operations, etc.)
+
+### API Routes Must Test:
+- [ ] All HTTP methods (GET, POST, PUT, DELETE)
+- [ ] Request/response handling
+- [ ] Authentication and authorization
+- [ ] Input validation and sanitization
+- [ ] Error responses and status codes
+
+### Utilities/Hooks Must Test:
+- [ ] Core functionality and behavior
+- [ ] Edge cases and boundary conditions
+- [ ] Error conditions and handling
+- [ ] All function parameters and return types
+
+## 🔧 **IMPLEMENTATION STANDARDS**
+
+### Unit Test Template
+```typescript
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, it, expect, vi } from 'vitest'
+import { ComponentName } from './ComponentName'
+
+describe('ComponentName', () => {
+  it('should render correctly', () => {
+    render(<ComponentName />)
+    expect(screen.getByRole('button')).toBeInTheDocument()
+  })
+  
+  it('should handle user interactions', async () => {
+    const user = userEvent.setup()
+    const mockHandler = vi.fn()
+    render(<ComponentName onClick={mockHandler} />)
+    
+    await user.click(screen.getByRole('button'))
+    expect(mockHandler).toHaveBeenCalledOnce()
+  })
+  
+  it('should handle error states', () => {
+    render(<ComponentName error="Something went wrong" />)
+    expect(screen.getByText('Something went wrong')).toBeInTheDocument()
+  })
+})
+```
+
+### Test Data & Mocking Standards
+- [ ] Use centralized test utilities from `@/test/utils/`
+- [ ] Import mock data from `@/test/fixtures/`
+- [ ] Mock external dependencies at service boundaries
+- [ ] Preserve existing code - DO NOT modify working components
+
+## 📊 **COVERAGE REQUIREMENTS**
+
+### Minimum Coverage Targets (ENFORCED)
+- **Statements**: 80%
+- **Branches**: 80%  
+- **Functions**: 80%
+- **Lines**: 80%
+
+## 🎯 **MINIMAL CHANGE COMPLIANCE**
+
+### PRESERVE (Do Not Modify):
+- [ ] Existing component implementations
+- [ ] Current file structure and organization
+- [ ] Working functionality and business logic
+- [ ] Existing prop interfaces and APIs
+- [ ] Current styling and UI behavior
+
+### ADD ONLY:
+- [ ] Test files in appropriate `__tests__/` directories
+- [ ] Test utilities if needed (in `@/test/utils/`)
+- [ ] Mock data if needed (in `@/test/fixtures/`)
+- [ ] `data-testid` attributes ONLY if needed for testing
+
+## 🚀 **TEST EXECUTION & VALIDATION**
+
+### MANDATORY: Run Tests Before Completion
+```bash
+npm run test:unit
+npm run test:coverage
+```
+
+### Test Results Requirements
+- [ ] ALL tests must pass
+- [ ] No console errors or warnings
+- [ ] Coverage targets must be met
+
+## 📝 **DELIVERABLES CHECKLIST**
+
+**YOU MUST PROVIDE:**
+- [ ] **Unit test file** for each applicable file
+- [ ] **Test execution results** showing all tests pass
+- [ ] **Coverage report** showing minimum thresholds met
+- [ ] **Complete inventory** of all files analyzed
+- [ ] **Test coverage summary** for each file
+
+## 🚨 **QUALITY GATES**
+
+### Before Completion, Verify:
+- [ ] All tests are written using vitest (NO Jest)
+- [ ] All tests follow our naming and structure conventions
+- [ ] Test files are co-located in `__tests__/` directories
+- [ ] All tests pass when executed
+- [ ] Coverage requirements are met
+- [ ] No existing code was modified unnecessarily
+
+---
+
+**Goal: Comprehensive unit test coverage that preserves existing functionality while ensuring quality and maintainability.**

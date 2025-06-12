@@ -1,0 +1,722 @@
+---
+description: Comprehensive prompt for creating new React components following project standards
+globs: 
+alwaysApply: false
+---
+---
+title: Component Creation Guide
+description: Enhanced comprehensive prompt for creating new React components with intelligent routing to specialized domain prompts
+tags: [prompt, component-creation, react, typescript, testing, accessibility, routing]
+version: 2.0.0
+lastUpdated: 2025-06-02
+usage: Use when creating new React components from scratch - intelligently routes to specialized prompts or provides general guidance
+audience: [claude, ai-assistants]
+scope: [component-architecture, file-structure, testing, accessibility, documentation, prompt-routing]
+related_prompts:
+  - "component-workflow-integration.mdc"
+  - "component-troubleshooting-guide.mdc"
+  - "component-create-form.mdc"
+  - "component-create-ui.mdc" 
+  - "component-create-layout.mdc"
+  - "component-create-card.mdc"
+  - "component-create-navigation.mdc"
+  - "component-create-marketing.mdc"
+  - "component-create-icon.mdc"
+  - "component-update-*.mdc"
+---
+
+# Component Creation Guide
+
+> **Enhanced general-purpose component creation prompt with intelligent routing to specialized domain prompts for optimal results.**
+
+## 🎯 **INTELLIGENT PROMPT ROUTING**
+
+### **Use Specialized Prompts First (Recommended)**
+
+Before using this general guide, consider if your component falls into these specialized domains:
+
+#### **📝 Form Components** → Use `component-create-form.mdc`
+- Login/registration forms, contact forms, surveys
+- Multi-step wizards, data entry forms
+- Form validation, field groups, dynamic fields
+- **When to use**: Any component primarily focused on data collection and validation
+
+#### **🎨 UI Components** → Use `component-create-ui.mdc`  
+- Buttons, inputs, modals, tooltips, dropdowns
+- Badges, avatars, progress indicators, alerts
+- Interactive elements, animations, state variations
+- **When to use**: Reusable interface elements with variants and interactions
+
+#### **📐 Layout Components** → Use `component-create-layout.mdc`
+- Headers, footers, sidebars, grid systems
+- Page layouts, section wrappers, containers
+- Responsive layouts, navigation structures
+- **When to use**: Components that structure and organize page content
+
+#### **🃏 Card Components** → Use `component-create-card.mdc`
+- Data display cards, product cards, profile cards
+- Info panels, feature cards, content blocks
+- Interactive cards, selection states, card lists
+- **When to use**: Components that display structured content in card format
+
+#### **🧭 Navigation Components** → Use `component-create-navigation.mdc`
+- Main navigation menus, sidebars, breadcrumbs
+- Tab navigation, pagination, menu systems
+- Navigation accessibility and responsive patterns
+- **When to use**: Components that help users navigate through the application
+
+#### **📢 Marketing Components** → Use `component-create-marketing.mdc`
+- Hero sections, landing pages, feature blocks
+- Call-to-action buttons, conversion optimization
+- SEO-friendly marketing content, testimonials
+- **When to use**: Components focused on marketing and conversion goals
+
+#### **🎨 Icon Components** → Use `component-create-icon.mdc`
+- SVG icons, icon systems, graphic elements
+- Accessible icons with proper ARIA labels
+- Consistent icon sizing and styling patterns
+- **When to use**: SVG-based visual elements and icon systems
+
+### **🔄 Advanced Integration Resources**
+
+For complex multi-prompt workflows and optimization:
+- **📋 Workflow Integration Guide** → Use `component-workflow-integration.mdc`
+- **🛠️ Troubleshooting Guide** → Use `component-troubleshooting-guide.mdc`
+
+### **When to Use This General Guide**
+
+Use this general prompt for:
+- **Complex hybrid components** spanning multiple domains
+- **Specialized business logic components** not covered by domain prompts
+- **Custom component types** unique to your application
+- **Learning and exploration** when unsure which specialized prompt fits
+
+---
+
+# Enhanced Component Creation Guide
+
+> **Enhanced general-purpose component creation prompt with intelligent routing to specialized domain prompts for optimal results.**
+
+## 🎯 **INTELLIGENT PROMPT ROUTING**
+
+### **Use Specialized Prompts First (Recommended)**
+
+Before using this general guide, consider if your component falls into these specialized domains:
+
+#### **📝 Form Components** → Use `component-create-form.mdc`
+- Login/registration forms, contact forms, surveys
+- Multi-step wizards, data entry forms
+- Form validation, field groups, dynamic fields
+- **When to use**: Any component primarily focused on data collection and validation
+
+#### **🎨 UI Components** → Use `component-create-ui.mdc`  
+- Buttons, inputs, modals, tooltips, dropdowns
+- Badges, avatars, progress indicators, alerts
+- Interactive elements, animations, state variations
+- **When to use**: Reusable interface elements with variants and interactions
+
+#### **📐 Layout Components** → Use `component-create-layout.mdc`
+- Headers, footers, sidebars, grid systems
+- Page layouts, section wrappers, containers
+- Responsive layouts, navigation structures
+- **When to use**: Components that structure and organize page content
+
+#### **🃏 Card Components** → Use `component-create-card.mdc`
+- Data display cards, product cards, profile cards
+- Info panels, feature cards, content blocks
+- Interactive cards, selection states, card lists
+- **When to use**: Components that display structured content in card format
+
+#### **🧭 Navigation Components** → Use `component-create-navigation.mdc`
+- Main navigation menus, sidebars, breadcrumbs
+- Tab navigation, pagination, menu systems
+- Navigation accessibility and responsive patterns
+- **When to use**: Components that help users navigate through the application
+
+#### **📢 Marketing Components** → Use `component-create-marketing.mdc`
+- Hero sections, landing pages, feature blocks
+- Call-to-action buttons, conversion optimization
+- SEO-friendly marketing content, testimonials
+- **When to use**: Components focused on marketing and conversion goals
+
+#### **🎨 Icon Components** → Use `component-create-icon.mdc`
+- SVG icons, icon systems, graphic elements
+- Accessible icons with proper ARIA labels
+- Consistent icon sizing and styling patterns
+- **When to use**: SVG-based visual elements and icon systems
+
+### **🔄 Advanced Integration Resources**
+
+For complex multi-prompt workflows and optimization:
+- **📋 Workflow Integration Guide** → Use `component-workflow-integration.mdc`
+- **🛠️ Troubleshooting Guide** → Use `component-troubleshooting-guide.mdc`
+
+### **When to Use This General Guide**
+
+Use this general prompt for:
+- **Complex hybrid components** spanning multiple domains
+- **Specialized business logic components** not covered by domain prompts
+- **Custom component types** unique to your application
+- **Learning and exploration** when unsure which specialized prompt fits
+
+---
+
+## 📋 **COMPONENT PLANNING**
+
+### **Step 1: Domain Assessment**
+```typescript
+// Evaluate component domain before proceeding
+interface ComponentDomainAnalysis {
+  primaryPurpose: 'form' | 'ui' | 'layout' | 'card' | 'business-logic' | 'hybrid';
+  interactionLevel: 'none' | 'basic' | 'complex';
+  dataHandling: 'display-only' | 'collection' | 'manipulation';
+  specializedPromptMatch: string | null;
+  proceedWithGeneral: boolean;
+}
+```
+
+### **Step 2: Component Type Determination**
+- **Client Component** (`src/components/client/`): Interactive, uses hooks, browser APIs, user interactions
+- **Server Component** (`src/components/server/`): Static, data fetching, no interactivity, SEO-focused
+- **Hybrid Component**: Server component wrapper with client component children
+
+### **Step 3: Directory Selection**
+Enhanced directory structure with domain alignment:
+
+```
+src/components/
+├── client/
+│   ├── forms/           # → Use component-create-form.mdc
+│   ├── ui/              # → Use component-create-ui.mdc  
+│   ├── layout/          # → Use component-create-layout.mdc
+│   ├── navigation/      # → Use component-create-navigation.mdc
+│   ├── icons/           # → Use component-create-icon.mdc
+│   └── business/        # → Use this general guide
+├── server/
+│   ├── cards/           # → Use component-create-card.mdc
+│   ├── layout/          # → Use component-create-layout.mdc
+│   ├── marketing/       # → Use component-create-marketing.mdc
+│   └── content/         # → Use this general guide
+└── shared/
+    ├── types/           # → Use this general guide
+    ├── hooks/           # → Use this general guide
+    └── utils/           # → Use this general guide
+```
+
+---
+
+## 🏗️ **ENHANCED IMPLEMENTATION**
+
+### **Step 4: File Structure Requirements**
+
+**Standard Structure:**
+```
+component-name/
+├── ComponentName.tsx              # Main component (PascalCase)
+├── types.ts                       # TypeScript interfaces (if complex)
+├── hooks/                         # Custom hooks (if applicable)
+│   └── useComponentName.ts
+├── utils/                         # Component utilities (if applicable)
+│   └── componentHelpers.ts
+├── __tests__/                     # Test directory
+│   ├── ComponentName.test.tsx
+│   ├── ComponentName.a11y.test.tsx (for UI components)
+│   └── ComponentName.integration.test.tsx (if needed)
+├── stories/                       # Storybook stories (if applicable)
+│   └── ComponentName.stories.tsx
+└── README.md                      # Component documentation (if complex)
+```
+
+### **Step 5: Enhanced Component Implementation**
+
+```typescript
+// Enhanced component template with full TypeScript support
+import React, { memo, forwardRef } from 'react';
+import { cn } from '@/lib/utils';
+
+/**
+ * Props interface for ComponentName
+ * @interface ComponentNameProps
+ */
+interface ComponentNameProps {
+  /** Primary content of the component */
+  children?: React.ReactNode;
+  /** CSS class names to apply */
+  className?: string;
+  /** Component variant */
+  variant?: 'default' | 'primary' | 'secondary';
+  /** Component size */
+  size?: 'sm' | 'md' | 'lg';
+  /** Loading state */
+  loading?: boolean;
+  /** Disabled state */
+  disabled?: boolean;
+  /** Accessibility label */
+  'aria-label'?: string;
+  /** Test identifier */
+  'data-testid'?: string;
+}
+
+/**
+ * ComponentName - Brief description of what this component does
+ * 
+ * @example
+ * ```tsx
+ * <ComponentName variant="primary" size="md">
+ *   Content here
+ * </ComponentName>
+ * ```
+ * 
+ * @param props - The component props
+ * @returns JSX element
+ */
+const ComponentName = memo(forwardRef<HTMLDivElement, ComponentNameProps>(({
+  children,
+  className,
+  variant = 'default',
+  size = 'md',
+  loading = false,
+  disabled = false,
+  'aria-label': ariaLabel,
+  'data-testid': testId,
+  ...props
+}, ref) => {
+  // Component logic here
+  const componentClasses = cn(
+    'base-component-classes',
+    {
+      'loading-classes': loading,
+      'disabled-classes': disabled,
+    },
+    `variant-${variant}`,
+    `size-${size}`,
+    className
+  );
+
+  return (
+    <div
+      ref={ref}
+      className={componentClasses}
+      aria-label={ariaLabel}
+      data-testid={testId || 'component-name'}
+      {...props}
+    >
+      {loading ? (
+        <div className="loading-indicator" aria-live="polite">
+          Loading...
+        </div>
+      ) : (
+        children
+      )}
+    </div>
+  );
+}));
+
+ComponentName.displayName = 'ComponentName';
+
+export { ComponentName };
+export type { ComponentNameProps };
+```
+
+### **Step 6: Enhanced Props Interface Design**
+
+```typescript
+// Advanced props interface patterns
+interface EnhancedComponentProps {
+  // Core props
+  children?: React.ReactNode;
+  className?: string;
+  
+  // Variant system
+  variant?: 'default' | 'primary' | 'secondary' | 'danger';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  
+  // State props
+  loading?: boolean;
+  disabled?: boolean;
+  error?: boolean;
+  
+  // Interaction props
+  onClick?: (event: React.MouseEvent) => void;
+  onFocus?: (event: React.FocusEvent) => void;
+  onBlur?: (event: React.FocusEvent) => void;
+  
+  // Advanced accessibility
+  role?: string;
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+  'aria-expanded'?: boolean;
+  
+  // Testing and analytics
+  'data-testid'?: string;
+  'data-track'?: string;
+  
+  // Performance
+  lazy?: boolean;
+  priority?: 'high' | 'normal' | 'low';
+}
+
+// Conditional props based on component type
+type ConditionalProps = 
+  | { interactive: true; onClick: (event: React.MouseEvent) => void }
+  | { interactive?: false; onClick?: never };
+
+// Final props interface combining base and conditional
+interface ComponentProps extends EnhancedComponentProps, ConditionalProps {}
+```
+
+---
+
+## 🧪 **ENHANCED TESTING STRATEGY**
+
+### **Step 7: Comprehensive Unit Tests**
+
+```typescript
+// Enhanced testing template
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { ComponentName } from '../ComponentName';
+
+describe('ComponentName', () => {
+  const user = userEvent.setup();
+  
+  describe('Rendering', () => {
+    it('should render with default props', () => {
+      render(<ComponentName>Test content</ComponentName>);
+      
+      expect(screen.getByTestId('component-name')).toBeInTheDocument();
+      expect(screen.getByText('Test content')).toBeInTheDocument();
+    });
+    
+    it('should apply custom className', () => {
+      render(<ComponentName className="custom-class">Content</ComponentName>);
+      
+      expect(screen.getByTestId('component-name')).toHaveClass('custom-class');
+    });
+    
+    it('should render all variants correctly', () => {
+      const variants = ['default', 'primary', 'secondary', 'danger'] as const;
+      
+      variants.forEach(variant => {
+        const { rerender } = render(
+          <ComponentName variant={variant}>Content</ComponentName>
+        );
+        
+        expect(screen.getByTestId('component-name')).toHaveClass(`variant-${variant}`);
+        
+        if (variant !== 'default') {
+          rerender(<ComponentName>Content</ComponentName>);
+        }
+      });
+    });
+  });
+  
+  describe('Interactions', () => {
+    it('should handle click events', async () => {
+      const mockClick = jest.fn();
+      render(
+        <ComponentName interactive onClick={mockClick}>
+          Clickable content
+        </ComponentName>
+      );
+      
+      await user.click(screen.getByTestId('component-name'));
+      
+      expect(mockClick).toHaveBeenCalledTimes(1);
+    });
+    
+    it('should handle keyboard interactions', async () => {
+      const mockClick = jest.fn();
+      render(
+        <ComponentName interactive onClick={mockClick}>
+          Content
+        </ComponentName>
+      );
+      
+      const component = screen.getByTestId('component-name');
+      component.focus();
+      
+      await user.keyboard('{Enter}');
+      expect(mockClick).toHaveBeenCalledTimes(1);
+      
+      await user.keyboard(' ');
+      expect(mockClick).toHaveBeenCalledTimes(2);
+    });
+  });
+  
+  describe('States', () => {
+    it('should show loading state correctly', () => {
+      render(<ComponentName loading>Content</ComponentName>);
+      
+      expect(screen.getByText('Loading...')).toBeInTheDocument();
+      expect(screen.queryByText('Content')).not.toBeInTheDocument();
+    });
+    
+    it('should handle disabled state', () => {
+      render(<ComponentName disabled>Content</ComponentName>);
+      
+      expect(screen.getByTestId('component-name')).toHaveClass('disabled-classes');
+    });
+  });
+  
+  describe('Error Boundaries', () => {
+    it('should handle errors gracefully', () => {
+      const ThrowError = () => {
+        throw new Error('Test error');
+      };
+      
+      const { container } = render(
+        <ComponentName>
+          <ThrowError />
+        </ComponentName>
+      );
+      
+      expect(container).toBeInTheDocument();
+      // Add error boundary testing logic
+    });
+  });
+});
+```
+
+### **Step 8: Accessibility Testing**
+
+```typescript
+// Enhanced accessibility testing
+import { expectNoA11yViolations } from '@/lib/test-utils';
+
+describe('ComponentName Accessibility', () => {
+  it('should have no accessibility violations', async () => {
+    render(<ComponentName>Accessible content</ComponentName>);
+    await expectNoA11yViolations();
+  });
+  
+  it('should support keyboard navigation', async () => {
+    const user = userEvent.setup();
+    render(
+      <div>
+        <ComponentName interactive>First</ComponentName>
+        <ComponentName interactive>Second</ComponentName>
+      </div>
+    );
+    
+    const firstComponent = screen.getByText('First');
+    const secondComponent = screen.getByText('Second');
+    
+    firstComponent.focus();
+    expect(firstComponent).toHaveFocus();
+    
+    await user.tab();
+    expect(secondComponent).toHaveFocus();
+  });
+  
+  it('should announce state changes to screen readers', async () => {
+    const { rerender } = render(<ComponentName>Content</ComponentName>);
+    
+    rerender(<ComponentName loading>Content</ComponentName>);
+    
+    await waitFor(() => {
+      expect(screen.getByLiveRegion()).toHaveTextContent('Loading...');
+    });
+  });
+  
+  it('should have proper ARIA attributes', () => {
+    render(
+      <ComponentName 
+        aria-label="Test component"
+        aria-describedby="description"
+      >
+        Content
+      </ComponentName>
+    );
+    
+    const component = screen.getByTestId('component-name');
+    expect(component).toHaveAttribute('aria-label', 'Test component');
+    expect(component).toHaveAttribute('aria-describedby', 'description');
+  });
+});
+```
+
+---
+
+## 🎨 **DESIGN SYSTEM INTEGRATION**
+
+### **Step 9: Enhanced Catalyst Integration**
+
+```typescript
+// Design token integration
+import { cva, type VariantProps } from 'class-variance-authority';
+
+const componentVariants = cva(
+  // Base classes
+  'transition-all duration-200 focus-visible:outline-none focus-visible:ring-2',
+  {
+    variants: {
+      variant: {
+        default: 'bg-white border border-gray-200 text-gray-900',
+        primary: 'bg-blue-600 border border-blue-600 text-white',
+        secondary: 'bg-gray-100 border border-gray-200 text-gray-900',
+        danger: 'bg-red-600 border border-red-600 text-white',
+      },
+      size: {
+        xs: 'px-2 py-1 text-xs',
+        sm: 'px-3 py-1.5 text-sm',
+        md: 'px-4 py-2 text-base',
+        lg: 'px-6 py-3 text-lg',
+        xl: 'px-8 py-4 text-xl',
+      },
+      state: {
+        default: '',
+        loading: 'opacity-75 cursor-wait',
+        disabled: 'opacity-50 cursor-not-allowed',
+        error: 'border-red-500 focus-visible:ring-red-500',
+      }
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+      state: 'default',
+    },
+  }
+);
+
+export type ComponentVariants = VariantProps<typeof componentVariants>;
+```
+
+---
+
+## 📚 **ENHANCED EXAMPLES**
+
+### **Example 1: Business Logic Component**
+```typescript
+// Complex business component not covered by specialized prompts
+const OrderSummaryCalculator: React.FC<OrderSummaryProps> = ({
+  items,
+  discounts,
+  taxRate,
+  shippingCost,
+  onCalculationComplete
+}) => {
+  // Complex business logic implementation
+  // Multi-step calculations, tax processing, discount application
+  // Real-time updates, currency formatting, internationalization
+};
+```
+
+### **Example 2: Hybrid Component**
+```typescript
+// Server wrapper with client interactivity
+const InteractiveDataTable: React.FC<DataTableProps> = ({
+  data,
+  serverSideFiltering = false
+}) => {
+  return (
+    <div className="data-table-container">
+      <ServerDataProvider data={data}>
+        <ClientSideFilters />
+        <InteractiveTable />
+        <PaginationControls />
+      </ServerDataProvider>
+    </div>
+  );
+};
+```
+
+---
+
+## 🚀 **ENHANCED DELIVERY CHECKLIST**
+
+### **Pre-Implementation**
+- [ ] **Domain analysis completed** - confirmed general guide is appropriate
+- [ ] **Specialized prompt compatibility** checked and documented
+- [ ] **Component architecture** planned with clear responsibilities
+- [ ] **Integration points** identified with existing system
+
+### **Core Implementation**
+- [ ] **Complete component implementation** with proper TypeScript
+- [ ] **Enhanced props interface** with comprehensive JSDoc documentation
+- [ ] **Error handling and loading states** properly implemented
+- [ ] **Accessibility features** built-in from the start
+- [ ] **Performance considerations** addressed (memoization, lazy loading)
+
+### **Testing & Quality**
+- [ ] **Unit test suite** with 80%+ coverage and comprehensive scenarios
+- [ ] **Accessibility test suite** with automated and manual testing
+- [ ] **Integration tests** (if component involves complex workflows)
+- [ ] **Performance testing** (render times, memory usage if applicable)
+- [ ] **Cross-browser compatibility** verified
+
+### **Documentation & Integration**
+- [ ] **README.md created** (for complex components)
+- [ ] **Storybook stories** (if component has multiple variants)
+- [ ] **Design system integration** documented
+- [ ] **Usage examples** and best practices provided
+- [ ] **Migration notes** (if replacing existing components)
+
+### **Standards Compliance**
+- [ ] **Vitest testing framework** used throughout
+- [ ] **File naming conventions** followed correctly
+- [ ] **Direct imports** used (no barrel imports)
+- [ ] **Component architecture** aligns with project standards
+- [ ] **Catalyst compatibility** maintained and extended appropriately
+
+---
+
+## 📖 **SPECIALIZED PROMPT QUICK REFERENCE**
+
+When in doubt, use this decision tree:
+
+```
+Is it primarily about data collection/validation?
+├─ YES → component-create-form.mdc
+└─ NO → Is it a reusable UI element with variants?
+    ├─ YES → component-create-ui.mdc  
+    └─ NO → Is it about page/content structure?
+        ├─ YES → component-create-layout.mdc
+        └─ NO → Does it display structured content in cards?
+            ├─ YES → component-create-card.mdc
+            └─ NO → Is it a navigation system?
+                ├─ YES → component-create-navigation.mdc
+                └─ NO → Is it marketing/conversion focused?
+                    ├─ YES → component-create-marketing.mdc
+                    └─ NO → Is it an icon/visual element?
+                        ├─ YES → component-create-icon.mdc
+                        └─ NO → Use this general guide
+```
+
+**Remember**: The specialized prompts provide deeper domain expertise, more targeted examples, and specific best practices. Use this general guide for unique cases or when learning the component creation process.
+
+---
+
+## 🔄 **INTEGRATED WORKFLOW RESOURCES**
+
+Need help with more complex component development workflows? Use these specialized resources:
+
+### **Multi-Prompt Workflows**
+For complex components requiring integration of multiple specialized prompts, refer to:
+- [**component-workflow-integration.mdc**](./component-workflow-integration.mdc) - Comprehensive workflow patterns, integration examples, and realistic development scenarios
+
+### **Troubleshooting & Best Practices**
+When facing integration challenges or seeking optimization strategies:
+- [**component-troubleshooting-guide.mdc**](./component-troubleshooting-guide.mdc) - Solutions for common issues, performance optimization, and component maintenance
+
+### **Development Path Recommendations**
+
+#### **Beginner Path:**
+1. Start with single-domain components using specialized prompts
+2. Use this general guide to understand component architecture
+3. Gradually build up to simple integrations (2 prompts)
+
+#### **Intermediate Path:**
+1. Work with more complex specialized prompts
+2. Integrate 2-3 component domains confidently
+3. Use the workflow integration guide for specific scenarios
+
+#### **Advanced Path:**
+1. Orchestrate complex development with 3+ prompt domains
+2. Contribute to component system optimization
+3. Create custom integration patterns 
+
+---
+
+**This enhanced guide maintains full backward compatibility while intelligently routing users to specialized prompts for optimal results. Use the specialized prompts first, fall back to this guide for edge cases and complex hybrid components.**

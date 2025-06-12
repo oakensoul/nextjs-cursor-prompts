@@ -1,0 +1,732 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Icon Component Creation Request
+
+**Please create a new icon component following our specialized icon patterns, SVG optimization principles, and accessibility standards.**
+
+## 🎯 **ICON CREATION OBJECTIVES:**
+
+1. **OPTIMIZE SVG performance** with efficient rendering, minimal file sizes, and build-time optimization
+2. **ENSURE accessibility compliance** with proper ARIA attributes, semantic usage, and screen reader support
+3. **INTEGRATE with design system** for consistent sizing, styling, and theming across all icons
+4. **PROVIDE flexible API** with multiple icon sources, dynamic loading, and customization options
+5. **FOLLOW performance standards** for bundle optimization, tree shaking, and runtime efficiency
+
+## 📋 **ICON DEVELOPMENT METHODOLOGY:**
+
+### **STEP 1: Icon Planning and Architecture**
+
+#### **Determine Icon Type and Location:**
+- **Client Component**: `src/components/client/icons/` - Interactive icons with state or animations
+- **Server Component**: `src/components/server/icons/` - Static icons for SSR optimization
+- **Icon Categories**:
+  - **System Icons**: UI elements, actions, states (`system/`)
+  - **Brand Icons**: Logos, social media, company branding (`brand/`)
+  - **Content Icons**: Illustrations, decorative elements (`content/`)
+  - **Custom Icons**: Project-specific iconography (`custom/`)
+
+#### **Icon Source Strategy:**
+- **Icon Libraries**: Heroicons, React Icons, Radix Icons, Lucide
+- **Custom SVGs**: Project-specific icons and illustrations
+- **Icon Fonts**: Legacy support and specific use cases
+- **Dynamic Icons**: Runtime-generated or API-sourced icons
+
+### **STEP 2: SVG Optimization and Performance**
+
+#### **SVG Optimization Pipeline:**
+```typescript
+// Optimized SVG icon component with build-time optimization
+interface IconProps {
+  /** Icon name or source */
+  name?: string
+  /** Custom SVG path or content */
+  svg?: string
+  /** Icon size (design system tokens) */
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number
+  /** Icon color (theme-aware) */
+  color?: 'current' | 'primary' | 'secondary' | 'muted' | string
+  /** Accessibility label */
+  label?: string
+  /** Decorative icon (hidden from screen readers) */
+  decorative?: boolean
+  /** Animation type */
+  animation?: 'none' | 'spin' | 'pulse' | 'bounce'
+  /** Additional CSS classes */
+  className?: string
+  /** Click handler for interactive icons */
+  onClick?: () => void
+  /** Test identifier */
+  'data-testid'?: string
+}
+
+const Icon = ({ 
+  name,
+  svg,
+  size = 'md',
+  color = 'current',
+  label,
+  decorative = false,
+  animation = 'none',
+  className,
+  onClick,
+  ...props 
+}) => {
+  const iconContent = useMemo(() => {
+    if (svg) {
+      return optimizeSVGContent(svg)
+    }
+    
+    if (name) {
+      return getIconFromLibrary(name)
+    }
+    
+    return null
+  }, [name, svg])
+
+  const sizeValue = useMemo(() => {
+    if (typeof size === 'number') return size
+    return getSizeFromToken(size)
+  }, [size])
+
+  const colorValue = useMemo(() => {
+    if (color === 'current') return 'currentColor'
+    return getColorFromTheme(color)
+  }, [color])
+
+  if (!iconContent) {
+    console.warn(`Icon not found: ${name}`)
+    return null
+  }
+
+  return (
+    <svg
+      width={sizeValue}
+      height={sizeValue}
+      viewBox={iconContent.viewBox}
+      fill={colorValue}
+      aria-label={decorative ? undefined : label}
+      aria-hidden={decorative}
+      role={decorative ? 'presentation' : 'img'}
+      className={cn(
+        'icon',
+        `icon-${size}`,
+        `icon-${animation}`,
+        onClick && 'icon-interactive',
+        className
+      )}
+      onClick={onClick}
+      {...props}
+    >
+      {iconContent.paths.map((path, index) => (
+        <path 
+          key={index} 
+          d={path.d} 
+          fillRule={path.fillRule}
+          clipRule={path.clipRule}
+        />
+      ))}
+    </svg>
+  )
+}
+```
+
+#### **Build-Time SVG Optimization:**
+```typescript
+// SVG optimization utilities for build process
+export const optimizeSVGContent = (svgString: string) => {
+  // Remove unnecessary attributes and whitespace
+  const cleaned = svgString
+    .replace(/\s+/g, ' ')
+    .replace(/<!--.*?-->/g, '')
+    .replace(/xmlns="[^"]*"/g, '')
+    .replace(/xml:space="[^"]*"/g, '')
+
+  // Extract viewBox and paths
+  const viewBoxMatch = cleaned.match(/viewBox="([^"]*)"/)
+  const pathMatches = cleaned.matchAll(/<path[^>]*d="([^"]*)"[^>]*>/g)
+
+  return {
+    viewBox: viewBoxMatch?.[1] || '0 0 24 24',
+    paths: Array.from(pathMatches).map(match => ({
+      d: match[1],
+      fillRule: match[0].includes('fill-rule') ? 
+        match[0].match(/fill-rule="([^"]*)")?.[1] : undefined,
+      clipRule: match[0].includes('clip-rule') ? 
+        match[0].match(/clip-rule="([^"]*)")?.[1] : undefined
+    }))
+  }
+}
+
+// Icon library integration
+export const getIconFromLibrary = (iconName: string) => {
+  // Dynamic import with tree shaking support
+  switch (iconName.split(':')[0]) {
+    case 'heroicons':
+      return import(`@heroicons/react/24/outline/${iconName.split(':')[1]}`)
+        .then(mod => optimizeSVGContent(mod.default))
+    case 'radix':
+      return import(`@radix-ui/react-icons/${iconName.split(':')[1]}`)
+        .then(mod => optimizeSVGContent(mod.default))
+    case 'lucide':
+      return import(`lucide-react/${iconName.split(':')[1]}`)
+        .then(mod => optimizeSVGContent(mod.default))
+    default:
+      return getCustomIcon(iconName)
+  }
+}
+```
+
+### **STEP 3: Accessibility Implementation**
+
+#### **Screen Reader and Keyboard Support:**
+```typescript
+// Accessible icon component with comprehensive a11y support
+const AccessibleIcon = ({ 
+  name,
+  label,
+  decorative = false,
+  interactive = false,
+  ...props 
+}) => {
+  const iconId = useId()
+  const labelId = useId()
+
+  // Interactive icon accessibility
+  if (interactive) {
+    return (
+      <button
+        type="button"
+        aria-labelledby={labelId}
+        className="icon-button"
+        onClick={props.onClick}
+      >
+        <Icon
+          name={name}
+          decorative={true}
+          aria-hidden={true}
+          {...props}
+        />
+        <span id={labelId} className="sr-only">
+          {label}
+        </span>
+      </button>
+    )
+  }
+
+  // Informative icon with proper labeling
+  if (!decorative && label) {
+    return (
+      <span className="icon-container" role="img" aria-labelledby={labelId}>
+        <Icon
+          name={name}
+          aria-hidden={true}
+          {...props}
+        />
+        <span id={labelId} className="sr-only">
+          {label}
+        </span>
+      </span>
+    )
+  }
+
+  // Decorative icon
+  return (
+    <Icon
+      name={name}
+      decorative={true}
+      aria-hidden={true}
+      {...props}
+    />
+  )
+}
+```
+
+#### **Icon Context and Semantic Usage:**
+```typescript
+// Context-aware icon usage patterns
+export const useIconContext = () => {
+  const getSemanticIcon = (context: string, state?: string) => {
+    const iconMap = {
+      'navigation': {
+        'default': 'heroicons:Bars3Icon',
+        'close': 'heroicons:XMarkIcon',
+        'back': 'heroicons:ArrowLeftIcon',
+        'forward': 'heroicons:ArrowRightIcon'
+      },
+      'status': {
+        'success': 'heroicons:CheckCircleIcon',
+        'error': 'heroicons:XCircleIcon',
+        'warning': 'heroicons:ExclamationTriangleIcon',
+        'info': 'heroicons:InformationCircleIcon'
+      },
+      'action': {
+        'edit': 'heroicons:PencilIcon',
+        'delete': 'heroicons:TrashIcon',
+        'save': 'heroicons:CheckIcon',
+        'cancel': 'heroicons:XMarkIcon'
+      }
+    }
+
+    return iconMap[context]?.[state || 'default']
+  }
+
+  const getAccessibilityLabel = (context: string, state?: string) => {
+    const labelMap = {
+      'navigation': {
+        'default': 'Open navigation menu',
+        'close': 'Close navigation menu',
+        'back': 'Go back',
+        'forward': 'Go forward'
+      },
+      'status': {
+        'success': 'Success',
+        'error': 'Error',
+        'warning': 'Warning',
+        'info': 'Information'
+      },
+      'action': {
+        'edit': 'Edit',
+        'delete': 'Delete',
+        'save': 'Save',
+        'cancel': 'Cancel'
+      }
+    }
+
+    return labelMap[context]?.[state || 'default']
+  }
+
+  return { getSemanticIcon, getAccessibilityLabel }
+}
+```
+
+### **STEP 4: Design System Integration**
+
+#### **Theme-Aware Icon Styling:**
+```typescript
+// Design system integration with theme support
+const useIconTheme = () => {
+  const theme = useTheme()
+
+  const getIconSize = (size: string | number) => {
+    if (typeof size === 'number') return `${size}px`
+    
+    const sizeMap = {
+      'xs': theme.spacing[3],   // 12px
+      'sm': theme.spacing[4],   // 16px
+      'md': theme.spacing[5],   // 20px
+      'lg': theme.spacing[6],   // 24px
+      'xl': theme.spacing[8]    // 32px
+    }
+    
+    return sizeMap[size] || sizeMap.md
+  }
+
+  const getIconColor = (color: string) => {
+    if (color === 'current') return 'currentColor'
+    
+    const colorMap = {
+      'primary': theme.colors.primary[600],
+      'secondary': theme.colors.secondary[600],
+      'muted': theme.colors.gray[400],
+      'success': theme.colors.green[600],
+      'warning': theme.colors.yellow[600],
+      'error': theme.colors.red[600]
+    }
+    
+    return colorMap[color] || theme.colors.gray[600]
+  }
+
+  return { getIconSize, getIconColor }
+}
+
+// Icon system configuration
+export const iconSystemConfig = {
+  defaultSize: 'md',
+  defaultColor: 'current',
+  animationDuration: '150ms',
+  hoverScale: 1.1,
+  activeScale: 0.95,
+  focusOutlineWidth: '2px',
+  focusOutlineColor: 'primary'
+}
+```
+
+#### **Icon Library Management:**
+```typescript
+// Centralized icon library with lazy loading
+class IconLibrary {
+  private cache = new Map()
+  private loadedLibraries = new Set()
+
+  async loadIcon(iconName: string): Promise<IconData> {
+    if (this.cache.has(iconName)) {
+      return this.cache.get(iconName)
+    }
+
+    const [library, name] = iconName.split(':')
+    
+    if (!this.loadedLibraries.has(library)) {
+      await this.loadLibrary(library)
+      this.loadedLibraries.add(library)
+    }
+
+    const iconData = await this.getIconData(library, name)
+    this.cache.set(iconName, iconData)
+    
+    return iconData
+  }
+
+  private async loadLibrary(library: string) {
+    switch (library) {
+      case 'heroicons':
+        await import('@heroicons/react/24/outline')
+        break
+      case 'radix':
+        await import('@radix-ui/react-icons')
+        break
+      case 'lucide':
+        await import('lucide-react')
+        break
+      default:
+        console.warn(`Unknown icon library: ${library}`)
+    }
+  }
+
+  private async getIconData(library: string, name: string): Promise<IconData> {
+    // Implementation for extracting icon data from libraries
+    // Returns optimized SVG data structure
+  }
+
+  getAvailableIcons(library?: string): string[] {
+    // Return list of available icons for development/documentation
+  }
+
+  preloadIcons(iconNames: string[]): Promise<void> {
+    // Preload critical icons for performance
+    return Promise.all(iconNames.map(name => this.loadIcon(name)))
+  }
+}
+
+export const iconLibrary = new IconLibrary()
+```
+
+### **STEP 5: Performance and Bundle Optimization**
+
+#### **Tree Shaking and Code Splitting:**
+```typescript
+// Dynamic icon loading with tree shaking
+const useDynamicIcon = (iconName?: string) => {
+  const [iconData, setIconData] = useState<IconData | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
+
+  useEffect(() => {
+    if (!iconName) return
+
+    setIsLoading(true)
+    setError(null)
+
+    iconLibrary.loadIcon(iconName)
+      .then(data => {
+        setIconData(data)
+        setIsLoading(false)
+      })
+      .catch(err => {
+        setError(err)
+        setIsLoading(false)
+      })
+  }, [iconName])
+
+  return { iconData, isLoading, error }
+}
+
+// Icon sprite generation for performance
+export const generateIconSprite = (iconNames: string[]) => {
+  // Generate SVG sprite for commonly used icons
+  // Reduces HTTP requests and improves caching
+  const sprite = iconNames.map(name => {
+    const iconData = iconLibrary.loadIcon(name)
+    return `
+      <symbol id="${name}" viewBox="${iconData.viewBox}">
+        ${iconData.paths.map(path => `<path d="${path.d}" />`).join('')}
+      </symbol>
+    `
+  }).join('')
+
+  return `
+    <svg style="display: none;">
+      <defs>
+        ${sprite}
+      </defs>
+    </svg>
+  `
+}
+```
+
+#### **Runtime Performance Optimization:**
+```typescript
+// Memoized icon rendering for performance
+const OptimizedIcon = memo(({ 
+  name, 
+  size, 
+  color, 
+  ...props 
+}: IconProps) => {
+  const { iconData, isLoading, error } = useDynamicIcon(name)
+  const { getIconSize, getIconColor } = useIconTheme()
+
+  const styles = useMemo(() => ({
+    width: getIconSize(size),
+    height: getIconSize(size),
+    color: getIconColor(color)
+  }), [size, color, getIconSize, getIconColor])
+
+  if (isLoading) {
+    return <IconSkeleton size={size} />
+  }
+
+  if (error || !iconData) {
+    return <IconFallback name={name} size={size} />
+  }
+
+  return (
+    <svg
+      style={styles}
+      viewBox={iconData.viewBox}
+      fill="currentColor"
+      {...props}
+    >
+      {iconData.paths.map((path, index) => (
+        <path key={index} d={path.d} />
+      ))}
+    </svg>
+  )
+})
+
+// Icon performance monitoring
+export const useIconPerformance = () => {
+  useEffect(() => {
+    // Monitor icon load times and cache hits
+    const observer = new PerformanceObserver((list) => {
+      list.getEntries().forEach((entry) => {
+        if (entry.name.includes('icon')) {
+          analytics.track('Icon Performance', {
+            iconName: entry.name,
+            loadTime: entry.duration,
+            fromCache: entry.transferSize === 0
+          })
+        }
+      })
+    })
+
+    observer.observe({ entryTypes: ['resource'] })
+    return () => observer.disconnect()
+  }, [])
+}
+```
+
+## ✅ **ICON IMPLEMENTATION REQUIREMENTS:**
+
+### **File Structure:**
+```
+icon-system/
+├── Icon.tsx                          # Main icon component
+├── components/
+│   ├── AccessibleIcon.tsx           # Accessibility-focused wrapper
+│   ├── IconButton.tsx               # Interactive icon button
+│   ├── IconSkeleton.tsx             # Loading state component
+│   └── IconFallback.tsx             # Error/missing icon fallback
+├── __tests__/
+│   ├── Icon.test.tsx                # Unit tests
+│   ├── Icon.a11y.test.tsx           # Accessibility tests
+│   └── Icon.performance.test.tsx    # Performance tests
+├── hooks/
+│   ├── useDynamicIcon.ts           # Dynamic icon loading
+│   ├── useIconTheme.ts             # Theme integration
+│   └── useIconPerformance.ts       # Performance monitoring
+├── utils/
+│   ├── iconLibrary.ts              # Icon library management
+│   ├── svgOptimization.ts          # SVG optimization utilities
+│   └── iconSprite.ts               # Sprite generation
+└── types/
+    └── icon.types.ts               # Icon system type definitions
+```
+
+### **Component Requirements:**
+- [ ] **TypeScript Props Interface**: Comprehensive icon prop typing with JSDoc
+- [ ] **SVG Optimization**: Build-time and runtime SVG optimization
+- [ ] **Accessibility Compliance**: WCAG 2.1 AA compliance with proper ARIA usage
+- [ ] **Design System Integration**: Theme-aware sizing, coloring, and styling
+- [ ] **Performance Optimization**: Tree shaking, lazy loading, and caching
+- [ ] **Library Integration**: Support for major icon libraries with fallbacks
+
+### **Testing Requirements:**
+- [ ] **Unit Testing**: Component behavior and prop handling
+- [ ] **Accessibility Testing**: Screen reader compatibility and keyboard navigation
+- [ ] **Performance Testing**: Bundle size impact and rendering performance
+- [ ] **Visual Regression**: Icon rendering consistency across themes and sizes
+
+### **Quality Standards:**
+- [ ] **SVG Optimization**: Minimal file sizes and efficient rendering
+- [ ] **Accessibility**: Proper semantic usage and screen reader support
+- [ ] **Performance**: Fast loading and minimal bundle impact
+- [ ] **Consistency**: Design system compliance and visual harmony
+- [ ] **Maintainability**: Clear API and easy library integration
+
+## 🔍 **ICON-SPECIFIC PATTERNS:**
+
+### **Icon Button Pattern:**
+```typescript
+const IconButton = ({ 
+  icon, 
+  label, 
+  variant = 'ghost',
+  size = 'md',
+  ...props 
+}) => {
+  const { getSemanticIcon, getAccessibilityLabel } = useIconContext()
+  
+  return (
+    <button
+      type="button"
+      aria-label={label || getAccessibilityLabel(icon)}
+      className={cn(
+        'icon-button',
+        `icon-button-${variant}`,
+        `icon-button-${size}`
+      )}
+      {...props}
+    >
+      <Icon
+        name={getSemanticIcon(icon)}
+        size={size}
+        decorative={true}
+      />
+    </button>
+  )
+}
+```
+
+### **Status Icon Pattern:**
+```typescript
+const StatusIcon = ({ 
+  status, 
+  message,
+  showMessage = true 
+}) => {
+  const { getSemanticIcon, getAccessibilityLabel } = useIconContext()
+  
+  const statusConfig = {
+    success: { color: 'success', animation: 'none' },
+    error: { color: 'error', animation: 'none' },
+    warning: { color: 'warning', animation: 'pulse' },
+    loading: { color: 'muted', animation: 'spin' }
+  }
+  
+  const config = statusConfig[status] || statusConfig.success
+  
+  return (
+    <div className="status-icon-container">
+      <Icon
+        name={getSemanticIcon('status', status)}
+        label={getAccessibilityLabel('status', status)}
+        color={config.color}
+        animation={config.animation}
+        size="sm"
+      />
+      {showMessage && message && (
+        <span className="status-message">
+          {message}
+        </span>
+      )}
+    </div>
+  )
+}
+```
+
+## 💡 **ICON EXAMPLES:**
+
+### **Example 1: Navigation Icons**
+```typescript
+const NavigationIcons = () => {
+  return (
+    <nav className="navigation-icons">
+      <IconButton
+        icon="navigation:menu"
+        label="Open navigation menu"
+        onClick={() => setMenuOpen(true)}
+      />
+      <IconButton
+        icon="action:search"
+        label="Search"
+        onClick={() => setSearchOpen(true)}
+      />
+      <IconButton
+        icon="navigation:profile"
+        label="User profile"
+        onClick={() => setProfileOpen(true)}
+      />
+    </nav>
+  )
+}
+```
+
+### **Example 2: Content Icons**
+```typescript
+const ContentIcons = ({ items }) => {
+  return (
+    <div className="content-icons">
+      {items.map(item => (
+        <div key={item.id} className="content-item">
+          <Icon
+            name={`content:${item.type}`}
+            size="lg"
+            color="primary"
+            label={`${item.type} icon`}
+          />
+          <span>{item.title}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+## 🚨 **COMMON ICON PITFALLS:**
+
+### **Performance Issues:**
+- **Bundle bloat** - Import only needed icons, use tree shaking
+- **Runtime imports** - Preload critical icons for better performance
+- **SVG complexity** - Optimize SVGs for web usage and file size
+- **Cache misses** - Implement proper icon caching strategies
+
+### **Accessibility Problems:**
+- **Missing labels** - Always provide labels for informative icons
+- **Decorative confusion** - Mark decorative icons as aria-hidden
+- **Interactive icons** - Use proper button semantics for clickable icons
+- **Color-only meaning** - Don't rely solely on color to convey information
+
+### **Design System Issues:**
+- **Inconsistent sizing** - Use design system tokens for consistent sizing
+- **Theme conflicts** - Ensure icons work across light/dark themes
+- **Visual weight** - Match icon visual weight with surrounding content
+- **Alignment issues** - Properly align icons with text and other elements
+
+## 🔧 **INTEGRATION WITH OTHER PROMPTS:**
+
+### **UI Component Integration:**
+- Use with `component-create-ui.mdc` for consistent button and control icons
+- Integrate with design system patterns for unified visual language
+
+### **Navigation Integration:**
+- Combine with `component-create-navigation.mdc` for navigation iconography
+- Ensure consistent icon usage across navigation components
+
+### **Marketing Integration:**
+- Coordinate with `component-create-marketing.mdc` for brand and social icons
+- Maintain icon consistency in marketing materials and CTAs
+
+**This icon creation prompt ensures performant, accessible, and design-system-compliant iconography that enhances user experience while maintaining technical excellence and visual consistency.**

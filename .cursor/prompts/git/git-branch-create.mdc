@@ -1,0 +1,472 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Git Branch Creation Guide
+
+**This prompt handles systematic branch creation following Git workflow standards, ensuring proper naming conventions, base branch selection, and documentation setup.**
+
+## 🎯 **BRANCH CREATION OBJECTIVES:**
+
+1. **DETERMINE branch type** and apply appropriate naming conventions
+2. **SELECT correct base branch** based on workflow standards
+3. **CREATE branch with proper setup** and initial configuration
+4. **ESTABLISH tracking** and team communication
+5. **PREPARE development environment** for the new branch
+
+## 📋 **BRANCH CREATION PROCESS:**
+
+### **STEP 1: Branch Type and Naming Analysis**
+
+#### **Branch Type Classification:**
+```markdown
+## Branch Type Assessment
+
+**FEATURE BRANCH:**
+- [ ] New functionality or enhancement
+- [ ] User-facing feature development
+- [ ] API endpoint creation
+- [ ] UI/UX improvements
+- Naming: `feature/[description]`
+
+**BUGFIX BRANCH:**
+- [ ] Non-critical bug resolution
+- [ ] Issue tracking integration
+- [ ] Performance improvements
+- [ ] Code quality fixes
+- Naming: `bugfix/[issue-id]-[description]`
+
+**EXPERIMENTAL BRANCH:**
+- [ ] Proof of concept work
+- [ ] Technology evaluation
+- [ ] Architecture exploration
+- [ ] Research and development
+- Naming: `experiment/[description]`
+
+**DOCUMENTATION BRANCH:**
+- [ ] Documentation updates
+- [ ] README improvements
+- [ ] API documentation
+- [ ] User guides and tutorials
+- Naming: `docs/[description]`
+
+**REFACTOR BRANCH:**
+- [ ] Code restructuring
+- [ ] Performance optimization
+- [ ] Technical debt reduction
+- [ ] Architecture improvements
+- Naming: `refactor/[description]`
+```
+
+#### **Branch Naming Validation:**
+```bash
+# Validate branch name against conventions
+BRANCH_NAME="[proposed-name]"
+
+# Check naming patterns
+case $BRANCH_NAME in
+  feature/*|bugfix/*|docs/*|refactor/*|experiment/*)
+    echo "✅ Valid branch name format"
+    ;;
+  *)
+    echo "❌ Invalid branch name format"
+    echo "Use: feature/*, bugfix/*, docs/*, refactor/*, experiment/*"
+    exit 1
+    ;;
+esac
+
+# Check for proper description format
+if [[ $BRANCH_NAME =~ ^[a-z]+/[a-z0-9-]+$ ]]; then
+  echo "✅ Valid naming convention"
+else
+  echo "❌ Use lowercase, hyphens only, no spaces or special characters"
+  exit 1
+fi
+```
+
+### **STEP 2: Base Branch Selection and Validation**
+
+#### **Base Branch Decision Matrix:**
+```markdown
+## Base Branch Selection
+
+**FROM develop:**
+- [x] Feature development (most common)
+- [x] New functionality
+- [x] Regular bug fixes
+- [x] Documentation updates
+- [x] Non-critical refactoring
+
+**FROM main:**
+- [x] Hotfix branches (critical production issues)
+- [x] Security patches
+- [x] Emergency fixes
+
+**FROM release/v[version]:**
+- [x] Release-specific bug fixes
+- [x] Release documentation updates
+- [x] Version-specific adjustments
+
+**FROM feature/[existing]:**
+- [x] Sub-feature development
+- [x] Collaborative feature work
+- [x] Dependent feature chains
+```
+
+#### **Base Branch Validation:**
+```bash
+# Ensure base branch is up to date
+BASE_BRANCH="[selected-base]"
+git checkout $BASE_BRANCH
+git fetch origin
+git status
+
+# Check if base branch is behind
+BEHIND=$(git rev-list --count HEAD..origin/$BASE_BRANCH)
+if [ $BEHIND -gt 0 ]; then
+  echo "⚠️  Base branch is $BEHIND commits behind origin"
+  echo "Update required before branch creation"
+  git pull origin $BASE_BRANCH
+fi
+
+# Verify clean working directory
+if [ -n "$(git status --porcelain)" ]; then
+  echo "❌ Working directory not clean"
+  echo "Commit or stash changes before creating branch"
+  exit 1
+fi
+```
+
+### **STEP 3: Branch Creation and Setup**
+
+#### **Branch Creation Process:**
+```bash
+# Create and checkout new branch
+BRANCH_NAME="[validated-branch-name]"
+BASE_BRANCH="[validated-base-branch]"
+
+echo "Creating branch: $BRANCH_NAME from $BASE_BRANCH"
+
+# Create branch
+git checkout -b $BRANCH_NAME $BASE_BRANCH
+
+# Push branch to remote and set upstream
+git push -u origin $BRANCH_NAME
+
+echo "✅ Branch $BRANCH_NAME created and pushed to origin"
+```
+
+#### **Initial Branch Configuration:**
+```bash
+# Set branch description (if supported)
+git config branch.$BRANCH_NAME.description "[Brief description of branch purpose]"
+
+# Configure branch protection (if applicable)
+# This would typically be done through GitHub/GitLab settings
+
+# Verify branch setup
+git branch -vv
+git status
+```
+
+### **STEP 4: Development Environment Preparation**
+
+#### **Initial Development Setup:**
+```bash
+# Install/update dependencies
+npm install                    # Node.js projects
+# or
+pip install -r requirements.txt  # Python projects
+# or 
+composer install              # PHP projects
+
+# Run initial health checks
+npm run type-check            # TypeScript validation
+npm run lint                  # Code linting
+npm run test                  # Basic test suite
+
+# Verify development environment
+echo "✅ Development environment ready for $BRANCH_NAME"
+```
+
+#### **Branch Metadata Documentation:**
+```markdown
+## Branch: [BRANCH_NAME]
+
+### Purpose
+[Clear description of what this branch is intended to accomplish]
+
+### Scope
+- [ ] [Specific task 1]
+- [ ] [Specific task 2] 
+- [ ] [Specific task 3]
+
+### Related Issues
+- Closes #[issue-number]
+- Related to #[issue-number]
+- Depends on #[issue-number]
+
+### Acceptance Criteria
+- [ ] [Criteria 1]
+- [ ] [Criteria 2]
+- [ ] [Criteria 3]
+
+### Dependencies
+- Base branch: [base-branch]
+- Required features: [list]
+- Blocking issues: [list]
+
+### Testing Strategy
+- [ ] Unit tests for new functionality
+- [ ] Integration tests for API changes
+- [ ] Accessibility tests for UI changes
+- [ ] Performance tests for optimization work
+
+### Timeline
+- Created: [date]
+- Target completion: [date]
+- Merge target: [target-branch]
+```
+
+## 🔍 **BRANCH CREATION STANDARDS:**
+
+### **Naming Convention Compliance:**
+- [ ] **Type prefix** matches branch purpose (feature/bugfix/docs/refactor/experiment)
+- [ ] **Description** is clear and concise (2-4 words)
+- [ ] **Format** uses lowercase with hyphens only
+- [ ] **Length** stays under 50 characters total
+- [ ] **Context** provides enough information for team understanding
+
+### **Examples of Good Branch Names:**
+```bash
+# Feature branches
+feature/user-authentication
+feature/payment-integration
+feature/dashboard-redesign
+feature/api-rate-limiting
+
+# Bug fix branches  
+bugfix/123-login-timeout
+bugfix/456-mobile-layout
+bugfix/789-memory-leak
+
+# Documentation branches
+docs/api-endpoints
+docs/installation-guide
+docs/contributing-guide
+
+# Refactor branches
+refactor/auth-service
+refactor/database-queries
+refactor/component-structure
+```
+
+### **Examples of Bad Branch Names (Avoid):**
+```bash
+# Too vague
+feature/updates
+bugfix/fix
+docs/changes
+
+# Poor formatting
+Feature/User_Authentication
+bugfix/Fix Login Issues
+DOCS/API-ENDPOINTS
+
+# Too long or complex
+feature/implement-complete-user-authentication-system-with-oauth-and-2fa
+```
+
+## 📊 **BRANCH CREATION DELIVERABLES:**
+
+### **REQUIRED OUTPUTS:**
+
+#### **1. Branch Creation Report:**
+```markdown
+## Branch Creation Summary
+
+### Branch Details
+- **Name**: [branch-name]
+- **Type**: [feature/bugfix/docs/refactor/experiment]
+- **Base**: [base-branch]
+- **Created**: [timestamp]
+- **Remote**: [remote-url]
+
+### Environment Status
+- [x] Dependencies installed
+- [x] Development environment verified
+- [x] Initial tests passing
+- [x] Code quality checks passing
+
+### Next Steps
+1. [First development task]
+2. [Second development task]
+3. [Testing requirements]
+```
+
+#### **2. Team Communication:**
+```markdown
+## New Branch Notification
+
+**Branch**: `[branch-name]` 
+**Purpose**: [Brief description]
+**Timeline**: [Expected duration]
+**Dependencies**: [Any blocking/dependent work]
+
+**Team Impact:**
+- [ ] Requires coordination with [team/person]
+- [ ] May affect [system/component]
+- [ ] Updates needed to [documentation/tests]
+
+**Questions/Concerns**: [Contact information]
+```
+
+#### **3. Development Checklist:**
+```markdown
+## Development Checklist for [BRANCH_NAME]
+
+### Initial Setup
+- [x] Branch created from correct base
+- [x] Development environment configured
+- [x] Dependencies up to date
+- [x] Initial tests passing
+
+### Development Tasks
+- [ ] [Task 1]: [Description]
+- [ ] [Task 2]: [Description]
+- [ ] [Task 3]: [Description]
+
+### Quality Gates
+- [ ] Code follows project standards
+- [ ] Tests written for new functionality
+- [ ] Documentation updated
+- [ ] Accessibility requirements met
+- [ ] Performance impact assessed
+
+### Pre-merge Requirements
+- [ ] All tests passing
+- [ ] Code review completed
+- [ ] Merge conflicts resolved
+- [ ] Documentation updated
+- [ ] Ready for deployment
+```
+
+## 🎯 **BRANCH LIFECYCLE MANAGEMENT:**
+
+### **Branch Tracking and Updates:**
+```bash
+# Regular maintenance commands
+git fetch origin                    # Get latest remote changes
+git rebase origin/develop          # Keep branch up to date (for feature branches)
+git status                         # Check working directory status
+git log --oneline -10              # Review recent commits
+```
+
+### **Branch Cleanup Preparation:**
+```bash
+# Before requesting merge
+git checkout develop
+git pull origin develop
+git checkout [branch-name]
+git rebase origin/develop           # Ensure branch is current
+
+# Verify branch is ready
+npm run test                       # All tests pass
+npm run lint                       # Code quality checks
+npm run build                      # Production build works
+```
+
+### **Merge Strategy Planning:**
+```markdown
+## Merge Strategy for [BRANCH_NAME]
+
+### Merge Type
+- [ ] **Merge commit**: Preserves branch history
+- [ ] **Squash merge**: Combines commits into single commit
+- [ ] **Rebase merge**: Linear history without merge commit
+
+### Pre-merge Checklist
+- [ ] Branch up to date with target
+- [ ] All CI/CD checks passing
+- [ ] Code review approved
+- [ ] Documentation updated
+- [ ] Tests passing
+- [ ] No merge conflicts
+
+### Post-merge Actions
+- [ ] Delete feature branch
+- [ ] Update project documentation
+- [ ] Deploy to staging/testing
+- [ ] Notify stakeholders
+- [ ] Update issue tracking
+```
+
+## ⚡ **QUICK BRANCH CREATION WORKFLOWS:**
+
+### **Standard Feature Branch:**
+```bash
+# Quick feature branch creation
+git checkout develop
+git pull origin develop
+git checkout -b feature/[description]
+git push -u origin feature/[description]
+```
+
+### **Bug Fix Branch:**
+```bash
+# Issue-tracked bug fix
+git checkout develop  
+git pull origin develop
+git checkout -b bugfix/[issue-id]-[description]
+git push -u origin bugfix/[issue-id]-[description]
+```
+
+### **Documentation Branch:**
+```bash
+# Documentation updates
+git checkout develop
+git pull origin develop  
+git checkout -b docs/[description]
+git push -u origin docs/[description]
+```
+
+## 🚨 **BRANCH CREATION TROUBLESHOOTING:**
+
+### **Common Issues and Solutions:**
+
+#### **Branch Name Conflicts:**
+```bash
+# If branch name already exists
+git branch -a | grep [branch-name]
+
+# Options:
+# 1. Use different name
+git checkout -b feature/[description]-v2
+
+# 2. Delete old branch (if safe)
+git branch -D [old-branch]
+git push origin --delete [old-branch]
+```
+
+#### **Base Branch Issues:**
+```bash
+# If base branch has problems
+git status                         # Check current state
+git stash                         # Save working changes
+git checkout [problematic-base]
+git reset --hard origin/[base]    # Reset to clean state
+git checkout -b [new-branch]      # Create branch from clean base
+git stash pop                     # Restore working changes
+```
+
+#### **Remote Tracking Issues:**
+```bash
+# If upstream tracking fails
+git branch --set-upstream-to=origin/[branch-name] [branch-name]
+
+# Or recreate tracking
+git push -u origin [branch-name]
+```
+
+This comprehensive branch creation guide ensures proper setup, naming conventions, and development environment preparation while maintaining consistency with your git workflow standards.

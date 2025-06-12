@@ -1,0 +1,318 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Thread Action Item Extraction and Todo Organization
+
+**This prompt analyzes the current conversation thread to identify unfinished work items, generates comprehensive thread continuation templates for each item, and creates an organized todo structure with priority analysis and usage guidance.**
+
+## 🎯 **TODO EXTRACTION OBJECTIVES:**
+
+1. **ANALYZE current thread** for incomplete tasks and future work items
+2. **EXTRACT actionable items** with sufficient context for independent execution
+3. **GENERATE continuation templates** using thread-continue-thread.mdc format
+4. **ORGANIZE todos** into structured folder system with clear priorities
+5. **CREATE comprehensive summary** with usage guidance and complexity analysis
+
+## 📋 **THREAD ANALYSIS AND EXTRACTION PROCESS:**
+
+### **STEP 1: Thread Assessment and Context Analysis**
+
+#### **Conversation Analysis:**
+```bash
+echo "🔍 Analyzing Current Thread for Action Items"
+echo "=========================================="
+
+# Thread metadata collection
+echo "📊 Thread Metadata:"
+echo "Estimated message count: [Count current conversation messages]"
+echo "Primary focus areas: [List main topics/projects discussed]"
+echo "Technical domains: [Technologies, frameworks, tools involved]"
+echo "Conversation complexity: [Simple/Moderate/Complex/Very Complex]"
+echo ""
+
+# Work status assessment
+echo "📈 Work Status Assessment:"
+echo "Completed deliverables: [Major accomplishments in this thread]"
+echo "In-progress items: [Work partially completed]"
+echo "Identified future work: [Tasks discussed but not started]"
+echo "Unresolved issues: [Problems or blockers identified]"
+echo ""
+
+# Context extraction for continuation
+echo "🎯 Context Elements for Continuation:"
+echo "Project objectives: [What we're trying to achieve]"
+echo "Technical constraints: [Limitations or requirements]"
+echo "Quality standards: [Standards and patterns being followed]"
+echo "Integration requirements: [How work connects to existing systems]"
+```
+
+### **STEP 2: Action Item Identification and Categorization**
+
+#### **Action Item Discovery:**
+```markdown
+## 🔍 Action Item Discovery Process
+
+### **Scanning Techniques:**
+1. **Explicit Mentions**: Direct statements like "we need to", "next step", "should implement"
+2. **Implicit Requirements**: Logical next steps from completed work
+3. **Unfinished Discussions**: Topics mentioned but not fully explored
+4. **Quality Improvements**: Identified optimizations or enhancements
+5. **Testing and Validation**: Verification work needed for completed items
+6. **Documentation Gaps**: Missing documentation or examples identified
+
+### **Categorization Framework:**
+- **🔴 Critical**: Work that blocks other progress or addresses immediate needs
+- **🟡 Important**: Work that significantly improves functionality or quality
+- **🟢 Enhancement**: Work that adds value but isn't essential for core functionality
+- **🔵 Research**: Exploratory work or investigation needed for future decisions
+```
+
+#### **Action Item Template:**
+```markdown
+## [Action Item Title]
+
+**Priority**: [Critical/Important/Enhancement/Research]
+**Category**: [Implementation/Testing/Documentation/Research/Optimization]
+**Estimated Effort**: [Low/Medium/High/Very High]
+**Dependencies**: [What this depends on or blocks]
+
+**Context Summary**:
+[Brief context of why this work is needed]
+
+**Specific Tasks**:
+- [Specific actionable task 1]
+- [Specific actionable task 2]  
+- [Specific actionable task 3]
+
+**Success Criteria**:
+- [How to know this is complete]
+- [What deliverables are expected]
+
+**Technical Requirements**:
+- [Technical constraints or specifications]
+- [Integration requirements]
+- [Quality standards to follow]
+```
+
+### **STEP 3: Continuation Template Generation**
+
+#### **Template Creation Process:**
+```bash
+echo "📝 Generating Thread Continuation Templates"
+echo "========================================"
+
+# For each identified action item
+for item in "${action_items[@]}"; do
+    echo "Creating template for: $item"
+    echo "- Extracting relevant context from current thread"
+    echo "- Identifying dependencies and prerequisites"
+    echo "- Documenting current state and next steps"
+    echo "- Creating comprehensive continuation template"
+    echo ""
+done
+
+echo "✅ All continuation templates generated"
+echo "📁 Templates organized in todo/ directory structure"
+```
+
+#### **Template Structure Requirements:**
+```markdown
+### **Each Continuation Template Must Include:**
+
+1. **🔄 Thread Continuation Template: [Item Name]**
+   - Complete project context and objectives
+   - Previous thread summary with key outcomes
+   - Work completed summary with specific accomplishments
+   - Current project state with file modifications and configuration
+
+2. **Immediate Next Steps** (Prioritized)
+   - Critical tasks with effort estimates
+   - Important tasks with impact assessment
+   - Enhancement tasks for future consideration
+
+3. **Context for New Agent**
+   - Important decisions made and rationale
+   - Technical and business constraints
+   - Established patterns and quality standards
+   - Integration requirements and dependencies
+
+4. **Technical Implementation Details**
+   - Current state analysis
+   - Proposed implementation approach
+   - Known issues and blockers
+   - Technical debt considerations
+
+5. **Continuation Request**
+   - Specific actionable request for new thread
+   - Clear focus area and expected deliverables
+   - Success criteria and validation approach
+```
+
+### **STEP 4: Todo Organization and Structure Creation**
+
+#### **Directory Structure Creation:**
+```bash
+echo "📁 Creating Todo Directory Structure"
+echo "=================================="
+
+# Create todo directory structure
+mkdir -p todo/
+echo "Created: todo/ directory"
+
+# Generate continuation templates
+echo "📄 Generating continuation template files:"
+for template in "${templates[@]}"; do
+    echo "- todo/thread-continuation-${template}.md"
+done
+
+# Create organization and navigation files
+echo "📋 Creating organization files:"
+echo "- todo/README.md (comprehensive index and usage guide)"
+echo "- todo/PRIORITY-GUIDE.md (priority assessment and workflow guidance)"
+```
+
+#### **README.md Generation Requirements:**
+```markdown
+## **Todo README Structure:**
+
+### **Available Templates Section**
+- List all generated templates with priorities
+- Brief description of focus area for each
+- Clear next steps and effort estimates
+
+### **Template Usage Instructions**
+- How to start new threads with templates
+- Template quality validation checklist
+- Integration with existing workflow
+
+### **Thread Management System Validation**
+- Real-world complexity assessment of current thread
+- Calculated complexity score using established metrics
+- Thread management recommendations based on analysis
+
+### **Template Effectiveness Analysis**
+- Context preservation quality assessment
+- Practical utility validation
+- Priority and workflow guidance
+
+### **Recommended Usage Priority**
+- Immediate focus items (next 1-2 sessions)
+- Short-term focus items (next 3-5 sessions)
+- Quality assurance notes and considerations
+```
+
+### **STEP 5: Complexity Analysis and Validation**
+
+#### **Current Thread Status Assessment:**
+```bash
+echo "📊 Thread Status Analysis"
+echo "=========================="
+
+# Message count assessment
+MESSAGES=$(estimate_message_count)
+echo "Message count: $MESSAGES"
+
+# File modification analysis
+FILES_MODIFIED=$(count_modified_files)
+echo "Files modified: $FILES_MODIFIED"
+
+# Tool usage assessment
+TOOL_CALLS=$(count_tool_usage)
+echo "Tool usage: $TOOL_CALLS tool calls"
+
+# Context switching evaluation
+WORKSTREAMS=$(identify_workstreams)
+echo "Context switching: $WORKSTREAMS workstreams"
+
+# Decision complexity assessment
+DECISIONS=$(count_major_decisions)
+echo "Decision complexity: $DECISIONS major decisions"
+
+# Calculate weighted complexity score
+COMPLEXITY_SCORE=$(calculate_complexity_score)
+echo "Calculated complexity score: $COMPLEXITY_SCORE points"
+
+# Provide thread management recommendation
+if [ $COMPLEXITY_SCORE -gt 40 ]; then
+    echo "🔄 Recommendation: CONTINUE IN NEW THREAD (Very High complexity)"
+elif [ $COMPLEXITY_SCORE -gt 25 ]; then
+    echo "🔄 Recommendation: CONSIDER NEW THREAD (High complexity)"
+else
+    echo "✅ Recommendation: CONTINUE IN CURRENT THREAD (Manageable complexity)"
+fi
+```
+
+## 🚀 **EXECUTION WORKFLOW:**
+
+### **Phase 1: Analysis and Discovery**
+1. **Analyze current thread** for completed work and remaining tasks
+2. **Identify action items** using systematic scanning approach
+3. **Categorize and prioritize** items based on impact and urgency
+4. **Extract context** needed for independent task execution
+
+### **Phase 2: Template Generation**
+1. **Generate continuation templates** for each significant action item
+2. **Ensure template completeness** using thread-continue-thread.mdc format
+3. **Validate context preservation** and actionability
+4. **Organize templates** with clear naming and structure
+
+### **Phase 3: Organization and Documentation**
+1. **Create todo directory structure** with generated templates
+2. **Generate comprehensive README.md** with usage guidance
+3. **Provide complexity analysis** and thread management recommendations
+4. **Include priority guidance** and workflow optimization suggestions
+
+## 📋 **QUALITY ASSURANCE CHECKLIST:**
+
+### **Template Quality Validation:**
+- [ ] Each template follows thread-continue-thread.mdc format exactly
+- [ ] Complete context preservation with no missing critical information
+- [ ] Clear, actionable next steps with specific deliverables
+- [ ] Appropriate priority assessment based on impact and dependencies
+- [ ] Success criteria that enable objective progress validation
+
+### **Organization Quality Validation:**
+- [ ] Todo directory structure is logical and navigable
+- [ ] README.md provides comprehensive usage guidance
+- [ ] Priority recommendations are justified and actionable
+- [ ] Complexity analysis accurately reflects thread characteristics
+- [ ] Integration with existing workflow is clear and beneficial
+
+### **Workflow Integration Validation:**
+- [ ] Templates enable seamless thread transitions
+- [ ] No duplication of work or conflicting priorities
+- [ ] Clear dependency relationships between action items
+- [ ] Realistic effort estimates and timeline considerations
+- [ ] Quality standards and constraints properly preserved
+
+## 🎯 **SUCCESS INDICATORS:**
+
+- **Complete Action Item Coverage**: All significant unfinished work identified and organized
+- **High-Quality Templates**: Templates enable immediate productive work in new threads
+- **Clear Prioritization**: Critical vs. important vs. enhancement items clearly distinguished
+- **Effective Organization**: Todo structure improves workflow efficiency and reduces context switching
+- **Preserved Context**: No loss of important decisions, constraints, or technical requirements
+- **Actionable Guidance**: Clear next steps and success criteria for each work item
+
+## 🔄 **INTEGRATION WITH THREAD MANAGEMENT:**
+
+### **Thread Status Awareness:**
+This prompt automatically assesses current thread status and provides thread management recommendations based on:
+- Message count and conversation length
+- File modification volume and scope
+- Tool usage intensity and frequency
+- Context switching and workstream management
+- Decision complexity and technical depth
+
+### **Workflow Optimization:**
+Generated todos integrate with established thread management patterns:
+- Use thread-continue-thread.mdc format for consistency
+- Provide complexity scoring for future thread management
+- Include quality standards and pattern preservation
+- Enable efficient transition between focused work sessions
+
+---
+
+**This prompt transforms complex, multi-faceted conversations into organized, actionable work items while preserving all critical context needed for successful continuation in focused threads.**

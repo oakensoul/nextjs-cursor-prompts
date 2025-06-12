@@ -1,0 +1,765 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# UI Component Update Request
+
+Please update and enhance an existing UI component following our design system improvement patterns and interaction standards:
+
+## 🎯 **UI COMPONENT UPDATE OBJECTIVES:**
+
+1. **ENHANCE variant system** with improved design tokens, states, and interaction patterns
+2. **IMPROVE accessibility** with better ARIA attributes, keyboard navigation, and focus management
+3. **OPTIMIZE interactions** with smooth animations, micro-interactions, and responsive feedback
+4. **UPGRADE design system integration** with Catalyst compatibility and token consistency
+5. **MAINTAIN backward compatibility** while implementing meaningful design and functionality improvements
+
+## 📋 **UI COMPONENT UPDATE METHODOLOGY:**
+
+### **STEP 1: Current Component Assessment**
+
+#### **Analyze Existing Implementation:**
+- **Current variant system**: Review existing size, color, and state variants
+- **Design system integration**: Check Catalyst compatibility and token usage
+- **Accessibility audit**: Test ARIA attributes, keyboard navigation, and screen reader support
+- **Interaction patterns**: Evaluate hover, focus, active, and loading states
+- **Performance analysis**: Review rendering optimization and bundle impact
+
+#### **Identify Enhancement Opportunities:**
+```typescript
+// Assessment checklist for UI component improvements
+interface UIComponentAudit {
+  designSystem: {
+    catalystIntegration: boolean;
+    designTokens: boolean;
+    variantConsistency: boolean;
+    responsiveDesign: boolean;
+  };
+  accessibility: {
+    ariaAttributes: boolean;
+    keyboardNavigation: boolean;
+    focusManagement: boolean;
+    colorContrast: boolean;
+  };
+  interactions: {
+    hoverStates: boolean;
+    focusStates: boolean;
+    loadingStates: boolean;
+    animations: boolean;
+  };
+  performance: {
+    memoOptimization: boolean;
+    bundleSize: boolean;
+    renderingSpeed: boolean;
+    memoryUsage: boolean;
+  };
+}
+```
+
+### **STEP 2: Variant System Enhancement**
+
+#### **Advanced Variant Improvements:**
+```typescript
+// Enhanced variant system with comprehensive options
+interface EnhancedUIVariants {
+  /** Visual style variant */
+  variant: 'primary' | 'secondary' | 'outline' | 'ghost' | 'link' | 'destructive';
+  /** Size configuration */
+  size: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  /** Color scheme */
+  color?: 'blue' | 'green' | 'red' | 'orange' | 'purple' | 'gray';
+  /** Corner radius */
+  radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
+  /** Shadow depth */
+  shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  /** State variants */
+  state?: 'default' | 'hover' | 'focus' | 'active' | 'disabled' | 'loading';
+}
+
+// Enhanced variant implementation with class-variance-authority
+const enhancedUIVariants = cva(
+  [
+    // Base styles with design tokens
+    "inline-flex items-center justify-center",
+    "font-medium transition-all duration-200 ease-in-out",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+    "disabled:pointer-events-none disabled:opacity-50"
+  ],
+  {
+    variants: {
+      variant: {
+        primary: [
+          "bg-primary text-primary-foreground",
+          "hover:bg-primary/90",
+          "focus-visible:ring-primary"
+        ],
+        secondary: [
+          "bg-secondary text-secondary-foreground",
+          "hover:bg-secondary/80",
+          "focus-visible:ring-secondary"
+        ],
+        outline: [
+          "border border-input bg-background",
+          "hover:bg-accent hover:text-accent-foreground",
+          "focus-visible:ring-ring"
+        ],
+        ghost: [
+          "hover:bg-accent hover:text-accent-foreground",
+          "focus-visible:ring-ring"
+        ],
+        link: [
+          "text-primary underline-offset-4",
+          "hover:underline",
+          "focus-visible:ring-ring"
+        ],
+        destructive: [
+          "bg-destructive text-destructive-foreground",
+          "hover:bg-destructive/90",
+          "focus-visible:ring-destructive"
+        ]
+      },
+      size: {
+        xs: "h-7 px-2 text-xs",
+        sm: "h-8 px-3 text-sm",
+        md: "h-9 px-4 text-sm",
+        lg: "h-10 px-6 text-base",
+        xl: "h-11 px-8 text-base"
+      },
+      radius: {
+        none: "rounded-none",
+        sm: "rounded-sm",
+        md: "rounded-md",
+        lg: "rounded-lg",
+        full: "rounded-full"
+      },
+      shadow: {
+        none: "shadow-none",
+        sm: "shadow-sm",
+        md: "shadow-md",
+        lg: "shadow-lg",
+        xl: "shadow-xl"
+      }
+    },
+    defaultVariants: {
+      variant: "primary",
+      size: "md",
+      radius: "md",
+      shadow: "none"
+    }
+  }
+);
+```
+
+#### **Advanced State Management:**
+```typescript
+// Enhanced state management with micro-interactions
+interface ComponentInteractionState {
+  isHovered: boolean;
+  isFocused: boolean;
+  isPressed: boolean;
+  isLoading: boolean;
+  isDisabled: boolean;
+  interactionHistory: string[];
+}
+
+const useEnhancedInteractionState = () => {
+  const [state, setState] = useState<ComponentInteractionState>({
+    isHovered: false,
+    isFocused: false,
+    isPressed: false,
+    isLoading: false,
+    isDisabled: false,
+    interactionHistory: []
+  });
+
+  const updateInteractionState = useCallback((
+    updates: Partial<ComponentInteractionState>,
+    trackHistory = true
+  ) => {
+    setState(prev => {
+      const newState = { ...prev, ...updates };
+      
+      if (trackHistory) {
+        const interaction = Object.entries(updates)
+          .filter(([_, value]) => value)
+          .map(([key]) => key)
+          .join(',');
+          
+        if (interaction) {
+          newState.interactionHistory = [
+            ...prev.interactionHistory.slice(-9), // Keep last 10
+            interaction
+          ];
+        }
+      }
+      
+      return newState;
+    });
+  }, []);
+
+  return { state, updateInteractionState };
+};
+```
+
+### **STEP 3: Accessibility Enhancement Implementation**
+
+#### **Advanced ARIA and Semantic Improvements:**
+```typescript
+// Enhanced accessibility with comprehensive ARIA support
+interface EnhancedAccessibilityProps {
+  /** Semantic role override */
+  role?: string;
+  /** Accessible label */
+  'aria-label'?: string;
+  /** Label reference */
+  'aria-labelledby'?: string;
+  /** Description reference */
+  'aria-describedby'?: string;
+  /** Current state */
+  'aria-current'?: 'page' | 'step' | 'location' | 'date' | 'time' | boolean;
+  /** Expanded state for interactive elements */
+  'aria-expanded'?: boolean;
+  /** Pressed state for toggleable elements */
+  'aria-pressed'?: boolean;
+  /** Selected state for selectable elements */
+  'aria-selected'?: boolean;
+  /** Disabled state */
+  'aria-disabled'?: boolean;
+  /** Live region for dynamic updates */
+  'aria-live'?: 'polite' | 'assertive' | 'off';
+}
+
+const EnhancedAccessibleComponent = forwardRef<
+  HTMLButtonElement,
+  ComponentProps & EnhancedAccessibilityProps
+>(({ 
+  children, 
+  variant, 
+  size, 
+  disabled,
+  loading,
+  onClick,
+  className,
+  ...props 
+}, ref) => {
+  const { state, updateInteractionState } = useEnhancedInteractionState();
+  const [announcements, setAnnouncements] = useState<string[]>([]);
+
+  // Enhanced keyboard handling
+  const handleKeyDown = useCallback((event: KeyboardEvent<HTMLButtonElement>) => {
+    switch (event.key) {
+      case 'Enter':
+      case ' ':
+        if (!disabled && !loading) {
+          event.preventDefault();
+          updateInteractionState({ isPressed: true });
+          onClick?.(event as any);
+        }
+        break;
+      case 'Escape':
+        // Clear any active states
+        updateInteractionState({ 
+          isPressed: false, 
+          isFocused: false 
+        });
+        break;
+    }
+  }, [disabled, loading, onClick, updateInteractionState]);
+
+  // Announce state changes to screen readers
+  useEffect(() => {
+    if (loading) {
+      setAnnouncements(prev => [...prev, 'Loading']);
+    } else if (state.isPressed) {
+      setAnnouncements(prev => [...prev, 'Activated']);
+    }
+  }, [loading, state.isPressed]);
+
+  return (
+    <>
+      <button
+        ref={ref}
+        type="button"
+        disabled={disabled || loading}
+        onMouseEnter={() => updateInteractionState({ isHovered: true })}
+        onMouseLeave={() => updateInteractionState({ isHovered: false })}
+        onFocus={() => updateInteractionState({ isFocused: true })}
+        onBlur={() => updateInteractionState({ isFocused: false })}
+        onMouseDown={() => updateInteractionState({ isPressed: true })}
+        onMouseUp={() => updateInteractionState({ isPressed: false })}
+        onKeyDown={handleKeyDown}
+        onClick={onClick}
+        className={cn(
+          enhancedUIVariants({ variant, size }),
+          state.isHovered && "hover-state",
+          state.isFocused && "focus-state",
+          state.isPressed && "pressed-state",
+          loading && "loading-state",
+          className
+        )}
+        aria-disabled={disabled || loading}
+        aria-busy={loading}
+        {...props}
+      >
+        {loading && (
+          <>
+            <Spinner 
+              size="sm" 
+              className="mr-2" 
+              aria-hidden="true" 
+            />
+            <span className="sr-only">Loading</span>
+          </>
+        )}
+        {children}
+      </button>
+      
+      {/* Screen reader announcements */}
+      <div className="sr-only" aria-live="polite">
+        {announcements.slice(-1)[0]}
+      </div>
+    </>
+  );
+});
+```
+
+#### **Enhanced Focus Management:**
+```typescript
+// Advanced focus management utilities
+const useFocusManagement = (elementRef: RefObject<HTMLElement>) => {
+  const focusTrap = useCallback(() => {
+    const focusableElements = elementRef.current?.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    if (!focusableElements?.length) return;
+    
+    const firstElement = focusableElements[0] as HTMLElement;
+    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+    
+    const handleTabKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+      
+      if (event.shiftKey) {
+        if (document.activeElement === firstElement) {
+          lastElement.focus();
+          event.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          firstElement.focus();
+          event.preventDefault();
+        }
+      }
+    };
+    
+    document.addEventListener('keydown', handleTabKey);
+    return () => document.removeEventListener('keydown', handleTabKey);
+  }, [elementRef]);
+  
+  const restoreFocus = useCallback((previousElement?: HTMLElement) => {
+    if (previousElement && document.contains(previousElement)) {
+      previousElement.focus();
+    } else {
+      // Fallback to first focusable element
+      const firstFocusable = document.querySelector(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      ) as HTMLElement;
+      firstFocusable?.focus();
+    }
+  }, []);
+  
+  return { focusTrap, restoreFocus };
+};
+```
+
+### **STEP 4: Animation and Interaction Enhancements**
+
+#### **Advanced Animation Patterns:**
+```typescript
+// Enhanced animations with framer-motion integration
+import { motion, AnimatePresence, useSpring, useTransform } from 'framer-motion';
+
+const AnimatedUIComponent = ({ 
+  children, 
+  variant, 
+  loading,
+  ...props 
+}: AnimatedComponentProps) => {
+  const scale = useSpring(1);
+  const opacity = useSpring(1);
+  
+  // Animation variants
+  const animationVariants = {
+    idle: { 
+      scale: 1, 
+      opacity: 1,
+      transition: { duration: 0.2, ease: 'easeOut' }
+    },
+    hover: { 
+      scale: 1.02, 
+      opacity: 0.9,
+      transition: { duration: 0.15, ease: 'easeOut' }
+    },
+    pressed: { 
+      scale: 0.98, 
+      opacity: 0.8,
+      transition: { duration: 0.1, ease: 'easeOut' }
+    },
+    loading: {
+      opacity: 0.7,
+      transition: { duration: 0.2, ease: 'easeInOut' }
+    },
+    disabled: {
+      opacity: 0.5,
+      scale: 1,
+      transition: { duration: 0.2, ease: 'easeOut' }
+    }
+  };
+
+  return (
+    <motion.button
+      variants={animationVariants}
+      initial="idle"
+      whileHover="hover"
+      whileTap="pressed"
+      animate={loading ? 'loading' : 'idle'}
+      className={cn(enhancedUIVariants({ variant }), props.className)}
+      {...props}
+    >
+      <AnimatePresence mode="wait">
+        {loading ? (
+          <motion.div
+            key="loading"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="flex items-center"
+          >
+            <Spinner size="sm" className="mr-2" />
+            Loading...
+          </motion.div>
+        ) : (
+          <motion.div
+            key="content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.button>
+  );
+};
+```
+
+#### **Performance-Optimized Interactions:**
+```typescript
+// CSS-based micro-interactions for performance
+const cssInteractionStyles = {
+  // Hover effects using CSS transforms
+  hover: [
+    "transition-all duration-200 ease-out",
+    "hover:scale-[1.02] hover:shadow-md",
+    "hover:-translate-y-0.5"
+  ],
+  
+  // Active/pressed effects
+  active: [
+    "active:scale-[0.98] active:shadow-sm",
+    "active:translate-y-0"
+  ],
+  
+  // Focus effects
+  focus: [
+    "focus-visible:ring-2 focus-visible:ring-offset-2",
+    "focus-visible:ring-primary focus-visible:outline-none"
+  ],
+  
+  // Loading effects
+  loading: [
+    "animate-pulse opacity-70",
+    "pointer-events-none"
+  ]
+};
+
+// Optimized interaction component
+const OptimizedInteractiveComponent = ({ 
+  variant, 
+  size, 
+  interactive = true,
+  ...props 
+}: OptimizedComponentProps) => {
+  return (
+    <div
+      className={cn(
+        enhancedUIVariants({ variant, size }),
+        interactive && [
+          ...cssInteractionStyles.hover,
+          ...cssInteractionStyles.active,
+          ...cssInteractionStyles.focus
+        ],
+        props.loading && cssInteractionStyles.loading,
+        props.className
+      )}
+      {...props}
+    />
+  );
+};
+```
+
+### **STEP 5: Performance and Bundle Optimization**
+
+#### **Advanced Optimization Patterns:**
+```typescript
+// Memo optimization with deep comparison
+const OptimizedUIComponent = memo(({ 
+  variant, 
+  size, 
+  children, 
+  onClick,
+  ...props 
+}: UIComponentProps) => {
+  // Memoize expensive calculations
+  const computedStyles = useMemo(() => {
+    return enhancedUIVariants({ variant, size });
+  }, [variant, size]);
+  
+  // Memoize event handlers
+  const handleClick = useCallback((event: MouseEvent) => {
+    onClick?.(event);
+  }, [onClick]);
+  
+  return (
+    <button
+      className={computedStyles}
+      onClick={handleClick}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}, (prevProps, nextProps) => {
+  // Custom comparison for optimal re-rendering
+  return (
+    prevProps.variant === nextProps.variant &&
+    prevProps.size === nextProps.size &&
+    prevProps.disabled === nextProps.disabled &&
+    prevProps.loading === nextProps.loading &&
+    prevProps.children === nextProps.children &&
+    prevProps.onClick === nextProps.onClick
+  );
+});
+
+// Bundle optimization with dynamic imports
+const LazyAnimatedComponent = lazy(() => 
+  import('./AnimatedUIComponent').then(module => ({
+    default: module.AnimatedUIComponent
+  }))
+);
+
+const UIComponentWithOptionalAnimations = ({ 
+  enableAnimations = false,
+  ...props 
+}: UIComponentProps & { enableAnimations?: boolean }) => {
+  if (enableAnimations) {
+    return (
+      <Suspense fallback={<OptimizedUIComponent {...props} />}>
+        <LazyAnimatedComponent {...props} />
+      </Suspense>
+    );
+  }
+  
+  return <OptimizedUIComponent {...props} />;
+};
+```
+
+## ✅ **UI COMPONENT UPDATE IMPLEMENTATION REQUIREMENTS:**
+
+### **Enhancement Categories:**
+```
+Priority 1: Design System Integration
+├── Variant System Enhancement
+│   ├── Expanded variant options
+│   ├── Design token integration
+│   └── Catalyst compatibility
+├── Accessibility Improvements
+│   ├── Enhanced ARIA attributes
+│   ├── Keyboard navigation
+│   └── Focus management
+└── State Management
+    ├── Interaction state tracking
+    ├── Loading state improvements
+    └── Error state handling
+
+Priority 2: Interaction Experience
+├── Animation Integration
+│   ├── Micro-interactions
+│   ├── State transitions
+│   └── Loading animations
+├── Responsive Feedback
+│   ├── Hover effects
+│   ├── Focus indicators
+│   └── Press feedback
+└── Performance Optimization
+    ├── Memo optimization
+    ├── Event handler optimization
+    └── Bundle size management
+
+Priority 3: Advanced Features
+├── Theme Integration
+│   ├── Dark mode support
+│   ├── Custom color schemes
+│   └── Dynamic theming
+├── Advanced Interactions
+│   ├── Gesture support
+│   ├── Touch optimizations
+│   └── Voice control
+└── Developer Experience
+    ├── Enhanced TypeScript
+    ├── Better documentation
+    └── Storybook integration
+```
+
+### **Update Requirements Checklist:**
+- [ ] **Enhanced Variant System**: Improved design tokens and variant options
+- [ ] **Accessibility Improvements**: WCAG 2.1 AA compliance with enhanced interactions
+- [ ] **Animation Integration**: Smooth transitions and micro-interactions
+- [ ] **Performance Optimization**: Memo optimization and bundle size management
+- [ ] **Catalyst Integration**: Better integration with Catalyst design system
+- [ ] **Testing Updates**: Updated test suite covering new functionality
+- [ ] **Documentation**: Updated usage examples and variant demonstrations
+
+## 🔍 **UI COMPONENT UPDATE QUALITY STANDARDS:**
+
+### **Design System Quality:**
+- **Token Consistency**: Use design tokens consistently across all variants
+- **Visual Harmony**: Components work together seamlessly
+- **Brand Alignment**: Maintain brand consistency while improving functionality
+- **Responsive Design**: Components work well across all screen sizes
+
+### **Interaction Quality:**
+- **Smooth Animations**: 60fps animations with proper easing
+- **Responsive Feedback**: Immediate visual feedback for all interactions
+- **Accessibility**: Full keyboard and screen reader support
+- **Performance**: No impact on application performance
+
+## 💡 **UI COMPONENT UPDATE EXAMPLES:**
+
+### **Button Enhancement Example:**
+```typescript
+// Before: Basic button
+<Button variant="primary" onClick={handleClick}>
+  Save Changes
+</Button>
+
+// After: Enhanced button with loading and success states
+<EnhancedButton
+  variant="primary"
+  size="md"
+  loading={isSaving}
+  success={saveSuccess}
+  icon={<SaveIcon />}
+  enableAnimations
+  onClick={handleClick}
+  aria-describedby="save-help"
+>
+  Save Changes
+</EnhancedButton>
+```
+
+### **Modal Enhancement Example:**
+```typescript
+// Before: Basic modal
+<Modal isOpen={isOpen} onClose={handleClose}>
+  <p>Are you sure?</p>
+  <Button onClick={handleConfirm}>Confirm</Button>
+</Modal>
+
+// After: Enhanced modal with animations and focus management
+<EnhancedModal
+  isOpen={isOpen}
+  onClose={handleClose}
+  size="md"
+  closeOnOverlayClick
+  trapFocus
+  restoreFocus
+  animationPreset="slideUp"
+  aria-labelledby="modal-title"
+  aria-describedby="modal-description"
+>
+  <ModalHeader>
+    <h2 id="modal-title">Confirm Action</h2>
+  </ModalHeader>
+  <ModalContent>
+    <p id="modal-description">Are you sure you want to continue?</p>
+  </ModalContent>
+  <ModalActions>
+    <Button variant="outline" onClick={handleClose}>
+      Cancel
+    </Button>
+    <Button variant="destructive" onClick={handleConfirm}>
+      Confirm
+    </Button>
+  </ModalActions>
+</EnhancedModal>
+```
+
+## 🚨 **COMMON UPDATE PITFALLS:**
+
+### **Design System Pitfalls:**
+- **Token deviation**: Don't hardcode values that should use design tokens
+- **Inconsistent variants**: Ensure all components follow same variant patterns
+- **Breaking visual changes**: Maintain visual consistency while enhancing
+- **Accessibility regression**: Don't break existing accessibility features
+
+### **Performance Pitfalls:**
+- **Animation overhead**: Use CSS transitions over JavaScript when possible
+- **Bundle size growth**: Monitor impact on application bundle size
+- **Memory leaks**: Clean up animation listeners and timers
+- **Excessive re-renders**: Optimize memo usage and event handlers
+
+## 🔧 **INTEGRATION WITH PROJECT STANDARDS:**
+
+### **Update Standards Compliance:**
+- **Coding Standards**: Maintain TypeScript and code quality standards
+- **Testing Standards**: Update tests to cover new functionality
+- **Design Standards**: Follow established design system patterns
+- **Performance Standards**: Maintain or improve performance benchmarks
+
+### **Related Prompts:**
+- Use `component-create-ui.mdc` for creating new UI components
+- Reference `component-update-guide.mdc` for general update patterns
+- Consider design system standards from project documentation
+
+## 📋 **UI COMPONENT UPDATE DELIVERABLES:**
+
+Please provide:
+
+- [ ] **Enhanced UI component** with improved variants and interactions
+- [ ] **Updated variant system** with design token integration
+- [ ] **Accessibility improvements** with enhanced ARIA and keyboard support
+- [ ] **Animation integration** with smooth transitions and micro-interactions
+- [ ] **Performance optimizations** with memo optimization and bundle management
+- [ ] **Updated test suite** covering new functionality and edge cases
+- [ ] **Implementation summary** with enhancement details and migration guide
+
+## 📖 **USAGE EXAMPLES:**
+
+```
+Update the Button component with enhanced variants, loading states, and smooth animations while maintaining Catalyst compatibility.
+Apply the UI component update prompt.
+```
+
+```
+Enhance the Input component with better validation states, accessibility improvements, and interactive focus indicators.
+Apply the UI component update prompt.
+```
+
+```
+Improve the Card component with hover effects, better variants, and enhanced accessibility for interactive cards.
+Apply the UI component update prompt.
+```

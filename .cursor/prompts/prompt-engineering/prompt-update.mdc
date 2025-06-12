@@ -1,0 +1,300 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Prompt Update and Maintenance Guide
+
+**This prompt provides a systematic approach to updating existing prompts, ensuring they remain current, standards-compliant, and effective while preserving their core value and functionality.**
+
+## 🎯 **UPDATE OBJECTIVES:**
+
+1. **MAINTAIN prompt effectiveness** while improving quality and compliance
+2. **ALIGN with current standards** and best practices
+3. **PRESERVE core functionality** and user familiarity
+4. **ENHANCE user experience** through targeted improvements
+5. **ENSURE future maintainability** and relevance
+
+## 📋 **PROMPT UPDATE PROCESS:**
+
+### **STEP 1: Current State Assessment**
+
+#### **Prompt Analysis:**
+- **Current version** - Document existing version and last update date
+- **Usage patterns** - How frequently is this prompt used and in what contexts?
+- **User feedback** - Any reported issues, confusion, or enhancement requests
+- **Integration status** - How well does it work with other prompts and rules?
+- **Standards compliance** - Compare against current standards documents
+
+#### **Quality Baseline Measurement:**
+- **Standards compliance score** - Rate against docs/standards/standards-prompt.md
+- **Content quality score** - Assess clarity, completeness, usability
+- **Technical accuracy** - Verify information is current and correct
+- **User experience score** - Evaluate ease of use and effectiveness
+- **Integration score** - How well it works with current ecosystem
+
+#### **Change Requirements Identification:**
+- **Standards gaps** - What doesn't meet current standards?
+- **Outdated information** - What technical details need updating?
+- **Missing functionality** - What should be added to improve effectiveness?
+- **Usability issues** - What causes confusion or poor user experience?
+- **Integration problems** - Where does it conflict with other prompts/rules?
+
+### **STEP 2: Update Planning**
+
+#### **Scope Definition:**
+- **Core preservation** - What essential functionality must remain unchanged?
+- **Enhancement opportunities** - What can be improved without breaking existing usage?
+- **Standards alignment** - What specific standards compliance is needed?
+- **Version impact** - Will this be a patch (x.x.1), minor (x.1.x), or major (1.x.x) update?
+
+#### **Change Strategy:**
+- **Incremental improvement** - Multiple small updates vs. comprehensive overhaul
+- **Backward compatibility** - Ensure existing usage patterns continue to work
+- **User transition** - How to communicate changes to existing users
+- **Testing approach** - How to validate that updates work as intended
+
+#### **Standards Integration Planning:**
+- **Prompt standards** (docs/standards/standards-prompt.md) - Frontmatter, structure, quality requirements
+- **Project standards** - Coding, testing, architecture, git workflow integration
+- **Rule compatibility** - Ensure compatibility with code-change-minimal, refactoring, etc.
+- **Documentation alignment** - Update references to match current project docs
+
+### **STEP 3: Update Implementation**
+
+#### **Frontmatter Updates:**
+```yaml
+---
+title: [Update if naming convention changed]
+description: [Revise if scope or purpose evolved]
+tags: [Update with current categorization]
+version: [Increment according to semantic versioning]
+lastUpdated: [Current date YYYY-MM-DD]
+usage: [Clarify or expand usage guidance]
+audience: [Update if target users changed]
+scope: [Refine if boundaries changed]
+---
+```
+
+#### **Content Structure Modernization:**
+- **Section organization** - Reorganize to match current prompt patterns
+- **Header consistency** - Use established emoji and formatting patterns
+- **Content flow** - Improve logical progression and readability
+- **Example updates** - Replace outdated examples with current technology
+- **Reference updates** - Update links to current standards documents
+
+#### **Technical Content Updates:**
+- **Technology alignment** - Update to current NextJS, React, TypeScript versions
+- **Best practices** - Incorporate latest industry standards and project practices
+- **Tool references** - Update to current tooling (Vitest, ESLint, etc.)
+- **Pattern updates** - Align with current architectural patterns
+- **Security updates** - Include current security best practices
+
+#### **Quality Enhancement:**
+- **Clarity improvements** - Simplify complex instructions
+- **Completeness additions** - Fill identified gaps in coverage
+- **Example enrichment** - Add more practical, current examples
+- **Error handling** - Improve guidance for common problems
+- **Integration guidance** - Better explain how to use with other prompts/rules
+
+### **STEP 4: Validation and Testing**
+
+#### **Standards Compliance Verification:**
+- [ ] **Frontmatter complete** - All required fields present and accurate
+- [ ] **Naming convention** - Follows current [category]-[action]-[target].mdc pattern
+- [ ] **Content structure** - Uses current prompt organization patterns
+- [ ] **Quality standards** - Meets current clarity, completeness, usability criteria
+- [ ] **Technical accuracy** - Information is current and correct
+- [ ] **Integration references** - Properly cites current standards documents
+
+#### **Functionality Testing:**
+- **Walkthrough testing** - Follow the prompt instructions completely
+- **Edge case validation** - Test with variations and unusual scenarios
+- **Integration testing** - Verify compatibility with related prompts and rules
+- **User experience testing** - Ensure smooth, intuitive experience
+- **Error scenario testing** - Verify guidance for when things go wrong
+
+#### **Backward Compatibility Check:**
+- **Existing usage patterns** - Ensure current users aren't disrupted
+- **Interface stability** - Major sections and concepts remain consistent
+- **Transition smoothness** - Changes are additive rather than replacement where possible
+- **Documentation clarity** - Change impacts are clearly communicated
+
+### **STEP 5: Version Management and Documentation**
+
+#### **Version Update Strategy:**
+```
+Patch (x.x.1): Bug fixes, typo corrections, minor clarifications
+Minor (x.1.x): New features, enhanced examples, improved organization  
+Major (1.x.x): Significant structural changes, scope changes, breaking changes
+```
+
+#### **Change Documentation:**
+- **Version notes** - Document what changed and why
+- **Migration guidance** - Help users adapt to significant changes
+- **Improvement summary** - Highlight key enhancements
+- **Breaking changes** - Clearly identify any compatibility impacts
+
+#### **Integration Updates:**
+- **Related prompts** - Update any prompts that reference this one
+- **Standards documents** - Update project standards if new patterns introduced
+- **Usage examples** - Update examples in docs/usage-examples.md
+- **Changelog entry** - Document the update in project changelog
+
+## 🔧 **UPDATE TYPES AND APPROACHES:**
+
+### **Standards Compliance Update:**
+```markdown
+Purpose: Bring prompt into compliance with current standards
+Approach: Systematic comparison against standards documents
+Focus: Frontmatter, structure, references, terminology
+Version Impact: Usually minor version bump
+```
+
+### **Technical Accuracy Update:**
+```markdown
+Purpose: Update outdated technical information
+Approach: Research current best practices and tool versions
+Focus: Technology references, code examples, recommended practices
+Version Impact: Minor for current tech, major for significant technology shifts
+```
+
+### **Usability Enhancement Update:**
+```markdown
+Purpose: Improve user experience and effectiveness
+Approach: User feedback analysis and UX improvement
+Focus: Clarity, examples, workflow integration, error handling
+Version Impact: Minor version bump
+```
+
+### **Scope Evolution Update:**
+```markdown
+Purpose: Expand or refine prompt scope based on usage patterns
+Approach: Analysis of actual usage vs. intended scope
+Focus: Boundary definition, feature addition, purpose clarification
+Version Impact: Minor for additions, major for scope changes
+```
+
+## 📊 **UPDATE SUCCESS METRICS:**
+
+### **Standards Compliance Improvement:**
+- **Before/after compliance scores** - Measurable improvement in standards adherence
+- **Checklist completion** - All compliance items satisfied
+- **Integration seamlessness** - Better works with other prompts/rules
+- **Documentation alignment** - Proper references to current standards
+
+### **Quality Enhancement Metrics:**
+- **Clarity improvement** - Instructions are clearer and easier to follow
+- **Completeness enhancement** - Gaps in coverage are filled
+- **Usability improvement** - User experience is smoother
+- **Technical accuracy** - Information is current and correct
+
+### **User Impact Assessment:**
+- **Effectiveness maintenance** - Core functionality remains reliable
+- **Experience improvement** - Users report better outcomes
+- **Adoption continuity** - Existing users continue using updated prompt
+- **New user onboarding** - New users find prompt easier to use
+
+## 💡 **UPDATE EXAMPLES:**
+
+### **Example 1: Standards Compliance Update**
+```
+Update .cursor/prompts/component/component-create-guide.mdc for current standards
+
+Following .cursor/prompts/prompt-engineering/prompt-update.mdc:
+- Fix frontmatter to match current schema
+- Update references to docs/standards/standards-coding.md  
+- Add integration guidance for current rules
+- Version bump: 1.2.0 → 1.3.0
+```
+
+### **Example 2: Technical Accuracy Update**
+```
+Update .cursor/prompts/test/test-create-comprehensive.mdc for Vitest patterns
+
+Following .cursor/prompts/prompt-engineering/prompt-update.mdc:
+- Replace Jest references with Vitest
+- Update testing patterns for React 19
+- Add accessibility testing guidance
+- Version bump: 2.1.0 → 2.2.0
+```
+
+### **Example 3: Usability Enhancement Update**
+```
+Update .cursor/prompts/api/api-create-endpoints.mdc based on user feedback
+
+Following .cursor/prompts/prompt-engineering/prompt-update.mdc:
+- Add more practical examples
+- Improve error handling guidance
+- Clarify integration with authentication
+- Version bump: 1.4.2 → 1.5.0
+```
+
+## 🚨 **UPDATE RED FLAGS:**
+
+**Stop and reconsider if:**
+- Update would break core functionality that users depend on
+- Changes are so extensive they constitute a complete rewrite
+- Update contradicts other established prompts or standards
+- Technical changes require expertise you don't currently have
+- User impact assessment shows significant negative consequences
+- Update timeline conflicts with active project deadlines
+
+## 🔄 **UPDATE MAINTENANCE SCHEDULE:**
+
+### **Ongoing Monitoring:**
+- **Quarterly review** - Check for outdated technical references
+- **Standards tracking** - Monitor project standards documents for changes
+- **User feedback** - Collect and analyze usage feedback
+- **Integration issues** - Watch for conflicts with new prompts/rules
+
+### **Scheduled Updates:**
+- **Annual comprehensive review** - Full assessment against current standards
+- **Technology updates** - When major tools or frameworks are updated
+- **Standards updates** - When project standards documents are revised
+- **Usage pattern changes** - When actual usage diverges from intended scope
+
+### **Reactive Updates:**
+- **Bug reports** - Fix identified issues promptly
+- **Standards violations** - Address compliance issues quickly
+- **Integration conflicts** - Resolve compatibility problems
+- **User confusion** - Clarify unclear instructions
+
+## 📋 **UPDATE EXECUTION TEMPLATE:**
+
+### **Prompt Being Updated:**
+[Specify the exact prompt file path]
+
+### **Update Context:**
+- **Trigger** - What prompted this update?
+- **Scope** - What aspects need updating?
+- **Constraints** - What must be preserved?
+- **Timeline** - When does this need to be completed?
+
+### **Current Assessment:**
+- **Version** - Current version number
+- **Standards compliance** - Score against current standards
+- **Quality metrics** - Current quality assessment
+- **User feedback** - Any reported issues or requests
+
+### **Planned Changes:**
+- **Standards alignment** - Specific compliance improvements
+- **Content updates** - Technical or informational changes
+- **Structure improvements** - Organization or clarity enhancements
+- **Integration updates** - Better compatibility with ecosystem
+
+### **Version Impact:**
+- **New version number** - Following semantic versioning
+- **Change classification** - Patch/minor/major and rationale
+- **Backward compatibility** - Impact on existing usage
+- **Migration needs** - Any user adaptation required
+
+### **Validation Plan:**
+- **Testing approach** - How to verify update works
+- **Review process** - Who will review the changes
+- **Integration testing** - Compatibility verification
+- **User acceptance** - How to confirm user satisfaction
+
+---
+
+**This update process ensures prompts evolve effectively while maintaining their value and usability, creating a sustainable and continuously improving prompt ecosystem.**

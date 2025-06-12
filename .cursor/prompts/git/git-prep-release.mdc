@@ -1,0 +1,556 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Release Preparation and Version Management Guide
+
+**This prompt provides systematic release preparation including version management, testing coordination, documentation updates, and deployment planning.**
+
+## 🎯 **RELEASE PREPARATION OBJECTIVES:**
+
+1. **PLAN release scope** and validate feature completeness
+2. **MANAGE version numbers** following semantic versioning
+3. **GENERATE comprehensive changelog** with all changes documented
+4. **COORDINATE testing** across all environments and stakeholders
+5. **PREPARE deployment** with rollback plans and monitoring
+
+## 📋 **RELEASE PLANNING AND SCOPE DEFINITION:**
+
+### **STEP 1: Release Type and Scope Assessment**
+
+#### **Release Type Classification:**
+```markdown
+## Release Classification
+
+**MAJOR RELEASE (X.0.0):**
+- [ ] Breaking API changes
+- [ ] Major architectural changes
+- [ ] Significant UI/UX overhaul
+- [ ] New platform/technology adoption
+- [ ] Removal of deprecated features
+
+**MINOR RELEASE (X.Y.0):**
+- [ ] New features added
+- [ ] Enhanced functionality
+- [ ] Performance improvements
+- [ ] Non-breaking API additions
+- [ ] New integrations
+
+**PATCH RELEASE (X.Y.Z):**
+- [ ] Bug fixes only
+- [ ] Security patches
+- [ ] Documentation updates
+- [ ] Configuration improvements
+- [ ] No new features
+```
+
+#### **Release Scope Documentation:**
+```markdown
+## Release [VERSION] Scope
+
+### Release Type: [MAJOR/MINOR/PATCH]
+### Target Date: [Release date]
+### Release Manager: [Name]
+
+### Features Included:
+- [ ] [Feature 1]: [Status, Testing status]
+- [ ] [Feature 2]: [Status, Testing status]
+- [ ] [Feature 3]: [Status, Testing status]
+
+### Bug Fixes Included:
+- [ ] [Issue 1]: [Description, PR link]
+- [ ] [Issue 2]: [Description, PR link]
+- [ ] [Issue 3]: [Description, PR link]
+
+### Breaking Changes:
+- [ ] [Change 1]: [Impact, Migration guide]
+- [ ] [Change 2]: [Impact, Migration guide]
+
+### Dependencies Updated:
+- [ ] [Package 1]: [Old version → New version]
+- [ ] [Package 2]: [Old version → New version]
+
+### Migration Requirements:
+- [ ] Database migrations: [List any required migrations]
+- [ ] Configuration changes: [Environment variables, etc.]
+- [ ] API client updates: [Required client changes]
+```
+
+### **STEP 2: Feature and Code Freeze Management**
+
+#### **Code Freeze Process:**
+```bash
+# Create release branch from develop
+git checkout develop
+git pull origin develop
+git checkout -b release/v[VERSION]
+
+# Push release branch
+git push -u origin release/v[VERSION]
+
+# Announce code freeze
+echo "Code freeze in effect for release/v[VERSION]"
+```
+
+#### **Feature Completeness Validation:**
+- [ ] **All planned features** merged and tested in develop branch
+- [ ] **No work-in-progress** commits or temporary code
+- [ ] **All dependencies** updated and security-scanned
+- [ ] **Breaking changes documented** with migration guides
+- [ ] **API documentation** updated for all changes
+
+## 🔢 **VERSION MANAGEMENT AND SEMANTIC VERSIONING:**
+
+### **STEP 3: Version Number Calculation**
+
+#### **Semantic Version Analysis:**
+```markdown
+## Version Bump Analysis
+
+### Current Version: [X.Y.Z]
+### Proposed Version: [X.Y.Z]
+
+### Version Bump Justification:
+**Major Bump (X):** [Reason if applicable]
+- Breaking API changes: [List]
+- Incompatible changes: [List]
+
+**Minor Bump (Y):** [Reason if applicable] 
+- New features: [List]
+- Backward-compatible functionality: [List]
+
+**Patch Bump (Z):** [Reason if applicable]
+- Bug fixes: [List]
+- Security patches: [List]
+```
+
+#### **Version Update Process:**
+```bash
+# Update package.json version
+npm version [major|minor|patch] --no-git-tag-version
+
+# Or manually update version in package.json, then:
+npm install  # Update package-lock.json
+
+# Update other version references
+# - README.md badges
+# - API documentation
+# - Configuration files
+# - Docker images tags
+```
+
+#### **Version Consistency Check:**
+```bash
+# Verify version consistency across files
+grep -r "version.*[0-9]\+\.[0-9]\+\.[0-9]\+" \
+  package.json \
+  README.md \
+  docs/ \
+  api/ \
+  docker-compose.yml
+
+# Update all version references to match
+```
+
+### **STEP 4: Automated Version Management**
+
+#### **Version Update Script:**
+```bash
+#!/bin/bash
+# release-version-update.sh
+
+VERSION=$1
+if [ -z "$VERSION" ]; then
+  echo "Usage: $0 <version>"
+  exit 1
+fi
+
+# Update package.json
+npm version $VERSION --no-git-tag-version
+
+# Update README badges
+sed -i "s/version-[0-9]\+\.[0-9]\+\.[0-9]\+/version-$VERSION/g" README.md
+
+# Update API documentation
+sed -i "s/\"version\": \"[0-9]\+\.[0-9]\+\.[0-9]\+\"/\"version\": \"$VERSION\"/g" api/openapi.yaml
+
+# Update Docker image tags
+sed -i "s/image: myapp:[0-9]\+\.[0-9]\+\.[0-9]\+/image: myapp:$VERSION/g" docker-compose.yml
+
+echo "Version updated to $VERSION"
+```
+
+## 📝 **CHANGELOG GENERATION AND DOCUMENTATION:**
+
+### **STEP 5: Comprehensive Changelog Creation**
+
+#### **Automated Changelog Generation:**
+```bash
+# Generate changelog using conventional commits
+npx conventional-changelog-cli -p angular -i CHANGELOG.md -s
+
+# Or use GitHub CLI for release notes
+gh api repos/:owner/:repo/releases/generate-notes \
+  -f tag_name=v[VERSION] \
+  -f target_commitish=main
+
+# Or use git log for manual changelog
+git log --oneline --pretty=format:"- %s (%an)" v[LAST_VERSION]..HEAD
+```
+
+#### **Manual Changelog Structure:**
+```markdown
+# Changelog
+
+## [VERSION] - YYYY-MM-DD
+
+### 🚀 Features
+- **[Component]**: [Feature description] ([#PR](link))
+- **[Component]**: [Feature description] ([#PR](link))
+
+### 🐛 Bug Fixes  
+- **[Component]**: [Fix description] ([#PR](link))
+- **[Component]**: [Fix description] ([#PR](link))
+
+### ⚡ Performance
+- **[Component]**: [Performance improvement] ([#PR](link))
+
+### 🔒 Security
+- **[Component]**: [Security improvement] ([#PR](link))
+
+### 💔 Breaking Changes
+- **[Component]**: [Breaking change description]
+  - **Migration**: [How to migrate]
+  - **Impact**: [Who is affected]
+
+### 📖 Documentation
+- [Documentation update description] ([#PR](link))
+
+### 🏗️ Build & CI
+- [Build/CI improvement description] ([#PR](link))
+
+### 📦 Dependencies
+- Bump [package] from [old] to [new] ([#PR](link))
+- Add [package] [version] ([#PR](link))
+- Remove [package] ([#PR](link))
+
+### 👥 Contributors
+- [@username](link) - [Contribution summary]
+- [@username](link) - [Contribution summary]
+```
+
+#### **Release Notes Generation:**
+```markdown
+## Release [VERSION] - [Release Name]
+
+### 🎯 Release Highlights
+[2-3 sentences summarizing the most important changes]
+
+### 📊 Release Statistics
+- **Features**: [Number] new features
+- **Bug Fixes**: [Number] issues resolved  
+- **Performance**: [Improvement metric]
+- **Security**: [Number] security improvements
+- **Contributors**: [Number] contributors
+
+### 🔗 Important Links
+- [Release Notes](link)
+- [Migration Guide](link) *(if breaking changes)*
+- [API Documentation](link)
+- [Download/Installation](link)
+
+### ⚠️ Breaking Changes
+[List any breaking changes with migration instructions]
+
+### 🆕 New Features
+[Highlight 3-5 most important new features]
+
+### 🐛 Critical Bug Fixes
+[Highlight critical bug fixes]
+
+### 📈 What's Next
+[Brief preview of next release plans]
+```
+
+## 🧪 **RELEASE TESTING AND VALIDATION:**
+
+### **STEP 6: Comprehensive Testing Strategy**
+
+#### **Testing Checklist by Environment:**
+```markdown
+## Release Testing Plan
+
+### Development Environment Testing:
+- [ ] All unit tests pass (100% of existing tests)
+- [ ] All integration tests pass
+- [ ] All end-to-end tests pass
+- [ ] New feature tests added and passing
+- [ ] Accessibility tests pass
+- [ ] Performance benchmarks within acceptable range
+
+### Staging Environment Testing:
+- [ ] Full deployment successful
+- [ ] Database migrations successful
+- [ ] External integrations working
+- [ ] User acceptance testing completed
+- [ ] Load testing passed
+- [ ] Security scanning passed
+
+### Pre-Production Testing:
+- [ ] Production-like data testing
+- [ ] Backup and restore procedures tested
+- [ ] Monitoring and alerting working
+- [ ] Rollback procedures tested
+- [ ] Documentation accuracy verified
+```
+
+#### **Automated Testing Execution:**
+```bash
+# Run full test suite
+npm run test:all
+
+# Run performance tests
+npm run test:performance
+
+# Run security tests
+npm run test:security
+
+# Run accessibility tests
+npm run test:a11y
+
+# Generate test coverage report
+npm run test:coverage
+
+# Run end-to-end tests
+npm run test:e2e
+```
+
+#### **User Acceptance Testing Coordination:**
+```markdown
+## UAT Coordination Plan
+
+### UAT Scope:
+- [Feature 1]: [Test scenarios]
+- [Feature 2]: [Test scenarios]
+- [Bug fixes]: [Verification steps]
+
+### UAT Team:
+- **Product Owner**: [Name] - [Contact]
+- **QA Lead**: [Name] - [Contact]  
+- **Business Users**: [Names] - [Contacts]
+
+### UAT Schedule:
+- **Start Date**: [Date]
+- **End Date**: [Date]
+- **Daily Standups**: [Time and location]
+- **Issue Reporting**: [Process and tools]
+
+### UAT Environment:
+- **URL**: [Staging environment URL]
+- **Credentials**: [How to access]
+- **Test Data**: [Available test datasets]
+```
+
+## 🚀 **RELEASE DEPLOYMENT PREPARATION:**
+
+### **STEP 7: Deployment Planning and Coordination**
+
+#### **Deployment Strategy Selection:**
+```markdown
+## Deployment Strategy
+
+### Strategy Type: [Blue-Green/Rolling/Canary/Big Bang]
+
+### Deployment Schedule:
+- **Maintenance Window**: [Start time - End time]
+- **Expected Duration**: [Duration]
+- **Rollback Deadline**: [Time limit for rollback decision]
+
+### Environment Progression:
+1. **Staging**: [Date/Time] - [Validation criteria]
+2. **Pre-Production**: [Date/Time] - [Validation criteria]  
+3. **Production**: [Date/Time] - [Validation criteria]
+
+### Rollback Plan:
+- **Rollback Triggers**: [Conditions that require rollback]
+- **Rollback Process**: [Step-by-step rollback procedure]
+- **Data Rollback**: [Database rollback strategy]
+- **Communication Plan**: [How to notify stakeholders]
+```
+
+#### **Infrastructure and Configuration Preparation:**
+```bash
+# Verify infrastructure readiness
+kubectl get nodes
+kubectl get deployments
+kubectl get services
+
+# Check configuration management
+# Verify environment variables
+# Check secrets and certificates
+# Validate database connection strings
+
+# Prepare deployment manifests
+# Update Kubernetes manifests with new version
+# Update environment-specific configurations
+# Prepare database migration scripts
+```
+
+#### **Monitoring and Alerting Setup:**
+```bash
+# Configure release-specific monitoring
+# Set up deployment alerts
+# Prepare dashboard for release monitoring
+# Configure error rate thresholds
+# Set up performance monitoring
+
+# Prepare runbooks for common issues
+# Document troubleshooting steps
+# Prepare contact information for escalation
+```
+
+### **STEP 8: Release Documentation and Communication**
+
+#### **Release Communication Plan:**
+```markdown
+## Release Communication Strategy
+
+### Stakeholder Notification:
+- **Development Team**: [When and how]
+- **QA Team**: [When and how]
+- **Product Team**: [When and how]
+- **Customer Support**: [When and how]
+- **End Users**: [When and how]
+
+### Communication Timeline:
+- **T-1 Week**: Release announcement and preparation
+- **T-1 Day**: Final readiness confirmation
+- **T-0 Hour**: Release start notification
+- **T+1 Hour**: Release completion status
+- **T+24 Hours**: Post-release stability report
+
+### Communication Channels:
+- **Internal**: [Slack channels, email lists]
+- **External**: [User communication channels]
+- **Emergency**: [Escalation procedures]
+```
+
+## 📦 **RELEASE FINALIZATION:**
+
+### **STEP 9: Release Tag and Branch Management**
+
+#### **Git Tag Creation:**
+```bash
+# Create annotated release tag
+git tag -a v[VERSION] -m "Release version [VERSION]
+
+### Release Highlights:
+- [Feature 1]
+- [Feature 2] 
+- [Critical fix 1]
+
+### Breaking Changes:
+- [Breaking change 1] - See migration guide
+
+### Contributors:
+- [Contributor list]
+
+For full changelog see: CHANGELOG.md"
+
+# Push tags
+git push origin v[VERSION]
+
+# Create GitHub/GitLab release
+gh release create v[VERSION] \
+  --title "Release v[VERSION]" \
+  --notes-file RELEASE_NOTES.md \
+  --target main
+```
+
+#### **Branch Cleanup and Maintenance:**
+```bash
+# Merge release branch to main
+git checkout main
+git merge release/v[VERSION]
+git push origin main
+
+# Merge back to develop
+git checkout develop  
+git merge main
+git push origin develop
+
+# Delete release branch
+git branch -d release/v[VERSION]
+git push origin --delete release/v[VERSION]
+
+# Update develop with any hotfixes applied to main
+```
+
+### **STEP 10: Post-Release Monitoring and Validation**
+
+#### **Release Validation Checklist:**
+```markdown
+## Post-Release Validation
+
+### Immediate Checks (0-2 hours):
+- [ ] Application startup successful
+- [ ] Health checks passing
+- [ ] Database migrations completed
+- [ ] External integrations working
+- [ ] Error rates within normal range
+- [ ] Performance metrics acceptable
+
+### Short-term Monitoring (2-24 hours):
+- [ ] User workflow validation
+- [ ] Feature functionality verification
+- [ ] Support ticket volume normal
+- [ ] System stability maintained
+- [ ] No critical issues reported
+
+### Long-term Monitoring (1-7 days):
+- [ ] Performance trends stable
+- [ ] User adoption metrics
+- [ ] System resource utilization
+- [ ] Customer feedback analysis
+- [ ] Technical debt assessment
+```
+
+## 💡 **RELEASE EXAMPLES:**
+
+### **Example 1: Major Release with Breaking Changes**
+```
+Prepare major release v2.0.0 with new authentication system
+
+Following .cursor/prompts/git/git-prep-release.mdc:
+- Plan breaking changes in auth API
+- Create comprehensive migration guide
+- Coordinate extended testing with all teams
+- Plan phased rollout with fallback options
+```
+
+### **Example 2: Minor Feature Release**
+```
+Prepare minor release v1.5.0 with new dashboard features
+
+Following .cursor/prompts/git/git-prep-release.mdc:
+- Document new dashboard functionality
+- Ensure backward compatibility maintained
+- Plan user training and communication
+- Coordinate with support team for user questions
+```
+
+### **Example 3: Critical Security Patch Release**
+```
+Prepare patch release v1.4.3 with security fixes
+
+Following .cursor/prompts/git/git-prep-release.mdc:
+- Prioritize security testing and validation
+- Plan expedited deployment schedule
+- Coordinate with security team for advisory
+- Prepare customer communication about security improvements
+```
+
+---
+
+**This release preparation guide ensures systematic, thorough preparation for software releases with proper version management, testing coordination, and deployment planning.**

@@ -1,0 +1,311 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Full Documentation Update Guide
+
+**This prompt orchestrates comprehensive updates across complete documentation suites, ensuring consistency, accuracy, and synchronization between architecture, developer, API, and user documentation.**
+
+## 🎯 **OBJECTIVES:**
+
+1. **ORCHESTRATE multi-document updates** across complete documentation suite
+2. **ENSURE consistency** between different documentation types
+3. **SYNCHRONIZE information** across architecture, developer, API, and user docs
+4. **MAINTAIN quality standards** across all documentation types
+5. **COORDINATE version alignment** between related documentation files
+
+## 📋 **FULL DOCUMENTATION UPDATE PROCESS:**
+
+### **STEP 1: Documentation Suite Analysis**
+
+#### **Current Documentation Inventory:**
+```bash
+echo "📚 Documentation Suite Analysis"
+echo "==============================="
+
+# Identify all documentation files
+echo "Architecture Documentation:"
+find docs/standards/ -name "*architecture*" -o -name "*design*"
+
+echo "Developer Documentation:"
+find docs/standards/ -name "*coding*" -o -name "*development*"
+
+echo "API Documentation:"
+find docs/standards/ -name "*api*" -o -name "openapi*"
+
+echo "User Documentation:"
+find docs/ -name "*user*" -o -name "*guide*" -o -name "README*"
+
+# Check documentation consistency
+echo "Documentation versions and dates:"
+grep -r "lastUpdated\|version:" docs/ | head -10
+```
+
+#### **Cross-Document Dependency Analysis:**
+- **Shared concepts** referenced across multiple documents
+- **Version dependencies** between different documentation types
+- **Architecture decisions** that affect multiple document types
+- **API changes** that impact both developer and user documentation
+- **Technology updates** affecting all documentation types
+
+#### **Update Scope Assessment:**
+- **Changes since last update** affecting multiple document types
+- **Consistency gaps** between related documents
+- **Outdated cross-references** between documents
+- **Version misalignment** across documentation suite
+- **Missing information** that should be synchronized
+
+### **STEP 2: Coordinated Update Planning**
+
+#### **Update Priority Matrix:**
+```markdown
+## Documentation Update Priorities:
+
+### High Priority (Breaking Changes):
+- [ ] **Architecture changes** affecting system design
+- [ ] **API changes** breaking existing interfaces
+- [ ] **Technology stack updates** affecting development
+- [ ] **Security updates** affecting all documentation
+
+### Medium Priority (Feature Updates):
+- [ ] **New features** requiring documentation updates
+- [ ] **Process improvements** affecting workflows
+- [ ] **Standards updates** affecting quality requirements
+- [ ] **Integration changes** affecting multiple systems
+
+### Low Priority (Enhancement):
+- [ ] **Clarity improvements** for better understanding
+- [ ] **Example updates** for better illustration
+- [ ] **Reference updates** for current information
+- [ ] **Format consistency** improvements
+```
+
+#### **Cross-Document Synchronization Plan:**
+- **Shared terminology** - Ensure consistent vocabulary across all docs
+- **Version alignment** - Synchronize version numbers and dates
+- **Cross-references** - Update links and references between documents
+- **Consistent examples** - Align code examples and workflows
+- **Quality standards** - Apply consistent quality requirements
+
+### **STEP 3: Sequential Update Execution**
+
+#### **Update Order Strategy:**
+```bash
+# Recommended update sequence for consistency
+echo "🔄 Documentation Update Sequence"
+echo "==============================="
+
+echo "1. Architecture Documentation (Foundation)"
+echo "   - Update system design and architectural decisions"
+echo "   - Establish foundation for other documentation"
+
+echo "2. Developer Documentation (Implementation)"
+echo "   - Update based on architectural changes"
+echo "   - Align with current development standards"
+
+echo "3. API Documentation (Interface)"
+echo "   - Update based on architectural and development changes"
+echo "   - Ensure interface accuracy and completeness"
+
+echo "4. User Documentation (Experience)"
+echo "   - Update based on all system changes"
+echo "   - Ensure user-facing accuracy and usability"
+```
+
+#### **Coordinated Update Process:**
+
+##### **Phase 1: Architecture Documentation Update**
+```
+Update architecture documentation using .cursor/prompts/documentation/documentation-update-architecture.mdc
+
+Focus on: [specific architectural changes or updates needed]
+```
+
+##### **Phase 2: Developer Documentation Update**
+```
+Update developer documentation using .cursor/prompts/documentation/documentation-update-developer.mdc
+
+Align with: Updated architectural decisions and current development standards
+```
+
+##### **Phase 3: API Documentation Update**
+```
+Update API documentation using .cursor/prompts/documentation/documentation-update-api.mdc
+
+Synchronize with: Current architecture and development patterns
+```
+
+##### **Phase 4: User Documentation Update**
+```
+Update user documentation using .cursor/prompts/documentation/documentation-update-user-guide.mdc
+
+Reflect: All system changes affecting user experience
+```
+
+### **STEP 4: Cross-Document Consistency Validation**
+
+#### **Consistency Validation Checklist:**
+
+##### **Terminology Consistency:**
+- [ ] **Technical terms** used consistently across all documents
+- [ ] **Product names** and versions aligned across documentation
+- [ ] **Process names** standardized across all documentation types
+- [ ] **Acronyms and abbreviations** defined consistently
+
+##### **Version Synchronization:**
+- [ ] **Technology versions** consistent across all documents
+- [ ] **API versions** aligned between developer and user docs
+- [ ] **Documentation versions** updated consistently
+- [ ] **Last updated dates** reflect actual update times
+
+##### **Cross-Reference Validation:**
+- [ ] **Internal links** between documents work correctly
+- [ ] **External references** remain valid and current
+- [ ] **Code examples** consistent across documentation types
+- [ ] **Workflow references** aligned between documents
+
+##### **Quality Standard Alignment:**
+- [ ] **Writing style** consistent across all documents
+- [ ] **Format standards** applied uniformly
+- [ ] **Accessibility requirements** met across all docs
+- [ ] **SEO considerations** applied consistently
+
+### **STEP 5: Comprehensive Quality Assurance**
+
+#### **Multi-Document Validation:**
+```bash
+echo "✅ Multi-Document Quality Assurance"
+echo "================================="
+
+# Validate cross-references
+echo "Checking cross-document references..."
+# [Validate links between documents]
+
+# Verify version consistency
+echo "Verifying version alignment..."
+# [Check version consistency across docs]
+
+# Test example consistency
+echo "Testing example alignment..."
+# [Verify examples work across contexts]
+
+# Validate terminology
+echo "Checking terminology consistency..."
+# [Verify consistent vocabulary usage]
+```
+
+#### **Integration Testing:**
+- **Documentation workflows** - Test complete documentation journeys
+- **Cross-document navigation** - Verify user flow between documents
+- **Example coherence** - Ensure examples work across document contexts
+- **Update impact** - Verify updates don't break existing workflows
+
+## ✅ **UPDATE REQUIREMENTS:**
+
+### **Consistency Requirements:**
+- **Terminology alignment** - All documents use consistent vocabulary
+- **Version synchronization** - All technology versions aligned
+- **Cross-reference accuracy** - All links and references valid
+- **Example coherence** - Code examples work across contexts
+- **Quality standard application** - Consistent quality across all docs
+
+### **Completeness Requirements:**
+- **Comprehensive coverage** - All aspects of system documented
+- **Current information** - All documents reflect current state
+- **Synchronized updates** - Related changes propagated across docs
+- **Cross-document flow** - Clear navigation between document types
+- **User journey support** - Complete documentation for all user needs
+
+### **Quality Requirements:**
+- **Technical accuracy** - All technical information current and correct
+- **Usability validation** - All documents tested for effectiveness
+- **Accessibility compliance** - All documents meet accessibility standards
+- **Maintenance sustainability** - Update process documented and repeatable
+
+## 🔍 **VALIDATION METHODOLOGY:**
+
+### **Cross-Document Validation:**
+```typescript
+// Document consistency validation
+interface DocumentConsistency {
+  terminologyAlignment: boolean;
+  versionSynchronization: boolean;
+  crossReferenceAccuracy: boolean;
+  exampleCoherence: boolean;
+  qualityStandardCompliance: boolean;
+}
+
+// Validate documentation suite
+const validateDocumentationSuite = async () => {
+  // Check terminology consistency
+  // Verify version alignment
+  // Test cross-references
+  // Validate examples
+  // Confirm quality standards
+};
+```
+
+### **User Journey Testing:**
+- **Complete documentation flows** - Test end-to-end documentation usage
+- **Cross-document transitions** - Verify smooth navigation between docs
+- **Task completion** - Ensure documentation supports user goals
+- **Information findability** - Verify users can find needed information
+
+## 💡 **INTEGRATION EXAMPLES:**
+
+### **After Major System Updates:**
+```
+Update complete documentation suite using .cursor/prompts/documentation/documentation-update-full.mdc
+
+We upgraded to Next.js 15.1, updated our architecture patterns, and added new API endpoints - need comprehensive documentation update.
+```
+
+### **For Release Preparation:**
+```
+Prepare documentation for v2.0 release using documentation-update-full.mdc
+
+Apply .cursor/rules/code-change-minimal.mdc - preserve existing structure while ensuring all information is current for release.
+```
+
+### **Quarterly Documentation Review:**
+```
+Quarterly documentation maintenance using documentation-update-full.mdc
+
+Focus on: Version alignment, cross-reference validation, and example currency across all documentation types.
+```
+
+## 🚨 **CRITICAL UPDATE TRIGGERS:**
+
+### **Immediate Full Update Required:**
+- **Major version releases** - Comprehensive updates across all documentation
+- **Architecture changes** - Updates affecting multiple document types
+- **Breaking API changes** - Synchronized updates across developer and user docs
+- **Security updates** - Critical information updates across all documents
+- **Technology stack changes** - Version and example updates across all docs
+
+### **Quality Gates:**
+Before completing full documentation update:
+- [ ] All individual document updates completed successfully
+- [ ] Cross-document consistency validated
+- [ ] User journey testing completed
+- [ ] Version synchronization confirmed
+- [ ] Quality standards validated across all documents
+
+## 🔧 **MAINTENANCE INTEGRATION:**
+
+### **Update Coordination:**
+- **Staged updates** - Systematic progression through documentation types
+- **Consistency checks** - Regular validation of cross-document alignment
+- **Version management** - Coordinated version updates across all documents
+- **Quality assurance** - Comprehensive testing of complete documentation suite
+
+### **Success Criteria:**
+- **Complete coverage** - All documentation types updated appropriately
+- **Consistency achieved** - All documents aligned and synchronized
+- **Quality maintained** - All documents meet established standards
+- **User experience optimized** - Complete documentation suite supports user needs
+
+---
+
+**This prompt ensures comprehensive, coordinated updates across complete documentation suites while maintaining consistency, accuracy, and quality standards.**

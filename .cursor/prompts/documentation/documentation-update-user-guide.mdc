@@ -1,0 +1,336 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# User Guide Documentation Update Guide
+
+**This prompt systematically updates user-facing documentation to reflect current features, user workflows, interface changes, and user experience patterns while maintaining accessibility and usability standards.**
+
+## 🎯 **OBJECTIVES:**
+
+1. **UPDATE user workflows** to reflect current application features and interface
+2. **SYNCHRONIZE screenshots** and visual guides with current UI implementation
+3. **MAINTAIN accessibility** standards in all user documentation
+4. **ENSURE tutorial accuracy** for current user experience flows
+5. **VALIDATE help content** for current feature set and user needs
+
+## 📋 **USER GUIDE UPDATE PROCESS:**
+
+### **STEP 1: Current User Experience Assessment**
+
+#### **Application State Analysis:**
+```bash
+echo "👥 Current User Experience Assessment"
+echo "===================================="
+
+# Check current application features
+echo "Application Features Analysis:"
+find src/app -name "page.tsx" | sort
+
+# Verify user interface components
+echo "UI Components Review:"
+find src/components -name "*.tsx" | grep -E "(Button|Form|Modal|Navigation)" | head -10
+
+# Check user flow implementations
+echo "User Flow Analysis:"
+find src/app -type d | grep -E "(auth|dashboard|profile|settings)" | sort
+
+# Review accessibility implementations
+echo "Accessibility Features:"
+find src/ -name "*.tsx" | xargs grep -l "aria-\|role=\|alt=" | head -5
+
+# Check user feedback and help features
+echo "Help and Support Features:"
+find src/ -name "*.tsx" | xargs grep -l "help\|support\|tutorial" | head -5
+```
+
+#### **User Experience Changes:**
+- **New features** added since last documentation update
+- **Interface modifications** affecting user workflows
+- **Navigation changes** impacting user experience flow
+- **Feature deprecations** requiring documentation updates
+- **Accessibility improvements** requiring guide updates
+
+#### **Documentation Gap Analysis:**
+- **Outdated screenshots** not reflecting current interface
+- **Missing feature documentation** for new capabilities
+- **Broken workflow guides** that no longer match user experience
+- **Incomplete accessibility guides** missing current features
+- **Outdated troubleshooting** that doesn't address current issues
+
+### **STEP 2: User Workflow Documentation Updates**
+
+#### **Core User Journey Updates:**
+```markdown
+## User Workflow Updates Required:
+
+### Onboarding and Setup:
+- [ ] **Account creation** - Update registration process documentation
+- [ ] **Initial setup** - Reflect current onboarding flow
+- [ ] **Profile configuration** - Update profile setup guides
+- [ ] **Preference settings** - Document current user preferences
+
+### Daily Usage Workflows:
+- [ ] **Navigation patterns** - Update current navigation documentation
+- [ ] **Feature usage** - Document current feature access and usage
+- [ ] **Data management** - Update current data handling workflows
+- [ ] **Collaboration features** - Document current sharing and collaboration
+
+### Advanced Features:
+- [ ] **Power user features** - Document advanced functionality
+- [ ] **Integration usage** - Update third-party integration guides
+- [ ] **Customization options** - Document current customization capabilities
+- [ ] **Export/import features** - Update data portability documentation
+```
+
+#### **Feature-Specific Documentation:**
+```typescript
+// User feature documentation validation
+interface FeatureDocumentation {
+  coreFeatures: boolean;
+  advancedFeatures: boolean;
+  integrationFeatures: boolean;
+  accessibilityFeatures: boolean;
+  troubleshootingGuides: boolean;
+}
+
+// User documentation areas to update
+const userDocumentationAreas = [
+  'getting-started-guides',
+  'feature-tutorials',
+  'workflow-documentation',
+  'troubleshooting-guides',
+  'accessibility-guides',
+  'frequently-asked-questions'
+];
+```
+
+### **STEP 3: Visual Guide and Screenshot Updates**
+
+#### **Visual Documentation Assessment:**
+```bash
+echo "📸 Visual Documentation Review"
+echo "============================="
+
+# Check for existing screenshots
+echo "Current Screenshots:"
+find docs/ -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.webp" | head -10
+
+# Identify visual guide locations
+echo "Visual Guide Locations:"
+find docs/ -name "*.md" | xargs grep -l "!\[.*\]" | head -5
+
+# Check for video or interactive guides
+echo "Interactive Content:"
+find docs/ -name "*.md" | xargs grep -l "video\|demo\|interactive" | head -5
+```
+
+#### **Screenshot and Visual Update Requirements:**
+- **Interface screenshots** - Update all screenshots to reflect current UI
+- **Workflow demonstrations** - Update step-by-step visual guides
+- **Feature highlights** - Update visual feature demonstrations
+- **Error state documentation** - Update error message and state visuals
+- **Mobile/responsive views** - Update mobile interface documentation
+
+### **STEP 4: Accessibility Documentation Updates**
+
+#### **Accessibility Guide Updates:**
+```markdown
+## Accessibility Documentation Updates:
+
+### Navigation Accessibility:
+- [ ] **Keyboard navigation** - Update keyboard shortcut documentation
+- [ ] **Screen reader support** - Document current screen reader compatibility
+- [ ] **Focus management** - Update focus flow documentation
+- [ ] **Skip links** - Document current skip navigation features
+
+### Content Accessibility:
+- [ ] **Alt text guidance** - Update image alt text best practices
+- [ ] **Color contrast** - Document current color accessibility features
+- [ ] **Text sizing** - Update text scaling and sizing options
+- [ ] **Language support** - Document current internationalization features
+
+### Interactive Accessibility:
+- [ ] **Form accessibility** - Update accessible form completion guides
+- [ ] **Error handling** - Document accessible error communication
+- [ ] **Dynamic content** - Update accessibility for dynamic features
+- [ ] **Media accessibility** - Document video/audio accessibility features
+```
+
+#### **WCAG Compliance Documentation:**
+```html
+<!-- Document current accessibility implementations -->
+<div role="main" aria-label="Current Accessibility Features">
+  <!-- Navigation accessibility -->
+  <nav aria-label="Main navigation" role="navigation">
+    <!-- Current navigation accessibility features -->
+  </nav>
+  
+  <!-- Content accessibility -->
+  <section aria-labelledby="content-heading">
+    <!-- Current content accessibility features -->
+  </section>
+  
+  <!-- Interactive accessibility -->
+  <form aria-label="Accessible form example">
+    <!-- Current form accessibility features -->
+  </form>
+</div>
+```
+
+### **STEP 5: Help and Support Documentation**
+
+#### **Support Documentation Updates:**
+```markdown
+## Help and Support Updates:
+
+### Troubleshooting Guides:
+- [ ] **Common issues** - Update current common problem solutions
+- [ ] **Error messages** - Document current error message meanings
+- [ ] **Performance issues** - Update performance troubleshooting
+- [ ] **Browser compatibility** - Update browser support documentation
+
+### Frequently Asked Questions:
+- [ ] **Feature questions** - Update FAQ for current features
+- [ ] **Account management** - Update account-related FAQ
+- [ ] **Technical support** - Update technical question answers
+- [ ] **Billing/subscription** - Update subscription-related questions (if applicable)
+
+### Contact and Support:
+- [ ] **Support channels** - Update current support contact methods
+- [ ] **Community resources** - Document current community support
+- [ ] **Documentation feedback** - Update documentation improvement process
+- [ ] **Feature requests** - Document current feature request process
+```
+
+#### **User Feedback Integration:**
+```javascript
+// Document current user feedback mechanisms
+const userFeedbackSystems = {
+  // In-app feedback
+  inAppFeedback: {
+    feedbackWidgets: "current implementation",
+    helpdesk: "current helpdesk integration",
+    chatSupport: "current chat support features"
+  },
+  
+  // Documentation feedback
+  docsFeedback: {
+    improvementSuggestions: "current feedback process",
+    errorReporting: "current error reporting process",
+    contentRequests: "current content request process"
+  }
+};
+```
+
+## ✅ **UPDATE REQUIREMENTS:**
+
+### **User Experience Accuracy:**
+- **Current interface reflection** - All documentation reflects current UI
+- **Workflow accuracy** - All user workflows match current application behavior
+- **Feature completeness** - All current features properly documented
+- **Screenshot currency** - All visual guides show current interface
+- **Accessibility alignment** - All accessibility docs reflect current implementation
+
+### **Usability Standards:**
+- **Clear instructions** - All user instructions clear and actionable
+- **Logical organization** - Information organized for optimal user flow
+- **Search optimization** - Content structured for easy searching and finding
+- **Mobile responsiveness** - Documentation accessible on all devices
+- **Loading performance** - Documentation loads quickly and efficiently
+
+### **Accessibility Compliance:**
+- **WCAG 2.1 AA compliance** - All documentation meets accessibility standards
+- **Screen reader compatibility** - Documentation works with assistive technology
+- **Keyboard navigation** - All interactive documentation keyboard accessible
+- **Color accessibility** - All visual content meets contrast requirements
+- **Alternative formats** - Multiple formats available for different needs
+
+## 🔍 **VALIDATION METHODOLOGY:**
+
+### **User Experience Validation:**
+```bash
+echo "✅ User Documentation Validation"
+echo "==============================="
+
+# Test user workflows
+echo "Testing documented user workflows..."
+# [Walk through all documented workflows in current application]
+
+# Validate screenshots
+echo "Validating visual documentation..."
+# [Compare screenshots to current interface]
+
+# Test accessibility features
+echo "Testing accessibility documentation..."
+# [Verify accessibility features work as documented]
+
+# Validate help content
+echo "Testing help and support content..."
+# [Verify help content addresses current issues]
+```
+
+### **User Testing:**
+- **New user onboarding** - Test documentation with new users
+- **Feature discovery** - Verify users can find and use features via docs
+- **Problem resolution** - Test troubleshooting guides solve actual issues
+- **Accessibility validation** - Test documentation with assistive technology users
+
+## 💡 **INTEGRATION EXAMPLES:**
+
+### **After Major UI Updates:**
+```
+Update user guide documentation after interface redesign using .cursor/prompts/documentation/documentation-update-user-guide.mdc
+
+We redesigned the dashboard and navigation - need comprehensive user documentation update with new screenshots and workflows.
+```
+
+### **New Feature Documentation:**
+```
+Update user guides for new collaboration features using documentation-update-user-guide.mdc
+
+Apply .cursor/rules/code-change-minimal.mdc - preserve existing user guide structure while adding new feature documentation.
+```
+
+### **Accessibility Improvements:**
+```
+Update user documentation for improved accessibility features using documentation-update-user-guide.mdc
+
+Focus on: Enhanced screen reader support, improved keyboard navigation, and updated accessibility workflows.
+```
+
+## 🚨 **CRITICAL UPDATE TRIGGERS:**
+
+### **Immediate Update Required:**
+- **Major UI changes** - Significant interface modifications affecting user workflows
+- **New features** - Features that change how users interact with the application
+- **Navigation changes** - Modifications to application navigation structure
+- **Accessibility updates** - Improvements to accessibility features requiring documentation
+- **Breaking workflow changes** - Changes that break existing documented workflows
+
+### **Quality Gates:**
+Before completing user guide documentation update:
+- [ ] All screenshots reflect current interface
+- [ ] All workflows tested with current application
+- [ ] All accessibility features verified and documented
+- [ ] All help content addresses current user needs
+- [ ] All documentation tested with actual users
+
+## 🔧 **MAINTENANCE INTEGRATION:**
+
+### **Regular Updates:**
+- **Feature release updates** - Updates when new features are released
+- **Interface change updates** - Updates when UI/UX changes are made
+- **Accessibility improvement updates** - Updates when accessibility features improve
+- **User feedback integration** - Updates based on user documentation feedback
+
+### **Success Criteria:**
+- **User success** - Users can successfully complete tasks using documentation
+- **Support reduction** - Documentation reduces support ticket volume
+- **Accessibility compliance** - Documentation meets all accessibility standards
+- **User satisfaction** - User feedback indicates documentation effectiveness
+
+---
+
+**This prompt ensures user guide documentation remains current, accessible, and valuable for users while supporting effective user experience and accessibility standards.**

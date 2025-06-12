@@ -1,0 +1,339 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# API Documentation Update Guide
+
+**This prompt systematically updates API documentation to reflect current endpoints, schemas, authentication methods, and integration patterns while maintaining comprehensive OpenAPI standards.**
+
+## 🎯 **OBJECTIVES:**
+
+1. **UPDATE endpoint documentation** to reflect current API implementation
+2. **SYNCHRONIZE OpenAPI specifications** with actual API behavior
+3. **MAINTAIN authentication** and authorization documentation accuracy
+4. **ENSURE schema accuracy** for all request and response types
+5. **VALIDATE integration examples** and client implementation guides
+
+## 📋 **API DOCUMENTATION UPDATE PROCESS:**
+
+### **STEP 1: API Implementation Assessment**
+
+#### **Current API Analysis:**
+```bash
+echo "🔌 API Implementation Assessment"
+echo "==============================="
+
+# Discover API routes
+echo "Current API Routes:"
+find src/app/api -name "route.ts" -o -name "*.ts" | sort
+
+# Check API configuration
+echo "API Configuration:"
+find . -name "*api*" -name "*.config.*" 2>/dev/null
+
+# Verify authentication setup
+echo "Authentication Implementation:"
+find src/ -name "*auth*" -o -name "*jwt*" -o -name "*token*" | head -10
+
+# Check database/data layer
+echo "Data Layer Implementation:"
+find src/ -name "*schema*" -o -name "*model*" -o -name "*db*" | head -10
+
+# Review middleware and validation
+echo "API Middleware:"
+find src/ -name "*middleware*" -o -name "*validation*" | head -5
+```
+
+#### **API Change Detection:**
+- **New endpoints** added since last documentation update
+- **Modified endpoints** with changed behavior or parameters
+- **Deprecated endpoints** that should be marked or removed
+- **Authentication changes** affecting API access patterns
+- **Schema modifications** affecting request/response structures
+
+#### **Documentation Gap Analysis:**
+- **Undocumented endpoints** missing from API documentation
+- **Outdated schemas** not reflecting current data structures
+- **Missing authentication docs** for new auth methods
+- **Incomplete examples** lacking current implementation details
+- **Broken integration guides** that no longer work with current API
+
+### **STEP 2: OpenAPI Specification Updates**
+
+#### **OpenAPI Schema Validation:**
+```yaml
+# OpenAPI specification structure to update
+openapi: 3.0.3
+info:
+  title: [Current API Title]
+  version: [Current API Version]
+  description: [Updated API Description]
+
+servers:
+  - url: [Current API Base URL]
+    description: [Environment Description]
+
+paths:
+  # Update all endpoint paths
+  /api/[endpoint]:
+    [method]:
+      summary: [Updated Summary]
+      parameters: [Current Parameters]
+      requestBody: [Current Request Schema]
+      responses: [Current Response Schemas]
+      security: [Current Security Requirements]
+```
+
+#### **Schema Updates Required:**
+```typescript
+// Verify current API schemas match implementation
+interface APISchemaValidation {
+  requestSchemas: boolean;
+  responseSchemas: boolean;
+  errorSchemas: boolean;
+  authenticationSchemas: boolean;
+  parameterSchemas: boolean;
+}
+
+// Current schema validation checklist
+const schemaValidationAreas = [
+  'user-schemas',
+  'authentication-schemas',
+  'error-response-schemas',
+  'pagination-schemas',
+  'filter-parameter-schemas',
+  'file-upload-schemas'
+];
+```
+
+### **STEP 3: Endpoint Documentation Updates**
+
+#### **Endpoint Documentation Review:**
+```markdown
+## Endpoint Documentation Updates:
+
+### Authentication Endpoints:
+- [ ] **Login/logout** - Update authentication flow documentation
+- [ ] **Token refresh** - Verify current token handling
+- [ ] **Password reset** - Update password recovery flow
+- [ ] **User registration** - Reflect current registration process
+
+### Core Business Endpoints:
+- [ ] **CRUD operations** - Update create, read, update, delete operations
+- [ ] **Search/filtering** - Document current search capabilities
+- [ ] **Pagination** - Update current pagination implementation
+- [ ] **Bulk operations** - Document batch processing capabilities
+
+### Integration Endpoints:
+- [ ] **Webhook endpoints** - Update webhook handling documentation
+- [ ] **File upload/download** - Document current file handling
+- [ ] **External API proxies** - Update third-party integration docs
+- [ ] **Real-time endpoints** - Document WebSocket or SSE implementations
+```
+
+#### **HTTP Method and Status Code Updates:**
+```http
+# Verify current endpoint implementations
+GET /api/users
+POST /api/users
+PUT /api/users/{id}
+DELETE /api/users/{id}
+
+# Update response status codes
+200 OK - [Current success response]
+201 Created - [Current creation response]
+400 Bad Request - [Current validation errors]
+401 Unauthorized - [Current auth errors]
+403 Forbidden - [Current permission errors]
+404 Not Found - [Current not found errors]
+422 Unprocessable Entity - [Current validation errors]
+500 Internal Server Error - [Current server errors]
+```
+
+### **STEP 4: Authentication and Security Updates**
+
+#### **Authentication Documentation Updates:**
+```markdown
+## Authentication Updates Required:
+
+### Authentication Methods:
+- [ ] **JWT tokens** - Update token structure and claims
+- [ ] **API keys** - Document current API key usage
+- [ ] **OAuth integration** - Update OAuth flow documentation
+- [ ] **Session management** - Document current session handling
+
+### Security Considerations:
+- [ ] **Rate limiting** - Document current rate limiting implementation
+- [ ] **CORS configuration** - Update CORS policy documentation
+- [ ] **Input validation** - Document current validation rules
+- [ ] **Error handling** - Update security-conscious error responses
+```
+
+#### **Authorization Patterns:**
+```typescript
+// Document current authorization patterns
+interface AuthorizationPatterns {
+  roleBasedAccess: boolean;
+  resourceOwnership: boolean;
+  permissionBased: boolean;
+  contextualSecurity: boolean;
+}
+
+// Security documentation areas to update
+const securityAreas = [
+  'authentication-flows',
+  'authorization-rules',
+  'security-headers',
+  'input-validation',
+  'error-handling',
+  'rate-limiting'
+];
+```
+
+### **STEP 5: Integration Guide Updates**
+
+#### **Client Integration Examples:**
+```javascript
+// Update JavaScript/TypeScript integration examples
+const apiClient = {
+  baseUrl: 'https://api.example.com',
+  
+  // Authentication examples
+  async authenticate(credentials) {
+    // Current authentication implementation
+  },
+  
+  // CRUD operation examples
+  async getUsers(params) {
+    // Current GET implementation
+  },
+  
+  async createUser(userData) {
+    // Current POST implementation
+  },
+  
+  // Error handling examples
+  handleApiError(error) {
+    // Current error handling patterns
+  }
+};
+```
+
+#### **SDK and Integration Updates:**
+- **Code examples** - Update code examples for current API implementation
+- **SDK documentation** - Update any SDK or client library documentation
+- **Postman collections** - Update API testing collections
+- **cURL examples** - Provide current cURL command examples
+- **Error handling guides** - Update error handling best practices
+
+## ✅ **UPDATE REQUIREMENTS:**
+
+### **API Accuracy:**
+- **Endpoint completeness** - All current endpoints documented
+- **Schema accuracy** - All schemas match current implementation
+- **Authentication current** - All auth methods properly documented
+- **Status code accuracy** - All response codes correctly documented
+- **Example validity** - All code examples work with current API
+
+### **Integration Support:**
+- **Clear examples** - All integration examples clear and functional
+- **Multiple languages** - Examples provided for common programming languages
+- **Error handling** - Comprehensive error handling documentation
+- **Testing guidance** - Clear guidance for API testing and validation
+- **Troubleshooting** - Common issues and solutions documented
+
+### **Documentation Quality:**
+- **OpenAPI compliance** - All documentation follows OpenAPI 3.0+ standards
+- **Accessibility** - Documentation accessible to all developers
+- **Search optimization** - Documentation structured for easy searching
+- **Version management** - API versioning clearly documented
+- **Change tracking** - API changes properly documented and communicated
+
+## 🔍 **VALIDATION METHODOLOGY:**
+
+### **API Documentation Validation:**
+```bash
+echo "✅ API Documentation Validation"
+echo "==============================="
+
+# Validate OpenAPI specification
+echo "Validating OpenAPI spec..."
+# npx swagger-codegen-cli validate -i openapi.yaml
+
+# Test endpoint documentation
+echo "Testing documented endpoints..."
+# [Test all documented endpoints against actual implementation]
+
+# Verify schema accuracy
+echo "Validating schema accuracy..."
+# [Compare documented schemas with actual API responses]
+
+# Test integration examples
+echo "Testing integration examples..."
+# [Run all code examples to verify they work]
+```
+
+### **Integration Testing:**
+- **Example validation** - Test all code examples work as documented
+- **Schema validation** - Verify all schemas match actual API responses
+- **Authentication testing** - Test all authentication flows work correctly
+- **Error scenario testing** - Verify error responses match documentation
+
+## 💡 **INTEGRATION EXAMPLES:**
+
+### **After API Changes:**
+```
+Update API documentation after endpoint modifications using .cursor/prompts/documentation/documentation-update-api.mdc
+
+We added new user management endpoints and updated authentication - need comprehensive API documentation update.
+```
+
+### **Authentication System Updates:**
+```
+Update API docs after OAuth integration using documentation-update-api.mdc
+
+Apply .cursor/rules/code-change-minimal.mdc - preserve existing endpoint documentation while adding OAuth authentication details.
+```
+
+### **Schema Evolution:**
+```
+Update API documentation for new data models using documentation-update-api.mdc
+
+Focus on: Updated user schema, new relationship models, and modified response structures.
+```
+
+## 🚨 **CRITICAL UPDATE TRIGGERS:**
+
+### **Immediate Update Required:**
+- **Breaking API changes** - Changes that break existing integrations
+- **New authentication methods** - Additional auth mechanisms
+- **Schema modifications** - Changes to request/response structures
+- **Security updates** - Changes affecting API security
+- **Endpoint additions/removals** - New or deprecated API endpoints
+
+### **Quality Gates:**
+Before completing API documentation update:
+- [ ] All endpoints tested and documented correctly
+- [ ] All schemas validated against actual API responses
+- [ ] All authentication flows tested and documented
+- [ ] All integration examples verified to work
+- [ ] OpenAPI specification validates successfully
+
+## 🔧 **MAINTENANCE INTEGRATION:**
+
+### **Regular Reviews:**
+- **API evolution tracking** - Monitor API changes for documentation updates
+- **Schema validation** - Regular validation of documented schemas
+- **Integration testing** - Regular testing of documented examples
+- **Security review** - Regular review of security documentation
+
+### **Success Criteria:**
+- **Developer experience** - API documentation supports efficient integration
+- **Technical accuracy** - All documentation reflects actual API behavior
+- **Integration success** - Developers can successfully integrate using documentation
+- **Maintenance efficiency** - Documentation easy to maintain and update
+
+---
+
+**This prompt ensures API documentation remains current, accurate, and valuable for developers integrating with your API while maintaining comprehensive OpenAPI standards.**

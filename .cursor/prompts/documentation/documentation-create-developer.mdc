@@ -1,0 +1,976 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Developer Documentation Creation
+
+**This prompt generates comprehensive developer-focused documentation including development environment setup, architecture overviews, coding standards, contribution guidelines, and technical workflows.**
+
+## 🎯 **DEVELOPER DOCUMENTATION OBJECTIVES:**
+
+1. **ANALYZE codebase structure** and generate setup documentation
+2. **CREATE comprehensive developer guides** for onboarding and contribution
+3. **DOCUMENT architecture decisions** and system design patterns
+4. **ESTABLISH coding standards** and development workflows
+5. **GENERATE contribution guidelines** and collaboration processes
+
+## 🔧 **DEVELOPMENT ENVIRONMENT ANALYSIS:**
+
+### **STEP 1: Technology Stack Discovery**
+
+#### **Automated Stack Detection:**
+```bash
+# Analyze project technology stack
+echo "🔍 Analyzing Technology Stack..."
+
+# Package managers and dependencies
+echo "## Package Management:"
+[ -f "package.json" ] && echo "- Node.js project (package.json found)"
+[ -f "yarn.lock" ] && echo "- Yarn package manager"
+[ -f "package-lock.json" ] && echo "- NPM package manager"
+[ -f "pnpm-lock.yaml" ] && echo "- PNPM package manager"
+[ -f "requirements.txt" ] && echo "- Python project (requirements.txt found)"
+[ -f "Pipfile" ] && echo "- Python project with Pipenv"
+[ -f "pyproject.toml" ] && echo "- Python project with Poetry"
+[ -f "Gemfile" ] && echo "- Ruby project (Gemfile found)"
+[ -f "Cargo.toml" ] && echo "- Rust project (Cargo.toml found)"
+[ -f "go.mod" ] && echo "- Go project (go.mod found)"
+
+# Framework detection
+echo -e "\n## Frameworks and Libraries:"
+if [ -f "package.json" ]; then
+    grep -q "next" package.json && echo "- Next.js framework"
+    grep -q "react" package.json && echo "- React library"
+    grep -q "vue" package.json && echo "- Vue.js framework"
+    grep -q "angular" package.json && echo "- Angular framework"
+    grep -q "express" package.json && echo "- Express.js server"
+    grep -q "fastify" package.json && echo "- Fastify server"
+    grep -q "gatsby" package.json && echo "- Gatsby framework"
+    grep -q "nuxt" package.json && echo "- Nuxt.js framework"
+fi
+
+# Development tools
+echo -e "\n## Development Tools:"
+[ -f "tsconfig.json" ] && echo "- TypeScript configuration"
+[ -f ".eslintrc.js" ] || [ -f ".eslintrc.json" ] && echo "- ESLint linting"
+[ -f "prettier.config.js" ] || [ -f ".prettierrc" ] && echo "- Prettier formatting"
+[ -f "vitest.config.ts" ] && echo "- Vitest testing framework"
+[ -f "jest.config.js" ] && echo "- Jest testing framework"
+[ -f "cypress.config.js" ] && echo "- Cypress E2E testing"
+[ -f "playwright.config.ts" ] && echo "- Playwright testing"
+[ -f "tailwind.config.js" ] && echo "- Tailwind CSS"
+[ -f "vite.config.ts" ] && echo "- Vite build tool"
+[ -f "webpack.config.js" ] && echo "- Webpack bundler"
+
+# Database and storage
+echo -e "\n## Database and Storage:"
+[ -f "prisma/schema.prisma" ] && echo "- Prisma ORM"
+[ -f "drizzle.config.ts" ] && echo "- Drizzle ORM"
+[ -f "knexfile.js" ] && echo "- Knex.js query builder"
+grep -q "mongoose" package.json 2>/dev/null && echo "- MongoDB with Mongoose"
+grep -q "pg" package.json 2>/dev/null && echo "- PostgreSQL"
+grep -q "mysql" package.json 2>/dev/null && echo "- MySQL"
+
+# Deployment and infrastructure
+echo -e "\n## Deployment and Infrastructure:"
+[ -f "Dockerfile" ] && echo "- Docker containerization"
+[ -f "docker-compose.yml" ] && echo "- Docker Compose"
+[ -f "vercel.json" ] && echo "- Vercel deployment"
+[ -f "netlify.toml" ] && echo "- Netlify deployment"
+[ -d ".github/workflows" ] && echo "- GitHub Actions CI/CD"
+[ -f ".gitlab-ci.yml" ] && echo "- GitLab CI"
+[ -f "serverless.yml" ] && echo "- Serverless framework"
+```
+
+#### **Project Structure Analysis:**
+```bash
+# Generate project structure documentation
+echo "📁 Analyzing Project Structure..."
+
+cat > "project-structure.md" << 'EOF'
+# Project Structure
+
+This document outlines the organization and structure of the codebase.
+
+## Root Directory Structure
+
+```
+project-root/
+├── src/                    # Source code
+├── public/                 # Static assets
+├── docs/                   # Documentation
+├── tests/                  # Test files
+├── scripts/                # Build and utility scripts
+├── .github/                # GitHub workflows and templates
+├── package.json            # Dependencies and scripts
+├── tsconfig.json           # TypeScript configuration
+├── next.config.js          # Next.js configuration
+└── README.md               # Project overview
+```
+
+## Source Code Organization
+
+### `/src` Directory
+```
+src/
+├── app/                    # Next.js App Router (if applicable)
+│   ├── (auth)/            # Route groups
+│   ├── api/               # API routes
+│   ├── globals.css        # Global styles
+│   └── layout.tsx         # Root layout
+├── components/            # Reusable UI components
+│   ├── ui/               # Base UI components
+│   ├── forms/            # Form components
+│   └── layout/           # Layout components
+├── lib/                  # Utility libraries and configurations
+│   ├── auth.ts           # Authentication configuration
+│   ├── db.ts             # Database configuration
+│   ├── utils.ts          # Utility functions
+│   └── validations.ts    # Schema validations
+├── hooks/                # Custom React hooks
+├── types/                # TypeScript type definitions
+├── styles/               # Styling files
+└── constants/            # Application constants
+```
+
+### Component Organization
+- **Atomic Design Pattern**: Components organized by complexity
+- **Feature-based**: Components grouped by feature/domain
+- **Shared Components**: Reusable across multiple features
+
+### API Structure (if applicable)
+```
+src/app/api/
+├── auth/                 # Authentication endpoints
+├── users/                # User management
+├── posts/                # Content management
+└── webhooks/             # External service webhooks
+```
+EOF
+```
+
+## 📋 **SETUP AND INSTALLATION GUIDES:**
+
+### **STEP 2: Development Environment Setup**
+
+#### **Comprehensive Setup Guide:**
+```bash
+# Create detailed setup documentation
+cat > "docs/SETUP.md" << 'EOF'
+# Development Environment Setup
+
+This guide will help you set up the development environment for [Project Name].
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+### Required Software
+- **Node.js**: Version 18.0.0 or higher
+  - Download from [nodejs.org](https://nodejs.org/)
+  - Verify installation: `node --version`
+- **Package Manager**: We use [yarn/npm/pnpm]
+  - Install yarn: `npm install -g yarn`
+  - Verify installation: `yarn --version`
+- **Git**: For version control
+  - Download from [git-scm.com](https://git-scm.com/)
+  - Verify installation: `git --version`
+
+### Optional but Recommended
+- **VS Code**: Recommended IDE with extensions
+- **Docker**: For containerized development (optional)
+- **[Database]**: [PostgreSQL/MySQL/MongoDB] for local development
+
+## Quick Start
+
+### 1. Clone the Repository
+```bash
+git clone [repository-url]
+cd [project-name]
+```
+
+### 2. Install Dependencies
+```bash
+# Using yarn (recommended)
+yarn install
+
+# Or using npm
+npm install
+
+# Or using pnpm
+pnpm install
+```
+
+### 3. Environment Configuration
+```bash
+# Copy environment template
+cp .env.example .env.local
+
+# Edit environment variables
+# Required variables:
+# - DATABASE_URL=your_database_connection_string
+# - NEXTAUTH_SECRET=your_secret_key
+# - NEXTAUTH_URL=http://localhost:3000
+```
+
+### 4. Database Setup
+```bash
+# If using Prisma
+npx prisma generate
+npx prisma db push
+
+# Or run migrations
+npx prisma migrate dev
+
+# Seed database (optional)
+npx prisma db seed
+```
+
+### 5. Start Development Server
+```bash
+yarn dev
+# or
+npm run dev
+# or
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Detailed Setup Instructions
+
+### Environment Variables
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```env
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/database_name"
+
+# Authentication (if using NextAuth.js)
+NEXTAUTH_SECRET="your-secret-key-here"
+NEXTAUTH_URL="http://localhost:3000"
+
+# External APIs
+API_KEY="your-api-key"
+
+# Optional: Feature flags
+ENABLE_FEATURE_X=true
+```
+
+### Database Configuration
+
+#### PostgreSQL (Recommended)
+1. Install PostgreSQL locally or use a cloud service
+2. Create a new database for the project
+3. Update `DATABASE_URL` in your `.env.local`
+4. Run migrations: `npx prisma migrate dev`
+
+#### Alternative: SQLite (Development Only)
+```env
+DATABASE_URL="file:./dev.db"
+```
+
+### IDE Configuration
+
+#### VS Code Extensions (Recommended)
+Install these extensions for the best development experience:
+
+```json
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "ms-vscode.vscode-typescript-next",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "prisma.prisma",
+    "ms-vscode.vscode-json"
+  ]
+}
+```
+
+#### VS Code Settings
+Add to your workspace settings (`.vscode/settings.json`):
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "typescript.preferences.importModuleSpecifier": "relative"
+}
+```
+
+## Development Workflow
+
+### Available Scripts
+
+```bash
+# Development
+yarn dev                    # Start development server
+yarn build                  # Build for production
+yarn start                  # Start production server
+yarn lint                   # Run ESLint
+yarn lint:fix              # Fix ESLint issues
+yarn type-check            # Run TypeScript checks
+
+# Testing
+yarn test                   # Run unit tests
+yarn test:watch            # Run tests in watch mode
+yarn test:coverage         # Run tests with coverage
+yarn test:e2e              # Run end-to-end tests
+
+# Database
+yarn db:generate           # Generate Prisma client
+yarn db:push              # Push schema to database
+yarn db:migrate            # Run database migrations
+yarn db:seed              # Seed database with sample data
+yarn db:studio             # Open Prisma Studio
+
+# Utilities
+yarn format               # Format code with Prettier
+yarn analyze              # Analyze bundle size
+```
+
+### Git Hooks
+
+We use Husky for Git hooks:
+
+```json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}
+```
+
+## Troubleshooting
+
+### Common Issues
+
+#### Port Already in Use
+```bash
+# Kill process on port 3000
+lsof -ti:3000 | xargs kill -9
+
+# Or use a different port
+yarn dev -p 3001
+```
+
+#### Database Connection Issues
+1. Verify database is running
+2. Check connection string in `.env.local`
+3. Ensure database exists
+4. Check firewall/network settings
+
+#### Node Version Issues
+```bash
+# Using nvm to switch Node versions
+nvm install 18
+nvm use 18
+```
+
+#### Dependency Issues
+```bash
+# Clear node_modules and reinstall
+rm -rf node_modules yarn.lock
+yarn install
+```
+
+### Getting Help
+
+- 📖 Check our [FAQ](./FAQ.md)
+- 🐛 Report issues on [GitHub Issues](link-to-issues)
+- 💬 Join our [Discord/Slack](link-to-community)
+- 📧 Contact: [development@yourproject.com]
+
+## Next Steps
+
+After setup, check out:
+- [Contributing Guidelines](./CONTRIBUTING.md)
+- [Code Standards](./CODING_STANDARDS.md)
+- [Architecture Overview](./ARCHITECTURE.md)
+- [API Documentation](./API.md)
+
+---
+Last updated: [Date]
+EOF
+
+echo "📚 Development setup guide created: docs/SETUP.md"
+```
+
+### **STEP 3: Architecture Documentation**
+
+#### **System Architecture Overview:**
+```bash
+# Create architecture documentation
+cat > "docs/ARCHITECTURE.md" << 'EOF'
+# System Architecture
+
+This document provides an overview of the system architecture, design decisions, and key components.
+
+## High-Level Architecture
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│                 │    │                 │    │                 │
+│   Client/UI     │◄──►│   API/Server    │◄──►│   Database      │
+│   (React/Next)  │    │   (Next.js)     │    │   (PostgreSQL)  │
+│                 │    │                 │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│                 │    │                 │    │                 │
+│   CDN/Static    │    │   External      │    │   Cache/Redis   │
+│   Assets        │    │   APIs          │    │   (Optional)    │
+│                 │    │                 │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
+
+## Technology Stack
+
+### Frontend
+- **Framework**: Next.js 15 with App Router
+- **UI Library**: React 19
+- **Styling**: Tailwind CSS
+- **State Management**: React Context/Zustand
+- **Form Handling**: React Hook Form with Zod validation
+- **TypeScript**: For type safety
+
+### Backend
+- **Runtime**: Node.js
+- **Framework**: Next.js API Routes
+- **Database ORM**: Prisma
+- **Authentication**: NextAuth.js
+- **Validation**: Zod schemas
+- **File Upload**: [Service/Library used]
+
+### Database
+- **Primary Database**: PostgreSQL
+- **ORM**: Prisma
+- **Migrations**: Prisma Migrate
+- **Connection Pooling**: Built-in Prisma connection pooling
+
+### Infrastructure
+- **Deployment**: Vercel/[Your platform]
+- **Database Hosting**: [Your database host]
+- **File Storage**: [Your storage solution]
+- **Monitoring**: [Your monitoring solution]
+
+## Application Structure
+
+### Frontend Architecture
+
+#### Component Hierarchy
+```
+App
+├── Layout
+│   ├── Header
+│   ├── Navigation
+│   └── Footer
+├── Pages
+│   ├── Dashboard
+│   ├── Profile
+│   └── Settings
+└── Shared Components
+    ├── UI Components
+    ├── Forms
+    └── Data Display
+```
+
+#### State Management
+- **Global State**: Context API for user session, theme
+- **Server State**: React Query/SWR for API data
+- **Form State**: React Hook Form for form management
+- **URL State**: Next.js router for navigation state
+
+### Backend Architecture
+
+#### API Design
+- **REST API**: Following RESTful principles
+- **Route Structure**: Organized by resource/feature
+- **Middleware**: Authentication, validation, error handling
+- **Response Format**: Consistent JSON responses
+
+#### Database Design
+```sql
+-- Example schema structure
+Users
+├── id (uuid, primary key)
+├── email (unique)
+├── name
+├── role
+├── created_at
+└── updated_at
+
+Posts
+├── id (uuid, primary key)
+├── title
+├── content
+├── author_id (foreign key -> Users.id)
+├── published
+├── created_at
+└── updated_at
+```
+
+## Design Patterns
+
+### Frontend Patterns
+
+#### Component Patterns
+- **Compound Components**: For complex UI components
+- **Render Props**: For component logic sharing
+- **Custom Hooks**: For stateful logic reuse
+- **Higher-Order Components**: For cross-cutting concerns
+
+#### Data Fetching
+- **Server Components**: For initial data loading
+- **Client Components**: For interactive data fetching
+- **Optimistic Updates**: For better UX
+- **Error Boundaries**: For error handling
+
+### Backend Patterns
+
+#### API Patterns
+- **Repository Pattern**: Data access abstraction
+- **Service Layer**: Business logic separation
+- **Middleware Pattern**: Cross-cutting concerns
+- **DTO Pattern**: Data transfer objects
+
+#### Security Patterns
+- **Authentication**: JWT with NextAuth.js
+- **Authorization**: Role-based access control
+- **Input Validation**: Zod schema validation
+- **SQL Injection Prevention**: Prisma ORM
+
+## Data Flow
+
+### Request Lifecycle
+1. **Client Request**: User interacts with UI
+2. **Route Handling**: Next.js router matches route
+3. **Middleware**: Authentication/authorization checks
+4. **API Handler**: Processes business logic
+5. **Database Query**: Prisma ORM executes query
+6. **Response**: Formatted data returned to client
+7. **UI Update**: React updates interface
+
+### Authentication Flow
+1. User submits credentials
+2. NextAuth.js validates against provider
+3. JWT token generated and stored
+4. Subsequent requests include token
+5. Middleware validates token
+6. User context available in components
+
+## Performance Considerations
+
+### Frontend Optimization
+- **Code Splitting**: Automatic with Next.js
+- **Image Optimization**: Next.js Image component
+- **Caching**: Browser and CDN caching
+- **Bundle Analysis**: Regular bundle size monitoring
+
+### Backend Optimization
+- **Database Indexing**: Strategic index placement
+- **Query Optimization**: Efficient Prisma queries
+- **Connection Pooling**: Database connection management
+- **Caching**: API response caching where appropriate
+
+### Monitoring and Observability
+- **Error Tracking**: [Your error tracking service]
+- **Performance Monitoring**: [Your APM solution]
+- **Analytics**: [Your analytics solution]
+- **Logging**: Structured logging for debugging
+
+## Security Architecture
+
+### Application Security
+- **HTTPS**: All communications encrypted
+- **CSRF Protection**: Built-in Next.js protection
+- **XSS Prevention**: Content Security Policy
+- **Input Sanitization**: Server-side validation
+
+### Data Security
+- **Encryption at Rest**: Database encryption
+- **Encryption in Transit**: TLS/SSL
+- **Access Control**: Role-based permissions
+- **Audit Logging**: Security event tracking
+
+## Deployment Architecture
+
+### Production Environment
+```
+Internet → CDN → Load Balancer → App Servers → Database
+                                      ↓
+                                 File Storage
+```
+
+### CI/CD Pipeline
+1. Code push to repository
+2. Automated tests run
+3. Build and optimization
+4. Security scanning
+5. Deployment to staging
+6. Production deployment (on approval)
+
+## Decision Records
+
+### ADR-001: Database Choice
+**Decision**: PostgreSQL
+**Rationale**: ACID compliance, JSON support, mature ecosystem
+**Consequences**: Better data integrity, learning curve for some developers
+
+### ADR-002: State Management
+**Decision**: React Context + React Query
+**Rationale**: Built-in, good for our use case, server state separation
+**Consequences**: Simpler setup, potential prop drilling for deep components
+
+### ADR-003: Styling Solution
+**Decision**: Tailwind CSS
+**Rationale**: Utility-first, consistent design system, fast development
+**Consequences**: Learning curve, potential bundle size
+
+## Future Considerations
+
+### Scalability
+- **Horizontal Scaling**: Multiple app instances
+- **Database Scaling**: Read replicas, sharding considerations
+- **Caching Strategy**: Redis for session/data caching
+- **Microservices**: Potential service extraction
+
+### Technology Evolution
+- **Framework Updates**: Regular Next.js/React updates
+- **Database Migration**: Potential NoSQL addition
+- **Infrastructure**: Kubernetes for container orchestration
+- **Monitoring**: Enhanced observability stack
+
+---
+For more detailed information, see:
+- [API Documentation](./API.md)
+- [Database Schema](./DATABASE.md)
+- [Security Guidelines](./SECURITY.md)
+EOF
+
+echo "🏗️ Architecture documentation created: docs/ARCHITECTURE.md"
+```
+
+### **STEP 4: Contribution Guidelines**
+
+#### **Comprehensive Contribution Guide:**
+```bash
+# Create contribution guidelines
+cat > "docs/CONTRIBUTING.md" << 'EOF'
+# Contributing Guidelines
+
+Thank you for your interest in contributing to [Project Name]! This document provides guidelines and information for contributors.
+
+## Code of Conduct
+
+Please read and follow our [Code of Conduct](./CODE_OF_CONDUCT.md). We are committed to providing a welcoming and inclusive environment for all contributors.
+
+## Getting Started
+
+### Prerequisites
+1. Read the [Setup Guide](./SETUP.md) to set up your development environment
+2. Familiarize yourself with our [Architecture](./ARCHITECTURE.md)
+3. Review our [Coding Standards](./CODING_STANDARDS.md)
+
+### Types of Contributions
+
+We welcome the following types of contributions:
+- 🐛 **Bug Reports**: Help us identify and fix issues
+- ✨ **Feature Requests**: Suggest new features or improvements
+- 📝 **Documentation**: Improve or add documentation
+- 🛠️ **Code Contributions**: Bug fixes, features, performance improvements
+- 🧪 **Testing**: Add or improve test coverage
+- 🎨 **Design**: UI/UX improvements and design contributions
+
+## Contributing Process
+
+### 1. Issue First Approach
+
+Before starting work on significant changes:
+1. **Search existing issues** to avoid duplicates
+2. **Create an issue** describing the problem or feature
+3. **Discuss the approach** with maintainers
+4. **Get approval** before starting development
+
+### 2. Fork and Clone
+```bash
+# Fork the repository on GitHub
+# Clone your fork
+git clone https://github.com/YOUR_USERNAME/PROJECT_NAME.git
+cd PROJECT_NAME
+
+# Add upstream remote
+git remote add upstream https://github.com/ORIGINAL_OWNER/PROJECT_NAME.git
+```
+
+### 3. Create a Feature Branch
+```bash
+# Update your main branch
+git checkout main
+git pull upstream main
+
+# Create a new branch
+git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/issue-number-description
+```
+
+### 4. Make Your Changes
+
+#### Development Guidelines
+- **Follow coding standards**: See [CODING_STANDARDS.md](./CODING_STANDARDS.md)
+- **Write tests**: Include unit tests for new functionality
+- **Update documentation**: Keep docs in sync with code changes
+- **Keep commits atomic**: One logical change per commit
+- **Write clear commit messages**: Follow conventional commits
+
+#### Commit Message Format
+We use [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+type(scope): description
+
+[optional body]
+
+[optional footer]
+```
+
+**Types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code formatting changes
+- `refactor`: Code refactoring
+- `test`: Adding or updating tests
+- `chore`: Maintenance tasks
+
+**Examples:**
+```
+feat(auth): add OAuth2 authentication
+fix(api): resolve user creation validation error
+docs(readme): update installation instructions
+test(users): add unit tests for user service
+```
+
+### 5. Testing Your Changes
+
+```bash
+# Run all tests
+yarn test
+
+# Run specific test files
+yarn test src/components/Button.test.tsx
+
+# Run tests with coverage
+yarn test:coverage
+
+# Run E2E tests
+yarn test:e2e
+
+# Lint and format
+yarn lint
+yarn format
+```
+
+### 6. Submit a Pull Request
+
+#### Before Submitting
+- [ ] All tests pass
+- [ ] Code is properly formatted
+- [ ] Documentation is updated
+- [ ] No console errors or warnings
+- [ ] Feature works in multiple browsers (if UI changes)
+
+#### Pull Request Template
+```markdown
+## Description
+Brief description of changes made.
+
+## Type of Change
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Documentation update
+
+## How Has This Been Tested?
+Describe the tests that you ran to verify your changes.
+
+## Screenshots (if applicable)
+Add screenshots to help explain your changes.
+
+## Checklist
+- [ ] My code follows the style guidelines of this project
+- [ ] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [ ] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+```
+
+#### Pull Request Guidelines
+- **Clear title**: Descriptive title summarizing the change
+- **Detailed description**: Explain what changed and why
+- **Link to issue**: Reference related issues with "Closes #123"
+- **Small PRs**: Keep changes focused and reviewable
+- **Update branch**: Rebase on latest main before submitting
+
+## Code Review Process
+
+### What to Expect
+1. **Automated checks**: CI/CD pipeline runs tests and lints
+2. **Peer review**: Team members review your code
+3. **Feedback**: Constructive feedback and suggestions
+4. **Iteration**: Make requested changes and push updates
+5. **Approval**: Once approved, your PR will be merged
+
+### Review Criteria
+- **Functionality**: Does the code work as intended?
+- **Code Quality**: Is the code clean, readable, and maintainable?
+- **Testing**: Are there adequate tests for the changes?
+- **Performance**: Are there any performance implications?
+- **Security**: Are there any security concerns?
+- **Documentation**: Is documentation updated appropriately?
+
+## Development Guidelines
+
+### Code Standards
+- **TypeScript**: Use strict TypeScript with proper typing
+- **ESLint**: Follow configured linting rules
+- **Prettier**: Use for consistent code formatting
+- **Comments**: Write clear comments for complex logic
+- **Naming**: Use descriptive, meaningful names
+
+### Component Guidelines
+- **Single Responsibility**: Each component should have one clear purpose
+- **Props Interface**: Define clear TypeScript interfaces for props
+- **Default Props**: Use defaultProps or default parameters
+- **Error Boundaries**: Implement error handling where appropriate
+
+### API Guidelines
+- **RESTful Design**: Follow REST principles
+- **Error Handling**: Consistent error response format
+- **Validation**: Validate all inputs with Zod schemas
+- **Documentation**: Keep API docs updated
+
+### Database Guidelines
+- **Migrations**: Use Prisma migrations for schema changes
+- **Indexing**: Add appropriate database indexes
+- **Constraints**: Use database constraints for data integrity
+- **Seeding**: Update seed data when adding new features
+
+## Release Process
+
+### Versioning
+We follow [Semantic Versioning](https://semver.org/):
+- **MAJOR**: Breaking changes
+- **MINOR**: New features (backward compatible)
+- **PATCH**: Bug fixes (backward compatible)
+
+### Release Workflow
+1. Feature freeze and testing
+2. Update changelog
+3. Create release branch
+4. Final testing and bug fixes
+5. Tag release version
+6. Deploy to production
+7. Update documentation
+
+## Getting Help
+
+### Resources
+- 📖 **Documentation**: Check existing docs first
+- 🐛 **Issues**: Search existing issues on GitHub
+- 💬 **Discussions**: Use GitHub Discussions for questions
+- 📧 **Email**: Contact maintainers directly
+
+### Community
+- **Discord/Slack**: [Link to community chat]
+- **Office Hours**: [If applicable]
+- **Meetings**: [If applicable]
+
+### Maintainer Contact
+- **Lead Maintainer**: [Name] - [email]
+- **Core Team**: [List core team members]
+
+## Recognition
+
+We value all contributions and maintain a [CONTRIBUTORS.md](./CONTRIBUTORS.md) file to recognize everyone who has helped make this project better.
+
+### Types of Recognition
+- **Contributor List**: All contributors listed in CONTRIBUTORS.md
+- **Release Notes**: Significant contributions mentioned in releases
+- **Special Thanks**: Outstanding contributions highlighted
+
+---
+
+Thank you for contributing to [Project Name]! Your efforts help make this project better for everyone.
+EOF
+
+echo "🤝 Contribution guidelines created: docs/CONTRIBUTING.md"
+echo ""
+echo "🎉 DEVELOPER DOCUMENTATION CREATION COMPLETE!"
+echo ""
+echo "📁 Generated Developer Documentation:"
+echo "   📁 Project Structure: project-structure.md"
+echo "   🔧 Setup Guide: docs/SETUP.md"
+echo "   🏗️ Architecture: docs/ARCHITECTURE.md"
+echo "   🤝 Contributing: docs/CONTRIBUTING.md"
+echo ""
+echo "🚀 Next Steps:"
+echo "   1. Customize content for your specific technology stack"
+echo "   2. Add project-specific setup instructions"
+echo "   3. Update architecture diagrams with actual system design"
+echo "   4. Configure IDE settings and recommended extensions"
+echo ""
+```
+
+## 💡 **DEVELOPER DOCUMENTATION EXAMPLES:**
+
+### **Example 1: Full-Stack Web Application**
+```
+Create comprehensive developer documentation for Next.js app
+
+Following .cursor/prompts/documentation/documentation-create-developer.mdc:
+- Focus on React/Next.js/TypeScript stack
+- Include database setup with Prisma
+- Generate detailed API documentation
+- Create comprehensive contribution guidelines
+```
+
+### **Example 2: Open Source Library**
+```
+Generate developer docs for JavaScript library
+
+Following .cursor/prompts/documentation/documentation-create-developer.mdc:
+- Emphasize package development and publishing
+- Include comprehensive testing documentation
+- Focus on API design and usage patterns
+- Create detailed contribution and maintenance guides
+```
+
+### **Example 3: Microservices Architecture**
+```
+Document microservices development environment
+
+Following .cursor/prompts/documentation/documentation-create-developer.mdc:
+- Include Docker and Kubernetes setup
+- Document service communication patterns
+- Create development workflow for distributed system
+- Generate architecture decision records (ADRs)
+```
+
+---
+
+**This developer documentation creation prompt ensures comprehensive technical documentation that enables efficient onboarding, contribution, and maintenance of software projects.**

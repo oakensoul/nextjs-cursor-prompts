@@ -1,0 +1,340 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Form Component Creation Request
+
+Please create a new form component following our specialized form patterns and validation standards:
+
+## 🎯 **FORM CREATION OBJECTIVES:**
+
+1. **IMPLEMENT comprehensive validation** using Zod schemas with real-time feedback
+2. **ENSURE accessibility compliance** with proper ARIA attributes and form semantics
+3. **INTEGRATE with NextJS patterns** including server actions and form submission flows
+4. **PROVIDE excellent UX** with loading states, error handling, and success feedback
+5. **FOLLOW project standards** for TypeScript, testing, and component architecture
+
+## 📋 **FORM DEVELOPMENT METHODOLOGY:**
+
+### **STEP 1: Form Planning and Architecture**
+
+#### **Determine Form Type and Location:**
+- **Client Component**: `src/components/client/forms/` - Forms with real-time validation, dynamic inputs
+- **Server Component Integration**: Use with server actions for form submission
+- **Form Categories**:
+  - **Authentication Forms**: Login, register, password reset (`auth/`)
+  - **User Input Forms**: Profile updates, settings, preferences (`user/`)
+  - **Content Forms**: Contact, feedback, support requests (`content/`)
+  - **Data Entry Forms**: Complex multi-step forms (`data/`)
+
+#### **Form Complexity Assessment:**
+- **Simple Forms**: Single-step, basic validation (contact forms, login)
+- **Complex Forms**: Multi-step, conditional fields, file uploads
+- **Dynamic Forms**: Fields that change based on user input
+- **Validation Requirements**: Real-time, server-side, custom validation rules
+
+### **STEP 2: Schema and Validation Design**
+
+#### **Zod Schema Definition:**
+```typescript
+// Define comprehensive validation schema
+const FormSchema = z.object({
+  email: z.string()
+    .email('Please enter a valid email address')
+    .min(1, 'Email is required'),
+  password: z.string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Password must contain uppercase, lowercase, and number'),
+  confirmPassword: z.string()
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+type FormData = z.infer<typeof FormSchema>;
+```
+
+#### **Validation Strategy:**
+- **Client-side validation**: Immediate feedback using Zod
+- **Server-side validation**: Validation in server actions
+- **Progressive validation**: Validate on blur, submit, and real-time where appropriate
+- **Error state management**: Clear error display and field highlighting
+
+### **STEP 3: Component Implementation Requirements**
+
+#### **Form Component Structure:**
+```typescript
+interface FormProps {
+  /** Initial form data */
+  initialData?: Partial<FormData>;
+  /** Submission handler or server action */
+  onSubmit?: (data: FormData) => Promise<void> | void;
+  /** Form submission state */
+  isLoading?: boolean;
+  /** External error state */
+  error?: string | null;
+  /** Success callback */
+  onSuccess?: () => void;
+  /** Additional CSS classes */
+  className?: string;
+  /** Test identifier */
+  'data-testid'?: string;
+}
+```
+
+#### **Required Form Features:**
+- **Form state management** with proper TypeScript typing
+- **Real-time validation** with immediate user feedback
+- **Loading states** during submission with disabled form
+- **Error handling** with clear error messages and field highlighting
+- **Success feedback** with appropriate user notifications
+- **Accessibility** with proper labels, ARIA attributes, and focus management
+
+#### **Server Action Integration:**
+```typescript
+// Server action implementation pattern
+'use server'
+
+import { z } from 'zod'
+import { redirect } from 'next/navigation'
+
+export async function submitFormAction(formData: FormData) {
+  const validatedFields = FormSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    }
+  }
+
+  // Process form data
+  try {
+    // Implementation
+    redirect('/success')
+  } catch (error) {
+    return {
+      message: 'Submission failed. Please try again.'
+    }
+  }
+}
+```
+
+### **STEP 4: Accessibility Implementation**
+
+#### **Form Accessibility Requirements:**
+- **Semantic HTML**: Use `<form>`, `<fieldset>`, `<legend>` appropriately
+- **Label Association**: Proper `htmlFor` connections or `aria-label` attributes
+- **Error Announcement**: `aria-describedby` for error messages
+- **Focus Management**: Logical tab order and focus indicators
+- **Screen Reader Support**: Descriptive labels and error messages
+- **Keyboard Navigation**: Full functionality without mouse interaction
+
+#### **ARIA Attributes Pattern:**
+```typescript
+<div className="form-field">
+  <label htmlFor="email" className="form-label">
+    Email Address
+    {required && <span aria-label="required">*</span>}
+  </label>
+  <input
+    id="email"
+    type="email"
+    aria-describedby={error ? "email-error" : undefined}
+    aria-invalid={error ? "true" : "false"}
+    className={cn(
+      "form-input",
+      error && "form-input-error"
+    )}
+  />
+  {error && (
+    <p id="email-error" className="form-error" role="alert">
+      {error}
+    </p>
+  )}
+</div>
+```
+
+### **STEP 5: User Experience Patterns**
+
+#### **Loading State Implementation:**
+- **Form submission loading**: Disable form, show loading indicator
+- **Field-level loading**: Individual field validation feedback
+- **Progressive disclosure**: Show/hide fields based on user input
+- **Auto-save functionality**: For complex forms with temporary data
+
+#### **Error State Management:**
+- **Immediate validation**: On blur for individual fields
+- **Submit validation**: Comprehensive validation on form submission
+- **Server error handling**: Display server-side validation errors
+- **Error recovery**: Clear errors when user corrects input
+
+#### **Success State Handling:**
+- **Immediate feedback**: Success message or visual indicator
+- **Form reset**: Clear form data after successful submission
+- **Navigation**: Redirect to appropriate page or show next steps
+- **Confirmation**: Email confirmation or other follow-up actions
+
+## ✅ **FORM IMPLEMENTATION REQUIREMENTS:**
+
+### **File Structure:**
+```
+form-name/
+├── FormName.tsx                    # Main form component
+├── __tests__/
+│   ├── FormName.test.tsx          # Unit tests
+│   ├── FormName.a11y.test.tsx     # Accessibility tests
+│   └── FormName.integration.test.tsx # Form submission tests
+├── hooks/
+│   └── useFormValidation.ts       # Custom form hooks (if needed)
+├── actions/
+│   └── form-actions.ts            # Server actions
+└── schemas/
+    └── form-schema.ts             # Zod validation schemas
+```
+
+### **Component Requirements:**
+- [ ] **TypeScript Props Interface**: Comprehensive prop typing with JSDoc
+- [ ] **Zod Schema Validation**: Client and server-side validation
+- [ ] **Server Action Integration**: Proper form submission handling
+- [ ] **Accessibility Compliance**: WCAG 2.1 AA compliance
+- [ ] **Loading State Management**: Proper UX during async operations
+- [ ] **Error Handling**: Comprehensive error display and recovery
+- [ ] **Success Feedback**: Clear user confirmation of successful submission
+
+### **Testing Requirements:**
+- [ ] **Form Rendering**: Test form renders with all required fields
+- [ ] **Validation Testing**: Test all validation rules and error states
+- [ ] **User Interaction**: Test form submission and user input handling
+- [ ] **Accessibility Testing**: Keyboard navigation and screen reader compatibility
+- [ ] **Server Integration**: Test server action integration and error handling
+- [ ] **Loading States**: Test loading indicators and disabled states
+
+## 🔍 **FORM QUALITY STANDARDS:**
+
+### **Validation Quality:**
+- **Comprehensive Rules**: Cover all business logic requirements
+- **User-Friendly Messages**: Clear, actionable error messages
+- **Real-time Feedback**: Immediate validation on appropriate triggers
+- **Server Validation**: Always validate on server side for security
+
+### **Performance Standards:**
+- **Fast Validation**: Client-side validation should be immediate
+- **Optimized Rendering**: Minimize re-renders during validation
+- **Bundle Size**: Use code splitting for complex validation logic
+- **Network Efficiency**: Optimize server action calls
+
+### **Accessibility Standards:**
+- **WCAG 2.1 AA**: Full compliance with accessibility guidelines
+- **Keyboard Navigation**: Complete functionality without mouse
+- **Screen Reader**: Proper announcement of errors and state changes
+- **Focus Management**: Logical tab order and focus indicators
+
+## 💡 **FORM COMPONENT EXAMPLES:**
+
+### **Simple Contact Form:**
+```typescript
+// Contact form with basic validation
+<ContactForm
+  onSubmit={submitContactAction}
+  validationSchema={ContactSchema}
+  fields={['name', 'email', 'message']}
+  submitLabel="Send Message"
+/>
+```
+
+### **Multi-step Registration Form:**
+```typescript
+// Complex registration with steps
+<RegistrationForm
+  steps={['personal', 'account', 'preferences']}
+  onSubmit={registerUserAction}
+  validationSchema={RegistrationSchema}
+  showProgress={true}
+/>
+```
+
+### **Dynamic Form with Conditional Fields:**
+```typescript
+// Form with conditional field display
+<DynamicForm
+  schema={DynamicSchema}
+  conditionalFields={{
+    'userType': {
+      'business': ['companyName', 'taxId'],
+      'individual': ['dateOfBirth']
+    }
+  }}
+/>
+```
+
+## 🚨 **COMMON FORM PITFALLS:**
+
+### **Validation Pitfalls:**
+- **Client-only validation**: Always validate on server for security
+- **Inconsistent error messages**: Use consistent validation messaging
+- **Validation timing**: Don't validate every keystroke, use blur events
+- **Schema mismatch**: Ensure client and server schemas match exactly
+
+### **UX Pitfalls:**
+- **Missing loading states**: Always show progress during submission
+- **Poor error recovery**: Make it easy to fix validation errors
+- **Inaccessible forms**: Test with keyboard navigation and screen readers
+- **Form data loss**: Implement auto-save for complex forms
+
+### **Performance Pitfalls:**
+- **Excessive re-renders**: Optimize form state management
+- **Large bundle size**: Code split complex validation logic
+- **Slow validation**: Cache validation results where appropriate
+- **Memory leaks**: Clean up form subscriptions and timers
+
+## 🔧 **INTEGRATION WITH PROJECT STANDARDS:**
+
+### **Component Architecture Integration:**
+- Follows client component patterns for interactive forms
+- Integrates with server actions for form submission
+- Uses proper TypeScript interfaces and validation
+- Implements co-located testing strategy
+
+### **Standards Compliance:**
+- **Coding Standards**: TypeScript interfaces, proper error handling
+- **Testing Standards**: Unit, accessibility, and integration tests
+- **Architecture Standards**: Client/server component organization
+- **Accessibility Standards**: WCAG 2.1 AA compliance
+
+### **Related Prompts:**
+- Use `component-create-guide.mdc` for general component patterns
+- Use `component-update-form.mdc` for enhancing existing forms
+- Reference authentication and security standards for sensitive forms
+
+## 📋 **FORM CREATION DELIVERABLES:**
+
+Please provide:
+
+- [ ] **Complete form component** with TypeScript interfaces and validation
+- [ ] **Zod validation schemas** for client and server-side validation
+- [ ] **Server action implementation** for form submission handling
+- [ ] **Comprehensive test suite** including unit, accessibility, and integration tests
+- [ ] **Accessibility implementation** with proper ARIA attributes and semantics
+- [ ] **Documentation** including usage examples and integration patterns
+- [ ] **Implementation summary** with key decisions and trade-offs
+
+## 📖 **USAGE EXAMPLES:**
+
+```
+Create a user registration form with email/password validation, terms acceptance, and email verification flow.
+Apply the form component creation prompt.
+```
+
+```
+Create a multi-step event registration form with personal info, preferences, and payment processing.
+Apply the form component creation prompt.
+```
+
+```
+Create a contact form with file upload capability, spam protection, and email notification integration.
+Apply the form component creation prompt.
+```

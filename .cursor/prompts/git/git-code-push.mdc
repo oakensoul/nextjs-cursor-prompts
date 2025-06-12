@@ -1,0 +1,329 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Git Code Push Validation Guide
+
+**This prompt ensures comprehensive quality validation and production readiness before pushing commits to GitHub. ALL quality gates must pass before proceeding.**
+
+## 🎯 **PUSH VALIDATION OBJECTIVES:**
+
+1. **EXECUTE comprehensive quality gates** with zero tolerance for failures
+2. **VALIDATE production readiness** including security and performance
+3. **VERIFY GitHub integration** and CI/CD pipeline compatibility
+4. **ASSESS deployment risk** and rollback preparedness
+5. **AUTHORIZE push execution** only after all criteria are met
+
+## 📋 **COMPREHENSIVE VALIDATION PROCESS:**
+
+### **STEP 1: Code Quality Validation**
+
+#### **Linting and Formatting Validation:**
+```bash
+# Comprehensive code quality checks
+npm run lint                 # ESLint validation with zero warnings
+npm run lint:fix            # Auto-fix what can be fixed
+npm run format              # Prettier formatting validation
+npm run type-check          # TypeScript strict type checking
+```
+
+#### **Code Quality Gates:**
+- [ ] **ESLint clean** - Zero errors, zero warnings tolerated
+- [ ] **TypeScript strict** - No type errors, proper interface usage
+- [ ] **Prettier compliant** - Consistent code formatting
+- [ ] **Import organization** - Clean import structure, no unused imports
+- [ ] **Dead code elimination** - No unreachable or unused code
+
+### **STEP 2: Testing Validation**
+
+#### **Comprehensive Test Suite Execution:**
+```bash
+# Full testing pipeline
+npm run test                 # Complete unit test suite
+npm run test:coverage        # Coverage verification (>80% required)
+npm run test:integration     # Integration test validation
+npm run test:e2e            # End-to-end test execution (if available)
+npm run test:accessibility  # Accessibility compliance testing
+```
+
+#### **Testing Quality Gates:**
+- [ ] **Unit tests: 100% pass rate** - No failing or skipped tests
+- [ ] **Coverage threshold met** - Minimum 80% code coverage
+- [ ] **Integration tests pass** - All integration scenarios validated
+- [ ] **E2E tests pass** - Critical user journeys function correctly
+- [ ] **Accessibility tests pass** - WCAG compliance verified
+- [ ] **Performance tests pass** - No performance regressions detected
+
+### **STEP 3: Build and Bundle Validation**
+
+#### **Production Build Verification:**
+```bash
+# Build validation pipeline
+npm run build               # Production build compilation
+npm run build:analyze       # Bundle size analysis
+npm run lighthouse          # Performance audit (if configured)
+npm run bundle-analyzer     # Detailed bundle analysis
+```
+
+#### **Build Quality Gates:**
+- [ ] **Build succeeds** - Clean production build without errors
+- [ ] **Bundle size acceptable** - No unexpected size increases (>10%)
+- [ ] **Performance metrics** - Lighthouse scores maintain thresholds
+- [ ] **Tree shaking effective** - Dead code eliminated from bundles
+- [ ] **Chunk optimization** - Proper code splitting and lazy loading
+
+### **STEP 4: Security and Dependency Validation**
+
+#### **Security Audit Pipeline:**
+```bash
+# Security validation suite
+npm audit                   # Dependency vulnerability scan
+npm audit fix               # Auto-fix vulnerabilities where safe
+npm run security:scan       # Additional security scanning (if configured)
+npm run license:check       # License compatibility verification
+```
+
+#### **Security Quality Gates:**
+- [ ] **No critical vulnerabilities** - Zero high/critical security issues
+- [ ] **Dependencies up-to-date** - No severely outdated packages
+- [ ] **License compatibility** - All dependencies have compatible licenses
+- [ ] **No secrets in code** - No API keys, passwords, or tokens
+- [ ] **Secure coding practices** - Input validation, output encoding implemented
+
+### **STEP 5: Repository and Git Validation**
+
+#### **Repository State Verification:**
+```bash
+# Git repository validation
+git status                  # Working directory must be clean
+git log --oneline -10       # Review recent commit history
+git diff origin/main        # Compare with main branch
+git branch -vv              # Verify branch tracking
+```
+
+#### **Repository Quality Gates:**
+- [ ] **Working directory clean** - No uncommitted changes
+- [ ] **Branch up-to-date** - Latest changes from main/develop merged
+- [ ] **No merge conflicts** - Clean merge state
+- [ ] **Commit history clean** - Logical, well-formatted commit sequence
+- [ ] **Branch tracking correct** - Proper upstream branch configuration
+
+### **STEP 6: Documentation and Communication Validation**
+
+#### **Documentation Completeness Check:**
+- [ ] **Changelog updated** - All user-facing changes documented
+- [ ] **README current** - Setup and usage instructions accurate
+- [ ] **API documentation** - All interface changes documented
+- [ ] **Migration guides** - Breaking changes include upgrade guidance
+- [ ] **Release notes** - User-friendly change summaries prepared
+
+#### **Communication Preparation:**
+- [ ] **Commit messages clear** - Conventional commit format followed
+- [ ] **PR description ready** - Template completed with context
+- [ ] **Reviewers identified** - Appropriate team members tagged
+- [ ] **Labels applied** - Feature/bug/breaking change labels set
+- [ ] **Issues linked** - Related GitHub issues referenced
+
+### **STEP 7: Production Readiness Assessment**
+
+#### **Deployment Readiness Validation:**
+- [ ] **Environment compatibility** - Works across target environments
+- [ ] **Configuration management** - Environment variables documented
+- [ ] **Database migrations** - Schema changes tested and reversible
+- [ ] **Feature flags configured** - Safe rollout strategy implemented
+- [ ] **Monitoring integration** - Observability hooks in place
+
+#### **Performance and Scalability Validation:**
+- [ ] **Load testing results** - Performance under expected load verified
+- [ ] **Memory usage acceptable** - No memory leaks or excessive usage
+- [ ] **Database query optimization** - Efficient query patterns used
+- [ ] **Caching strategy** - Appropriate caching implemented
+- [ ] **Resource utilization** - CPU, memory, network usage optimized
+
+### **STEP 8: Risk Assessment and Rollback Planning**
+
+#### **Risk Analysis:**
+- **Change impact scope** - How many users/systems affected?
+- **Complexity assessment** - Simple fix vs. complex feature?
+- **Dependencies involved** - External services or APIs affected?
+- **Rollback complexity** - How easy is it to revert changes?
+- **Testing coverage** - How thoroughly are changes tested?
+
+#### **Rollback Preparedness:**
+- [ ] **Rollback procedure documented** - Clear reversion steps
+- [ ] **Database rollback plan** - Data migration reversal strategy
+- [ ] **Feature flag killswitch** - Ability to disable features remotely
+- [ ] **Emergency procedures** - Team contacts and escalation paths
+- [ ] **Monitoring alerts** - Detection of issues post-deployment
+
+## 📊 **QUALITY VALIDATION DELIVERABLES:**
+
+### **REQUIRED VALIDATION OUTPUTS:**
+
+#### **1. Quality Gates Summary:**
+```markdown
+## Quality Validation Results
+
+**Overall Status**: [PASS/FAIL]
+**Validation Date**: [Current Date/Time]
+**Validation Duration**: [Time taken]
+
+### Gate Results:
+✅ Code Quality: [PASS/FAIL]
+✅ Testing Suite: [PASS/FAIL] 
+✅ Build Validation: [PASS/FAIL]
+✅ Security Audit: [PASS/FAIL]
+✅ Repository State: [PASS/FAIL]
+✅ Documentation: [PASS/FAIL]
+✅ Production Readiness: [PASS/FAIL]
+✅ Risk Assessment: [LOW/MEDIUM/HIGH]
+```
+
+#### **2. Test Execution Summary:**
+```markdown
+## Test Results Summary
+
+**Unit Tests**: [X/Y passed] - [Coverage: XX%]
+**Integration Tests**: [X/Y passed]
+**E2E Tests**: [X/Y passed]
+**Accessibility Tests**: [X/Y passed]
+**Performance Tests**: [PASS/FAIL]
+
+### Failed Tests (if any):
+- [Test name]: [Failure reason]
+- [Test name]: [Failure reason]
+```
+
+#### **3. Build and Performance Report:**
+```markdown
+## Build Validation Results
+
+**Build Status**: [SUCCESS/FAILED]
+**Bundle Size**: [Current size] ([Change from previous])
+**Performance Metrics**:
+- Lighthouse Performance: [Score]
+- Lighthouse Accessibility: [Score]
+- Lighthouse SEO: [Score]
+- Core Web Vitals: [LCP/FID/CLS scores]
+```
+
+#### **4. Security Audit Report:**
+```markdown
+## Security Validation Results
+
+**Vulnerability Scan**: [CLEAN/ISSUES FOUND]
+**Critical Issues**: [Number]
+**High Issues**: [Number]
+**Medium Issues**: [Number]
+**Low Issues**: [Number]
+
+### Security Recommendations:
+- [Recommendation 1]
+- [Recommendation 2]
+```
+
+#### **5. Production Readiness Assessment:**
+```markdown
+## Production Readiness Score: [X/10]
+
+**Deployment Risk**: [LOW/MEDIUM/HIGH]
+**Rollback Complexity**: [SIMPLE/MODERATE/COMPLEX]
+**User Impact**: [MINIMAL/MODERATE/SIGNIFICANT]
+
+### Readiness Factors:
+- Configuration: [READY/NOT READY]
+- Monitoring: [READY/NOT READY]
+- Documentation: [READY/NOT READY]
+- Rollback Plan: [READY/NOT READY]
+```
+
+### **6. Push Recommendation:**
+```markdown
+## GitHub Push Recommendation
+
+**RECOMMENDATION**: [GO/NO-GO]
+
+**Reasoning**:
+- [Primary reasons supporting/opposing push]
+- [Risk factors considered]
+- [Quality gate results summary]
+
+**Required Actions Before Push**:
+- [ ] [Action if any issues need resolution]
+- [ ] [Action if any issues need resolution]
+
+**Post-Push Monitoring**:
+- [What to monitor after deployment]
+- [Success criteria to validate]
+```
+
+## 🚨 **PUSH VALIDATION RED FLAGS:**
+
+**MANDATORY STOP - Do not push if:**
+- **Any test failures** - Unit, integration, or E2E tests failing
+- **Security vulnerabilities** - Critical or high-severity issues found
+- **Build failures** - Production build does not complete successfully
+- **Significant performance degradation** - >20% performance impact
+- **Missing documentation** - User-facing changes without documentation
+- **Unresolved merge conflicts** - Repository in inconsistent state
+- **No rollback plan** - High-risk changes without reversion strategy
+
+## 💡 **PUSH VALIDATION EXAMPLES:**
+
+### **Example 1: Feature Push Validation**
+```
+Validate new user dashboard feature for GitHub push
+
+Following .cursor/prompts/git/git-code-push.mdc:
+- All quality gates must pass
+- Performance impact assessed
+- Documentation complete
+- Rollback plan prepared
+```
+
+### **Example 2: Bug Fix Push Validation**
+```
+Validate critical bug fix for immediate push
+
+Following .cursor/prompts/git/git-code-push.mdc:
+- Prioritize security and stability gates
+- Verify fix doesn't introduce regressions
+- Confirm rollback procedures ready
+```
+
+### **Example 3: Breaking Change Push Validation**
+```
+Validate API breaking changes for major release
+
+Following .cursor/prompts/git/git-code-push.mdc:
+- All gates pass with extra scrutiny
+- Migration documentation complete
+- Comprehensive testing executed
+- Staged rollout plan ready
+```
+
+## 🔄 **POST-VALIDATION ACTIONS:**
+
+### **If Validation Passes (GO):**
+1. **Execute GitHub push** - `git push origin [branch-name]`
+2. **Monitor CI/CD pipeline** - Watch automated deployment
+3. **Verify deployment success** - Confirm changes are live
+4. **Monitor application health** - Watch for errors or performance issues
+5. **Communicate deployment** - Notify team of successful push
+
+### **If Validation Fails (NO-GO):**
+1. **Document failures** - Record what needs to be fixed
+2. **Prioritize issues** - Address critical issues first
+3. **Fix identified problems** - Resolve blocking issues
+4. **Re-run validation** - Complete process again after fixes
+5. **Communicate delays** - Update stakeholders on timeline
+
+### **Integration with Workflow:**
+- **Previous phase**: `.cursor/prompts/git/git-code-commit.mdc` (commit execution)
+- **Full workflow**: `.cursor/prompts/git/git-code-shipit.mdc` (complete automation)
+- **Follow-up**: Monitor deployment and application health
+
+---
+
+**This push validation phase ensures only high-quality, production-ready code reaches GitHub and production environments.**

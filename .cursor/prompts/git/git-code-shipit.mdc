@@ -1,0 +1,361 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Git Code Ship It - Complete Workflow Orchestrator
+
+**🚢 This is the ultimate "Ship It" command - a comprehensive git workflow that takes you from code changes to GitHub push with complete quality validation and documentation.**
+
+## 🎯 **SHIP IT OBJECTIVES:**
+
+1. **ORCHESTRATE complete git workflow** from preparation through push
+2. **ENSURE comprehensive quality** at every phase with zero tolerance for failures
+3. **PROVIDE detailed reporting** of all operations and validations
+4. **MAINTAIN safety checkpoints** with clear go/no-go decisions
+5. **DELIVER production-ready code** to GitHub with confidence
+
+## 🚢 **SHIP IT WORKFLOW PHASES:**
+
+```
+Phase 1: PREPARATION    → Analyze, document, plan
+Phase 2: COMMIT         → Validate, execute, verify  
+Phase 3: PUSH           → Quality gates, security, deploy
+Phase 4: CONFIRMATION   → Success report, monitoring
+```
+
+## 📋 **COMPLETE SHIPIT PROCESS:**
+
+### **🔍 PHASE 1: PREPARATION** 
+*Following `.cursor/prompts/git/git-code-prep.mdc`*
+
+#### **Comprehensive Change Analysis:**
+- **Analyze all modifications** - Files changed, features added, bugs fixed
+- **Determine commit strategy** - Single vs. multiple commits, logical grouping
+- **Update documentation** - Changelog, README, API docs, sitemap
+- **Plan commit messages** - Conventional commit format preparation
+- **Execute initial quality checks** - Precommit hooks, linting, type checking
+
+#### **Phase 1 Success Criteria:**
+- [ ] **Change analysis complete** - Full understanding of modifications
+- [ ] **Documentation updated** - Changelog, LLMs.mdc, sitemap current
+- [ ] **Commit strategy planned** - Clear execution plan prepared
+- [ ] **Initial quality gates pass** - Precommit hooks successful
+- [ ] **Files staged appropriately** - Correct staging for planned commits
+
+#### **🚨 Phase 1 Checkpoint:**
+**CONTINUE TO PHASE 2?** [GO/NO-GO]
+- If NO-GO: Stop, address preparation issues, re-run Phase 1
+
+### **✅ PHASE 2: COMMIT EXECUTION**
+*Following `.cursor/prompts/git/git-code-commit.mdc`*
+
+#### **Final Validation and Commit:**
+- **Review staged changes** - Confirm all intended files staged
+- **Execute final quality checks** - Comprehensive validation suite
+- **Validate commit messages** - Conventional format, clear descriptions
+- **Execute planned commits** - Single or multiple commits as planned
+- **Verify commit integrity** - Confirm successful commit creation
+
+#### **Phase 2 Success Criteria:**
+- [ ] **Final validation passes** - All quality checks successful
+- [ ] **Commits executed cleanly** - No errors during commit process
+- [ ] **Commit messages proper** - Conventional format, clear descriptions
+- [ ] **Repository state clean** - Working directory clean after commits
+- [ ] **Commit history logical** - Clear progression of changes
+
+#### **🚨 Phase 2 Checkpoint:**
+**CONTINUE TO PHASE 3?** [GO/NO-GO]
+- If NO-GO: Stop, address commit issues, potentially reset and re-run
+
+### **🛡️ PHASE 3: PUSH VALIDATION & EXECUTION**
+*Following `.cursor/prompts/git/git-code-push.mdc`*
+
+#### **Comprehensive Quality Gates:**
+- **Code quality validation** - Linting, formatting, type checking
+- **Testing validation** - Unit, integration, E2E, accessibility tests
+- **Build validation** - Production build, bundle analysis, performance
+- **Security validation** - Vulnerability scan, dependency audit
+- **Production readiness** - Deployment preparation, rollback planning
+
+#### **Phase 3 Success Criteria:**
+- [ ] **All quality gates pass** - Zero tolerance for failures
+- [ ] **Security audit clean** - No critical vulnerabilities
+- [ ] **Production build succeeds** - Clean deployment-ready build
+- [ ] **Performance validated** - No significant regressions
+- [ ] **Documentation complete** - All user-facing changes documented
+
+#### **🚨 Phase 3 Checkpoint:**
+**EXECUTE GITHUB PUSH?** [GO/NO-GO]
+- If NO-GO: Stop, address quality issues, re-run validation
+
+### **🚀 PHASE 4: PUSH EXECUTION & CONFIRMATION**
+
+#### **GitHub Push Execution:**
+```bash
+# Execute the actual push
+git push origin [branch-name]
+```
+
+#### **Post-Push Validation:**
+- **Monitor CI/CD pipeline** - Watch automated deployment
+- **Verify GitHub integration** - Confirm push successful
+- **Check deployment status** - Validate production deployment
+- **Monitor application health** - Watch for errors or issues
+
+## 📊 **COMPREHENSIVE SHIPIT REPORTING:**
+
+### **PHASE EXECUTION SUMMARY:**
+```markdown
+# 🚢 SHIP IT EXECUTION REPORT
+
+**Execution Date**: [Current Date/Time]
+**Total Duration**: [Time from start to finish]
+**Overall Status**: [SUCCESS/FAILED]
+**Final Outcome**: [SHIPPED/BLOCKED]
+
+## Phase Results Summary:
+✅ Phase 1 - Preparation: [PASS/FAIL] ([Duration])
+✅ Phase 2 - Commit: [PASS/FAIL] ([Duration])  
+✅ Phase 3 - Push Validation: [PASS/FAIL] ([Duration])
+✅ Phase 4 - GitHub Push: [PASS/FAIL] ([Duration])
+```
+
+### **DETAILED PHASE REPORTING:**
+
+#### **Phase 1: Preparation Results**
+```markdown
+## 🔍 PREPARATION PHASE RESULTS
+
+**Status**: [COMPLETED/FAILED]
+**Duration**: [Time taken]
+
+### Change Analysis:
+- **Files Modified**: [Number] files
+- **Change Types**: [feature/fix/docs/refactor mix]
+- **Version Impact**: [major/minor/patch]
+- **Breaking Changes**: [Yes/No]
+
+### Documentation Updates:
+- [x] Changelog.ts: [Updated with X entries]
+- [x] LLMs.mdc: [Updated/Not Required]
+- [x] Sitemap.xml: [Updated/Not Required]
+- [x] README.md: [Updated/Not Required]
+
+### Commit Strategy:
+- **Total Planned Commits**: [Number]
+- **Commit Types**: [List of planned commit types]
+- **Staging Strategy**: [Description]
+
+### Quality Checks:
+- [x] Precommit hooks: [PASS/FAIL]
+- [x] Linting: [PASS/FAIL]  
+- [x] Type checking: [PASS/FAIL]
+```
+
+#### **Phase 2: Commit Results**
+```markdown
+## ✅ COMMIT PHASE RESULTS
+
+**Status**: [COMPLETED/FAILED]
+**Duration**: [Time taken]
+
+### Commits Created:
+1. **[commit-hash]**: [type](scope): [subject]
+   - Files: [Number] files committed
+   - Status: [SUCCESS/FAILED]
+
+2. **[commit-hash]**: [type](scope): [subject]
+   - Files: [Number] files committed
+   - Status: [SUCCESS/FAILED]
+
+### Repository State:
+- **Working Directory**: [Clean/Has Changes]
+- **Staged Changes**: [None/Remaining]
+- **Branch Status**: [Up to date/Behind]
+```
+
+#### **Phase 3: Push Validation Results**
+```markdown
+## 🛡️ PUSH VALIDATION RESULTS
+
+**Status**: [COMPLETED/FAILED]
+**Duration**: [Time taken]
+
+### Quality Gates Summary:
+- [x] Code Quality: [PASS/FAIL]
+- [x] Testing Suite: [PASS/FAIL]
+- [x] Build Validation: [PASS/FAIL]
+- [x] Security Audit: [PASS/FAIL]
+- [x] Production Readiness: [PASS/FAIL]
+
+### Test Results:
+- **Unit Tests**: [X/Y passed] - Coverage: [XX%]
+- **Integration Tests**: [X/Y passed]
+- **E2E Tests**: [X/Y passed]
+- **Accessibility Tests**: [X/Y passed]
+
+### Security Audit:
+- **Vulnerabilities**: [X critical, Y high, Z medium]
+- **Dependencies**: [X outdated, Y insecure]
+- **Status**: [CLEAN/ISSUES FOUND]
+
+### Build Validation:
+- **Build Status**: [SUCCESS/FAILED]
+- **Bundle Size**: [Size] ([+/-X% change])
+- **Performance**: [Lighthouse scores]
+```
+
+#### **Phase 4: Push Execution Results**
+```markdown
+## 🚀 PUSH EXECUTION RESULTS
+
+**Status**: [COMPLETED/FAILED]
+**Duration**: [Time taken]
+
+### GitHub Push:
+- **Push Command**: git push origin [branch-name]
+- **Push Status**: [SUCCESS/FAILED]
+- **Remote Response**: [Success message/Error details]
+
+### CI/CD Pipeline:
+- **Pipeline Triggered**: [Yes/No]
+- **Pipeline Status**: [RUNNING/SUCCESS/FAILED]
+- **Deployment Status**: [DEPLOYED/PENDING/FAILED]
+
+### Post-Push Validation:
+- **Application Health**: [HEALTHY/ISSUES DETECTED]
+- **Error Monitoring**: [CLEAN/ERRORS FOUND]
+- **Performance Impact**: [POSITIVE/NEUTRAL/NEGATIVE]
+```
+
+## 🚨 **SHIPIT FAILURE HANDLING:**
+
+### **Failure Recovery Procedures:**
+
+#### **Phase 1 Failure:**
+```markdown
+**Issue**: Preparation phase failed
+**Actions**:
+1. Review preparation errors in detail
+2. Fix documentation, staging, or quality issues
+3. Re-run preparation phase only
+4. Continue to Phase 2 when resolved
+```
+
+#### **Phase 2 Failure:**
+```markdown
+**Issue**: Commit execution failed
+**Actions**:
+1. Review commit errors (staging, messages, conflicts)
+2. Reset repository state if needed: git reset --soft HEAD~1
+3. Fix commit issues and re-stage files
+4. Re-run commit phase only
+5. Continue to Phase 3 when resolved
+```
+
+#### **Phase 3 Failure:**
+```markdown
+**Issue**: Push validation failed
+**Actions**:
+1. Review specific quality gate failures
+2. Fix code quality, test, build, or security issues
+3. Re-commit fixes if code changes needed
+4. Re-run push validation only
+5. Continue to Phase 4 when all gates pass
+```
+
+#### **Phase 4 Failure:**
+```markdown
+**Issue**: GitHub push failed
+**Actions**:
+1. Review push error (network, permissions, conflicts)
+2. Resolve GitHub/remote repository issues
+3. Sync with remote if needed: git pull --rebase
+4. Re-attempt push execution
+5. Monitor deployment after successful push
+```
+
+## 💡 **SHIPIT USAGE EXAMPLES:**
+
+### **Example 1: Feature Release Ship It**
+```
+I've completed the new user profile feature and I'm ready to ship it
+
+Ship it using .cursor/prompts/git/git-code-shipit.mdc
+
+Expected flow:
+- Prep: Analyze feature, update changelog, plan commits
+- Commit: Execute feature commits with proper messages
+- Push: Validate all quality gates, security, performance
+- Ship: Push to GitHub and monitor deployment
+```
+
+### **Example 2: Critical Bug Fix Ship It**
+```
+I've fixed a critical authentication bug and need to deploy immediately
+
+Ship it using .cursor/prompts/git/git-code-shipit.mdc
+
+Expected flow:
+- Prep: Document bug fix, prioritize security validation
+- Commit: Single commit with fix and tests
+- Push: Expedited quality gates focusing on security
+- Ship: Immediate push with enhanced monitoring
+```
+
+### **Example 3: Documentation Update Ship It**
+```
+I've updated documentation and API guides across multiple files
+
+Ship it using .cursor/prompts/git/git-code-shipit.mdc
+
+Expected flow:
+- Prep: Plan logical documentation commits
+- Commit: Separate commits for different doc types
+- Push: Standard validation with focus on content accuracy
+- Ship: Deploy updated documentation
+```
+
+## 🔄 **POST-SHIPIT ACTIVITIES:**
+
+### **Success Monitoring:**
+- [ ] **Application health verified** - No errors or performance issues
+- [ ] **CI/CD pipeline completed** - Successful automated deployment
+- [ ] **Team notification sent** - Stakeholders informed of deployment
+- [ ] **Deployment documented** - Changes recorded in deployment log
+- [ ] **Monitoring alerts configured** - Watch for post-deployment issues
+
+### **Continuous Improvement:**
+- [ ] **Process timing recorded** - Note duration of each phase
+- [ ] **Bottlenecks identified** - Document any slow steps
+- [ ] **Quality issues noted** - Record any problems for future prevention
+- [ ] **Success metrics captured** - Measure deployment success rate
+- [ ] **Team feedback collected** - Gather input on process effectiveness
+
+## 🎯 **SHIPIT SUCCESS CRITERIA:**
+
+### **Overall Success Definition:**
+✅ **All phases completed** without manual intervention  
+✅ **Zero quality gate failures** throughout the process  
+✅ **GitHub push successful** with clean deployment  
+✅ **Application healthy** post-deployment  
+✅ **Documentation complete** and accurate  
+✅ **Team confidence high** in deployed changes  
+
+### **Shipit Confidence Score:**
+```
+🚢 SHIP IT CONFIDENCE: [X/10]
+
+Based on:
+- Quality gate pass rate: [100%/less]
+- Test coverage: [>80%/less] 
+- Security audit: [Clean/Issues]
+- Performance impact: [Positive/Neutral/Negative]
+- Documentation quality: [Complete/Incomplete]
+- Rollback readiness: [Ready/Not Ready]
+```
+
+---
+
+**🚢 Ship It represents the pinnacle of development confidence - when you know your code is ready for the world to see. Use this workflow to ship with pride and zero regrets!**

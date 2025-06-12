@@ -1,0 +1,899 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# User Guide and Tutorial Documentation Creation
+
+**This prompt generates comprehensive user-facing documentation including step-by-step tutorials, FAQ sections, troubleshooting guides, and onboarding flows with focus on user experience and accessibility.**
+
+## 🎯 **USER DOCUMENTATION OBJECTIVES:**
+
+1. **ANALYZE user journeys** and identify documentation needs across all user types
+2. **CREATE task-oriented guides** with clear step-by-step instructions
+3. **DEVELOP tutorial sequences** for progressive skill building
+4. **GENERATE comprehensive FAQ** addressing common user questions
+5. **ESTABLISH troubleshooting resources** for effective problem resolution
+
+## 👥 **USER AUDIENCE ANALYSIS:**
+
+### **STEP 1: User Persona and Journey Mapping**
+
+#### **User Persona Discovery:**
+```bash
+# Analyze user types and create personas
+echo "👥 Identifying User Personas..."
+
+cat > "user-personas.md" << 'EOF'
+# User Personas for Documentation
+
+## Primary Users
+
+### 1. New User (First-time)
+**Characteristics:**
+- No prior experience with the application
+- Needs clear onboarding and setup guidance
+- Prefers visual aids and step-by-step instructions
+- Easily overwhelmed by technical jargon
+
+**Goals:**
+- Complete initial setup quickly
+- Understand core functionality
+- Achieve first success/value
+
+**Pain Points:**
+- Complex setup processes
+- Unclear navigation
+- Missing prerequisites information
+
+### 2. Regular User (Intermediate)
+**Characteristics:**
+- Familiar with basic functionality
+- Seeks to expand usage and efficiency
+- Comfortable with moderate complexity
+- Values quick reference materials
+
+**Goals:**
+- Learn advanced features
+- Improve workflow efficiency
+- Troubleshoot occasional issues
+
+**Pain Points:**
+- Finding advanced features
+- Understanding feature relationships
+- Lack of workflow examples
+
+### 3. Power User (Advanced)
+**Characteristics:**
+- Deep application knowledge
+- Seeks customization and integration options
+- Comfortable with technical details
+- Often helps other users
+
+**Goals:**
+- Maximize application potential
+- Integrate with other tools
+- Customize workflows
+
+**Pain Points:**
+- Limited advanced documentation
+- Missing API/integration details
+- Insufficient customization guidance
+
+### 4. Administrator/Manager
+**Characteristics:**
+- Responsible for team setup and management
+- Needs governance and compliance information
+- Focuses on security and control features
+- Requires reporting and analytics guidance
+
+**Goals:**
+- Configure team settings
+- Manage user permissions
+- Generate reports and insights
+- Ensure compliance
+
+**Pain Points:**
+- Complex admin interfaces
+- Unclear permission models
+- Missing governance documentation
+EOF
+```
+
+#### **User Journey Mapping:**
+```bash
+# Map critical user journeys
+cat > "user-journeys.md" << 'EOF'
+# Critical User Journeys
+
+## Journey 1: New User Onboarding
+**Goal**: First-time user completes setup and achieves initial value
+
+### Journey Steps:
+1. **Discovery** → User finds application/service
+2. **Registration** → Account creation and verification
+3. **Initial Setup** → Basic configuration and preferences
+4. **First Task** → Complete primary use case successfully
+5. **Value Realization** → User sees benefit and continues usage
+
+### Documentation Needs:
+- Getting started guide
+- Account setup tutorial
+- First-task walkthrough
+- Success indicators explanation
+
+## Journey 2: Feature Adoption
+**Goal**: Existing user learns and adopts new features
+
+### Journey Steps:
+1. **Feature Discovery** → User learns about new capability
+2. **Understanding** → User grasps feature purpose and benefits
+3. **Setup** → User configures feature for their needs
+4. **First Use** → User successfully uses feature
+5. **Integration** → User incorporates feature into workflow
+
+### Documentation Needs:
+- Feature announcement and benefits
+- Setup and configuration guide
+- Use case examples
+- Integration tutorials
+
+## Journey 3: Problem Resolution
+**Goal**: User encounters issue and resolves it independently
+
+### Journey Steps:
+1. **Problem Recognition** → User identifies issue or blocker
+2. **Help Seeking** → User searches for solution
+3. **Solution Discovery** → User finds relevant help content
+4. **Solution Application** → User follows resolution steps
+5. **Verification** → User confirms issue is resolved
+
+### Documentation Needs:
+- Comprehensive troubleshooting guide
+- Common error solutions
+- Step-by-step problem resolution
+- Escalation paths for complex issues
+EOF
+```
+
+## 📝 **TUTORIAL CONTENT CREATION:**
+
+### **STEP 2: Progressive Tutorial Development**
+
+#### **Getting Started Tutorial Series:**
+```bash
+# Create comprehensive getting started tutorials
+mkdir -p "docs/tutorials/getting-started"
+
+cat > "docs/tutorials/getting-started/01-welcome.md" << 'EOF'
+# Welcome to [Application Name]
+
+Welcome! This tutorial series will help you get started with [Application Name] quickly and confidently. By the end of these tutorials, you'll be able to [list key outcomes].
+
+## What You'll Learn
+
+### Tutorial 1: Account Setup and First Login ⭐
+**Time**: 5 minutes | **Difficulty**: Beginner
+- Create your account
+- Verify your email
+- Complete your profile
+- Navigate the main interface
+
+### Tutorial 2: Your First [Primary Task] ⭐
+**Time**: 10 minutes | **Difficulty**: Beginner
+- [Primary task step 1]
+- [Primary task step 2]
+- [Primary task step 3]
+- See your results
+
+### Tutorial 3: Essential Features Tour
+**Time**: 15 minutes | **Difficulty**: Beginner
+- Explore key features
+- Understand the main workflow
+- Customize your preferences
+- Set up notifications
+
+### Tutorial 4: Collaboration and Sharing
+**Time**: 12 minutes | **Difficulty**: Beginner-Intermediate
+- Invite team members
+- Share [content/projects]
+- Set permissions
+- Collaborate effectively
+
+## Before You Start
+
+### Prerequisites
+- [ ] Modern web browser (Chrome, Firefox, Safari, Edge)
+- [ ] Stable internet connection
+- [ ] Valid email address
+- [ ] [Any specific requirements]
+
+### What You'll Need
+- [ ] [List any required information or materials]
+- [ ] [Access credentials or invitations]
+- [ ] [Time estimates for completion]
+
+## Getting Help
+
+### During Tutorials
+- 💡 **Tips** are marked with light bulbs
+- ⚠️ **Important notes** are marked with warning signs
+- 🔗 **Related links** provide additional context
+- ❓ **Common questions** address frequent concerns
+
+### If You Get Stuck
+1. **Check our FAQ** - Many questions are answered there
+2. **Search the help center** - Use keywords from your issue
+3. **Contact support** - We're here to help!
+4. **Community forum** - Connect with other users
+
+## Ready to Start?
+
+Great! Let's begin with [Tutorial 1: Account Setup →](./02-account-setup.md)
+
+---
+📖 **Tutorial Series**: Getting Started | **Next**: Account Setup and First Login
+EOF
+
+cat > "docs/tutorials/getting-started/02-account-setup.md" << 'EOF'
+# Tutorial 1: Account Setup and First Login
+
+**Time**: 5 minutes | **Difficulty**: Beginner
+
+In this tutorial, you'll create your account, verify your email, and take your first look around the application interface.
+
+## Step 1: Create Your Account
+
+### 1.1 Navigate to Sign Up
+1. Go to [https://yourapp.com/signup]
+2. You'll see the registration form
+
+### 1.2 Fill Out Registration Form
+1. **Email Address**: Enter your work or personal email
+   💡 **Tip**: Use an email you check regularly for important updates
+2. **Password**: Choose a strong password (at least 8 characters)
+   ⚠️ **Security Note**: Include letters, numbers, and symbols
+3. **Full Name**: Enter your first and last name
+4. **Company** (optional): Enter your organization name
+
+### 1.3 Complete Registration
+1. Check the "I agree to Terms of Service" box
+2. Click **"Create Account"**
+3. You'll see a "Check your email" message
+
+## Step 2: Verify Your Email
+
+### 2.1 Check Your Inbox
+1. Open your email application
+2. Look for an email from [Application Name] Support
+3. Check spam folder if you don't see it within 2 minutes
+
+### 2.2 Click Verification Link
+1. Open the verification email
+2. Click **"Verify Email Address"**
+3. You'll be redirected to the application
+4. You should see a "Email verified successfully!" message
+
+## Step 3: Complete Your Profile
+
+### 3.1 Profile Setup Wizard
+After email verification, you'll see a profile setup wizard:
+
+1. **Profile Photo** (optional)
+   - Click "Upload Photo" to add a profile picture
+   - Or skip this step for now
+
+2. **Role Selection**
+   - Choose your primary role: [list relevant roles]
+   - This helps customize your experience
+
+3. **Preferences**
+   - Select your timezone
+   - Choose email notification preferences
+   - Set your preferred language
+
+### 3.2 Save Your Profile
+1. Review your information
+2. Click **"Complete Setup"**
+3. You'll be taken to your dashboard
+
+## Step 4: Explore Your Dashboard
+
+### 4.1 Main Navigation
+Take a moment to familiarize yourself with the main areas:
+
+1. **Top Navigation Bar**
+   - Your profile menu (top right)
+   - Main navigation links
+   - Search functionality
+   - Notifications
+
+2. **Sidebar Menu** (if applicable)
+   - Quick access to key features
+   - Recent items
+   - Shortcuts and favorites
+
+3. **Main Content Area**
+   - Dashboard widgets
+   - Recent activity
+   - Quick action buttons
+
+### 4.2 Key Interface Elements
+- **Dashboard**: Your home base with overview information
+- **[Feature 1]**: [Brief description]
+- **[Feature 2]**: [Brief description]
+- **Settings**: Access to all configuration options
+- **Help**: Built-in help and support resources
+
+## ✅ What You've Accomplished
+
+Congratulations! You've successfully:
+- ✅ Created your account
+- ✅ Verified your email address
+- ✅ Completed your profile setup
+- ✅ Explored the main interface
+
+## ❓ Common Questions
+
+**Q: I didn't receive the verification email**
+A: Check your spam folder first. If still not found, click "Resend verification email" on the login page.
+
+**Q: Can I change my email address later?**
+A: Yes! Go to Settings → Account → Email to update your email address.
+
+**Q: What if I forget my password?**
+A: Use the "Forgot Password?" link on the login page to reset it.
+
+## 🎯 Next Steps
+
+Now that your account is set up, you're ready to [accomplish your first main task]. 
+
+**Continue to**: [Tutorial 2: Your First [Primary Task] →](./03-first-task.md)
+
+---
+📖 **Tutorial Series**: Getting Started | **Previous**: Welcome | **Next**: Your First Task
+EOF
+
+echo "📚 Getting started tutorial series created"
+```
+
+#### **Feature-Specific Tutorials:**
+```bash
+# Create feature-specific tutorial templates
+mkdir -p "docs/tutorials/features"
+
+cat > "docs/tutorials/features/feature-tutorial-template.md" << 'EOF'
+# [Feature Name] Tutorial
+
+**Time**: [X] minutes | **Difficulty**: [Beginner/Intermediate/Advanced]
+
+Learn how to [accomplish specific goal with feature] in this step-by-step tutorial.
+
+## What You'll Learn
+
+By the end of this tutorial, you'll be able to:
+- [ ] [Specific learning outcome 1]
+- [ ] [Specific learning outcome 2]
+- [ ] [Specific learning outcome 3]
+
+## Prerequisites
+
+Before starting this tutorial, make sure you have:
+- [ ] [Required setup or knowledge]
+- [ ] [Access levels or permissions needed]
+- [ ] [Previous tutorials completed, if applicable]
+
+## Step 1: [Action/Setup]
+
+### 1.1 [Sub-step]
+[Detailed instructions with screenshots]
+
+💡 **Tip**: [Helpful tip related to this step]
+
+### 1.2 [Sub-step]
+[Detailed instructions]
+
+⚠️ **Important**: [Critical information or common mistake to avoid]
+
+## Step 2: [Main Task]
+
+### 2.1 [Sub-step]
+[Instructions]
+
+### 2.2 [Sub-step]
+[Instructions]
+
+🔗 **Related**: See [link to related documentation]
+
+## Step 3: [Verification/Completion]
+
+### 3.1 Verify Your Work
+[How to confirm the task was completed successfully]
+
+### 3.2 Expected Results
+[What the user should see/experience]
+
+## ✅ Summary
+
+You've successfully learned how to:
+- ✅ [Outcome 1]
+- ✅ [Outcome 2]
+- ✅ [Outcome 3]
+
+## 🎯 Next Steps
+
+### Recommended Next Tutorials:
+- [Related tutorial 1]
+- [Related tutorial 2]
+
+### Advanced Topics:
+- [Advanced feature tutorial]
+- [Integration tutorial]
+
+## ❓ Troubleshooting
+
+### Common Issues
+
+**Issue**: [Common problem]
+**Solution**: [Step-by-step solution]
+
+**Issue**: [Another common problem]
+**Solution**: [Step-by-step solution]
+
+### Need More Help?
+- 📖 Check our [Feature Documentation]
+- 💬 Visit our [Community Forum]
+- 📧 [Contact Support]
+
+---
+📖 **Tutorial Series**: Features | **Related**: [List related tutorials]
+EOF
+```
+
+## 🙋 **FAQ AND HELP CONTENT:**
+
+### **STEP 3: Comprehensive FAQ Development**
+
+#### **FAQ Structure and Content:**
+```bash
+# Create comprehensive FAQ system
+mkdir -p "docs/help/faq"
+
+cat > "docs/help/faq/general.md" << 'EOF'
+# Frequently Asked Questions
+
+## Getting Started
+
+### Account and Setup
+
+**Q: How do I create an account?**
+A: Visit [signup page] and fill out the registration form. You'll need to verify your email address before you can start using the application. See our [Getting Started Tutorial] for detailed steps.
+
+**Q: What browsers are supported?**
+A: We support all modern browsers including:
+- Chrome (recommended)
+- Firefox
+- Safari
+- Microsoft Edge
+
+**Q: Can I use [Application] on mobile devices?**
+A: Yes! [Application] works on mobile browsers. We also have dedicated mobile apps for [iOS/Android if applicable].
+
+**Q: Is there a free trial available?**
+A: Yes, all new accounts include a [X]-day free trial with access to [list features]. No credit card required to start.
+
+### Basic Usage
+
+**Q: How do I [common task 1]?**
+A: [Step-by-step answer with links to detailed tutorials]
+
+**Q: How do I [common task 2]?**
+A: [Step-by-step answer with links to detailed tutorials]
+
+**Q: Can I [common question about capabilities]?**
+A: [Answer with explanation and links to relevant documentation]
+
+## Account Management
+
+### Profile and Settings
+
+**Q: How do I change my password?**
+A: 
+1. Go to Settings → Account → Security
+2. Click "Change Password"
+3. Enter your current password and new password
+4. Click "Update Password"
+
+**Q: How do I update my profile information?**
+A: Navigate to Settings → Profile to update your name, email, photo, and other profile details.
+
+**Q: Can I delete my account?**
+A: Yes, you can delete your account by going to Settings → Account → Delete Account. ⚠️ **Warning**: This action cannot be undone and will permanently delete all your data.
+
+### Billing and Subscriptions
+
+**Q: How do I upgrade my plan?**
+A: Go to Settings → Billing → Change Plan to view available options and upgrade.
+
+**Q: What payment methods do you accept?**
+A: We accept all major credit cards (Visa, MasterCard, American Express) and PayPal.
+
+**Q: Can I get a refund?**
+A: Yes, we offer a 30-day money-back guarantee. Contact support for refund requests.
+
+## Features and Functionality
+
+### [Feature Category 1]
+
+**Q: [Feature-specific question]?**
+A: [Detailed answer with examples]
+
+**Q: [Another feature question]?**
+A: [Answer with links to tutorials]
+
+### [Feature Category 2]
+
+**Q: [Feature-specific question]?**
+A: [Detailed answer]
+
+## Troubleshooting
+
+### Common Issues
+
+**Q: I'm not receiving email notifications**
+A: Check these settings:
+1. Verify your email in Settings → Profile
+2. Check notification preferences in Settings → Notifications
+3. Look in your spam/junk folder
+4. Add our domain to your email whitelist
+
+**Q: The application is loading slowly**
+A: Try these solutions:
+1. Clear your browser cache and cookies
+2. Disable browser extensions temporarily
+3. Check your internet connection
+4. Try a different browser
+
+**Q: I can't log in to my account**
+A: 
+1. Verify you're using the correct email address
+2. Try resetting your password using "Forgot Password?"
+3. Check if your account has been locked (you'll see a message)
+4. Contact support if the issue persists
+
+### Error Messages
+
+**Q: What does "[Error Message]" mean?**
+A: [Explanation and solution steps]
+
+**Q: I'm seeing "[Another Error]"**
+A: [Explanation and solution steps]
+
+## Integration and Advanced Features
+
+### API and Integrations
+
+**Q: Do you have an API?**
+A: Yes! See our [API Documentation] for complete details on endpoints, authentication, and usage examples.
+
+**Q: Can I integrate with [popular service]?**
+A: [Answer about specific integrations available]
+
+### Data and Security
+
+**Q: How secure is my data?**
+A: We take security seriously. Your data is encrypted in transit and at rest, and we follow industry best practices. See our [Security Page] for detailed information.
+
+**Q: Can I export my data?**
+A: Yes, you can export your data at any time from Settings → Data → Export. Choose from multiple formats including CSV, JSON, and PDF.
+
+**Q: Do you offer single sign-on (SSO)?**
+A: SSO is available on our [Enterprise plan]. Contact sales for setup assistance.
+
+## Still Need Help?
+
+Can't find the answer you're looking for?
+
+### Contact Options:
+- 📧 **Email Support**: support@[domain].com (Response within 24 hours)
+- 💬 **Live Chat**: Available Mon-Fri 9AM-5PM [timezone]
+- 📖 **Help Center**: Browse our complete documentation
+- 👥 **Community Forum**: Connect with other users and get community support
+
+### Before Contacting Support:
+- Check this FAQ first
+- Search our help documentation
+- Include specific error messages in your inquiry
+- Mention your browser and operating system
+
+---
+**Last Updated**: [Date] | **Need to suggest an FAQ addition?** [Contact us]
+EOF
+```
+
+### **STEP 4: Troubleshooting Guide Development**
+
+#### **Systematic Troubleshooting Framework:**
+```bash
+# Create comprehensive troubleshooting guide
+cat > "docs/help/troubleshooting.md" << 'EOF'
+# Troubleshooting Guide
+
+This guide helps you diagnose and resolve common issues you might encounter while using [Application Name].
+
+## 🔍 General Troubleshooting Steps
+
+Before diving into specific issues, try these general troubleshooting steps:
+
+### 1. Basic Checks
+- [ ] Refresh the page (Ctrl+R or Cmd+R)
+- [ ] Check your internet connection
+- [ ] Verify you're logged in with the correct account
+- [ ] Clear browser cache and cookies
+- [ ] Try a different browser or incognito/private mode
+
+### 2. Browser Requirements
+Ensure you're using a supported browser:
+- ✅ Chrome 90+ (recommended)
+- ✅ Firefox 88+
+- ✅ Safari 14+
+- ✅ Edge 90+
+
+### 3. System Requirements
+- Stable internet connection (minimum 1 Mbps)
+- JavaScript enabled
+- Cookies enabled
+- Pop-up blockers disabled for our domain
+
+## 🐛 Common Issues and Solutions
+
+### Login and Account Issues
+
+#### ❌ Can't Log In
+
+**Symptoms**: Unable to access account, login errors, "invalid credentials" messages
+
+**Solutions**:
+1. **Verify Email and Password**
+   - Double-check email address (no typos)
+   - Ensure caps lock is off
+   - Try typing password in a text editor first
+
+2. **Reset Password**
+   - Click "Forgot Password?" on login page
+   - Check email (including spam folder)
+   - Follow reset instructions
+
+3. **Account Status**
+   - Check if account is locked or suspended
+   - Verify email address if recently changed
+   - Contact support if account issues persist
+
+#### ❌ Not Receiving Emails
+
+**Symptoms**: Missing verification emails, password reset emails, or notifications
+
+**Solutions**:
+1. **Check Email Settings**
+   - Verify email address in account settings
+   - Check spam/junk folders
+   - Add support@[domain].com to safe senders
+
+2. **Email Provider Issues**
+   - Some corporate email systems block external emails
+   - Try a personal email address
+   - Contact IT department about email filtering
+
+3. **Resend Options**
+   - Use "Resend verification email" if available
+   - Wait 5-10 minutes between resend attempts
+
+### Performance Issues
+
+#### ❌ Slow Loading Times
+
+**Symptoms**: Pages load slowly, features are unresponsive, timeouts
+
+**Solutions**:
+1. **Browser Optimization**
+   - Close unnecessary browser tabs
+   - Clear browser cache and cookies
+   - Disable browser extensions temporarily
+   - Update browser to latest version
+
+2. **Network Issues**
+   - Test internet speed (minimum 1 Mbps recommended)
+   - Switch to wired connection if using WiFi
+   - Restart router/modem
+   - Contact ISP if connectivity issues persist
+
+3. **Application Status**
+   - Check our [Status Page] for known issues
+   - Try accessing during off-peak hours
+   - Contact support if issues are widespread
+
+#### ❌ Features Not Working
+
+**Symptoms**: Buttons don't respond, forms won't submit, features appear broken
+
+**Solutions**:
+1. **Browser Issues**
+   - Disable ad blockers for our site
+   - Enable JavaScript and cookies
+   - Try incognito/private browsing mode
+   - Test in different browser
+
+2. **Cache Problems**
+   - Hard refresh: Ctrl+Shift+R (PC) or Cmd+Shift+R (Mac)
+   - Clear browser data for our domain
+   - Log out and log back in
+
+3. **Permissions**
+   - Check if you have required permissions for the feature
+   - Contact admin if this is a team/organizational account
+   - Verify your subscription includes the feature
+
+### Data and Sync Issues
+
+#### ❌ Data Not Saving
+
+**Symptoms**: Changes aren't saved, work is lost, sync errors
+
+**Solutions**:
+1. **Connection Issues**
+   - Check internet connection stability
+   - Avoid switching networks during work
+   - Save work frequently as backup
+
+2. **Browser Storage**
+   - Check available storage space
+   - Clear browser cache if storage is full
+   - Disable "private browsing" mode
+
+3. **Account Limits**
+   - Verify you haven't exceeded storage limits
+   - Check subscription plan limits
+   - Upgrade plan if necessary
+
+#### ❌ Missing Data
+
+**Symptoms**: Previously saved data is missing, can't find content
+
+**Solutions**:
+1. **Search and Filters**
+   - Use search function to locate content
+   - Check if filters are hiding content
+   - Look in archive or trash folders
+
+2. **Sync Delays**
+   - Wait a few minutes for sync to complete
+   - Refresh page to trigger sync
+   - Check other devices for recent changes
+
+3. **Account Access**
+   - Verify you're logged into correct account
+   - Check if you have access to shared content
+   - Contact content owner for permission issues
+
+## 🚨 Error Messages
+
+### Authentication Errors
+
+**Error**: "Session expired"
+**Solution**: Log out and log back in. Enable "Remember me" for longer sessions.
+
+**Error**: "Account locked"
+**Solution**: Wait 15 minutes and try again, or contact support for immediate unlock.
+
+### Permission Errors
+
+**Error**: "Access denied" or "Insufficient permissions"
+**Solution**: Contact your administrator or account owner to grant necessary permissions.
+
+### System Errors
+
+**Error**: "Server error" or "Something went wrong"
+**Solution**: 
+1. Refresh the page
+2. Try again in a few minutes
+3. Check our status page
+4. Contact support if error persists
+
+## 📞 When to Contact Support
+
+Contact our support team if:
+- You've tried the troubleshooting steps above
+- Error persists for more than 30 minutes
+- You're experiencing data loss
+- Security concerns or suspicious activity
+- Billing or account issues
+
+### Support Information
+- 📧 **Email**: support@[domain].com
+- 💬 **Live Chat**: Available Mon-Fri 9AM-5PM EST
+- 📱 **Phone**: [Phone number] (Enterprise customers only)
+
+### Information to Include
+When contacting support, please provide:
+- Specific error messages (screenshots helpful)
+- Steps to reproduce the issue
+- Browser and operating system information
+- Account email address
+- When the issue first occurred
+
+## 🔧 Advanced Troubleshooting
+
+### Browser Console Logs
+For technical users, browser console logs can help diagnose issues:
+
+1. Open browser developer tools (F12)
+2. Go to Console tab
+3. Reproduce the issue
+4. Screenshot any error messages
+5. Include in support request
+
+### Network Issues
+If you suspect network problems:
+1. Test from different network (mobile hotspot)
+2. Use network diagnostic tools
+3. Contact IT department for corporate networks
+
+---
+**Need immediate help?** Check our [Status Page] or contact support directly.
+EOF
+
+echo "🎉 USER DOCUMENTATION CREATION COMPLETE!"
+echo ""
+echo "📁 Generated User Documentation:"
+echo "   👥 User Personas: user-personas.md"
+echo "   🗺️ User Journeys: user-journeys.md"  
+echo "   📚 Tutorial Series: docs/tutorials/getting-started/"
+echo "   🙋 FAQ: docs/help/faq/general.md"
+echo "   🔧 Troubleshooting: docs/help/troubleshooting.md"
+echo ""
+echo "🚀 Next Steps:"
+echo "   1. Customize content for your specific application"
+echo "   2. Add application-specific screenshots and examples"
+echo "   3. Create feature-specific tutorials using the template"
+echo "   4. Set up user feedback collection for continuous improvement"
+echo ""
+```
+
+## 💡 **USER GUIDE EXAMPLES:**
+
+### **Example 1: SaaS Application User Guide**
+```
+Create comprehensive user documentation for SaaS platform
+
+Following .cursor/prompts/documentation/documentation-create-user-guide.mdc:
+- Focus on business user personas and workflows
+- Include collaboration features and team management
+- Create progressive tutorial series from beginner to advanced
+- Generate comprehensive FAQ for common business scenarios
+```
+
+### **Example 2: Developer Tool User Guide**
+```
+Generate user documentation for developer-focused tool
+
+Following .cursor/prompts/documentation/documentation-create-user-guide.mdc:
+- Target developer personas with technical backgrounds
+- Include API integration tutorials and code examples
+- Create troubleshooting guides for development environments
+- Focus on workflow integration and productivity features
+```
+
+### **Example 3: Consumer App User Guide**
+```
+Create user-friendly documentation for consumer application
+
+Following .cursor/prompts/documentation/documentation-create-user-guide.mdc:
+- Design for non-technical user personas
+- Emphasize visual tutorials with screenshots
+- Include accessibility considerations and mobile usage
+- Create simple troubleshooting for common user issues
+```
+
+---
+
+**This user guide creation prompt ensures comprehensive, user-centered documentation that guides users from first contact through advanced usage with clear, accessible, and helpful content.**

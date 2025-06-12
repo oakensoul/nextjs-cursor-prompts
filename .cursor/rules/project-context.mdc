@@ -1,0 +1,129 @@
+---
+description: When you lack sufficient context about this project's structure, patterns, conventions, or development practices, consult the project documentation in @LLMs.mdc for comprehensive guidance.
+globs: 
+alwaysApply: false
+---
+# Project Context Reference Rule
+
+**When you lack sufficient context about this project's structure, patterns, conventions, or development practices, consult the project documentation in [LLMs.mdc](mdc:LLMs.mdc) for comprehensive guidance.**
+
+## 🎯 **RULE OBJECTIVES:**
+
+1. **ENSURE comprehensive understanding** of project context before making changes
+2. **PREVENT assumptions** about project structure and conventions
+3. **MAINTAIN consistency** with established project practices
+4. **REDUCE errors** from insufficient background knowledge
+5. **ACCELERATE onboarding** to project-specific patterns
+
+## 🔍 **WHEN TO APPLY THIS RULE:**
+
+### **Context Insufficiency Indicators:**
+- Unfamiliar with project architecture or file organization
+- Unclear about coding standards or conventions used
+- Uncertain about testing patterns or requirements
+- Don't understand deployment or development workflow
+- Need background on project scope and objectives
+- Unsure about dependencies or technology stack decisions
+- Lack understanding of existing component patterns
+- Need clarity on API design principles
+- Uncertain about database schema or data patterns
+
+### **Mandatory Consultation Scenarios:**
+- **First time working** with this codebase
+- **Complex refactoring** or architectural changes
+- **Integration work** with existing systems
+- **New feature development** that touches multiple areas
+- **Performance optimization** requiring system understanding
+- **Security implementations** needing context about data flow
+- **API changes** affecting multiple consumers
+
+## 📋 **CONSULTATION PROCESS:**
+
+### **STEP 1: Context Assessment**
+Before starting any significant work:
+- [ ] **Evaluate current understanding** of the project
+- [ ] **Identify knowledge gaps** that could affect the task
+- [ ] **Determine consultation necessity** based on task complexity
+
+### **STEP 2: Documentation Review**
+When context is insufficient:
+- [ ] **Read [LLMs.mdc](mdc:LLMs.mdc)** thoroughly for project overview
+- [ ] **Focus on sections** relevant to your current task
+- [ ] **Note key patterns** and conventions to follow
+- [ ] **Understand constraints** and architectural decisions
+
+### **STEP 3: Application**
+After consulting documentation:
+- [ ] **Apply learned patterns** to your implementation
+- [ ] **Follow established conventions** consistently
+- [ ] **Respect architectural constraints** mentioned in documentation
+- [ ] **Update documentation** if you discover gaps or changes
+
+## ✅ **REQUIRED ACTIONS:**
+
+### **Before Implementation:**
+1. **CONSULT [LLMs.mdc](mdc:LLMs.mdc)** when context is insufficient
+2. **UNDERSTAND project structure** and organization principles
+3. **IDENTIFY relevant patterns** for your specific task
+4. **CLARIFY any ambiguities** through documentation review
+
+### **During Implementation:**
+1. **FOLLOW documented conventions** and standards
+2. **RESPECT architectural decisions** outlined in the documentation
+3. **MAINTAIN consistency** with established patterns
+4. **REFERENCE documentation** when making design decisions
+
+### **After Implementation:**
+1. **VERIFY alignment** with documented practices
+2. **UPDATE documentation** if new patterns are established
+3. **DOCUMENT any deviations** and their reasoning
+
+## 🚫 **AVOID WITHOUT CONTEXT:**
+
+- Making assumptions about project structure
+- Implementing patterns inconsistent with existing code
+- Ignoring established conventions or standards
+- Creating new architectural patterns without understanding existing ones
+- Making changes that conflict with documented constraints
+- Proceeding with insufficient understanding of system impact
+
+## 💡 **CONTEXT AREAS COVERED IN DOCUMENTATION:**
+
+The [LLMs.mdc](mdc:LLMs.mdc) file typically contains:
+- **Project overview** and objectives
+- **Architecture decisions** and patterns
+- **Coding standards** and conventions
+- **Testing strategies** and requirements
+- **Development workflow** and practices
+- **Deployment considerations** and constraints
+- **Performance requirements** and guidelines
+- **Security considerations** and implementations
+- **Integration patterns** and APIs
+- **Database schema** and data patterns
+
+## 🔧 **INTEGRATION WITH OTHER RULES:**
+
+### **Works With:**
+- **Minimal Change Rule** - Context prevents unnecessary rewrites
+- **Test-Driven Rule** - Understanding testing patterns from documentation
+- **Refactoring Rule** - Context guides safe improvement approaches
+- **Database Safety Rule** - Understanding data constraints and patterns
+
+### **Enhances:**
+- More informed decision-making
+- Better consistency with existing patterns
+- Reduced risk of architectural conflicts
+- Improved code quality through context awareness
+
+## 🚨 **ESCALATION PROTOCOL:**
+
+If after consulting [LLMs.mdc](mdc:LLMs.mdc) you still lack sufficient context:
+
+1. **IDENTIFY specific gaps** in your understanding
+2. **DOCUMENT questions** that weren't answered
+3. **REQUEST clarification** on ambiguous areas
+4. **WAIT for guidance** before proceeding with uncertain implementations
+
+---
+
+**This rule ensures that all development work is informed by proper project context and maintains consistency with established practices.**

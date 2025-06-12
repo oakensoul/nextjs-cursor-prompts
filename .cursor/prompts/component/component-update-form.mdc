@@ -1,0 +1,624 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Form Component Update Request
+
+Please update and enhance an existing form component following our improvement patterns and enhancement standards:
+
+## 🎯 **FORM UPDATE OBJECTIVES:**
+
+1. **ENHANCE validation systems** with improved rules, real-time feedback, and error handling
+2. **IMPROVE accessibility** with better ARIA attributes, keyboard navigation, and screen reader support
+3. **OPTIMIZE user experience** with loading states, success feedback, and form flow improvements
+4. **UPGRADE technical implementation** with better TypeScript, performance optimizations, and modern patterns
+5. **MAINTAIN backward compatibility** while implementing meaningful improvements
+
+## 📋 **FORM UPDATE METHODOLOGY:**
+
+### **STEP 1: Current Form Assessment**
+
+#### **Analyze Existing Implementation:**
+- **Current validation approach**: Review existing Zod schemas and validation logic
+- **Accessibility audit**: Test current ARIA attributes and keyboard navigation
+- **User experience gaps**: Identify missing loading states, error handling, success feedback
+- **Performance issues**: Review re-render patterns and optimization opportunities
+- **TypeScript completeness**: Check interface coverage and type safety
+
+#### **Identify Enhancement Opportunities:**
+```typescript
+// Assessment checklist for form improvements
+interface FormAudit {
+  validation: {
+    realTimeValidation: boolean;
+    serverValidation: boolean;
+    customRules: boolean;
+    errorRecovery: boolean;
+  };
+  accessibility: {
+    properLabels: boolean;
+    ariaDescriptions: boolean;
+    keyboardNavigation: boolean;
+    screenReaderSupport: boolean;
+  };
+  userExperience: {
+    loadingStates: boolean;
+    successFeedback: boolean;
+    progressIndicators: boolean;
+    autoSave: boolean;
+  };
+  performance: {
+    optimizedRendering: boolean;
+    efficientValidation: boolean;
+    memoryManagement: boolean;
+  };
+}
+```
+
+### **STEP 2: Validation Enhancement Patterns**
+
+#### **Advanced Validation Improvements:**
+```typescript
+// Enhanced validation with contextual feedback
+const enhancedFormSchema = z.object({
+  email: z.string()
+    .min(1, 'Email is required')
+    .email('Please enter a valid email address')
+    .refine(async (email) => {
+      // Server-side validation for uniqueness
+      const exists = await checkEmailExists(email);
+      return !exists;
+    }, 'This email is already registered'),
+    
+  password: z.string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/^(?=.*[a-z])/, 'Must contain at least one lowercase letter')
+    .regex(/^(?=.*[A-Z])/, 'Must contain at least one uppercase letter')
+    .regex(/^(?=.*\d)/, 'Must contain at least one number')
+    .regex(/^(?=.*[@$!%*?&])/, 'Must contain at least one special character'),
+    
+  confirmPassword: z.string()
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+// Real-time validation with debouncing
+const useEnhancedValidation = (schema: ZodSchema) => {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isValidating, setIsValidating] = useState<Record<string, boolean>>({});
+  
+  const validateField = useCallback(
+    debounce(async (fieldName: string, value: any) => {
+      setIsValidating(prev => ({ ...prev, [fieldName]: true }));
+      
+      try {
+        await schema.shape[fieldName].parseAsync(value);
+        setErrors(prev => ({ ...prev, [fieldName]: '' }));
+      } catch (error) {
+        if (error instanceof ZodError) {
+          setErrors(prev => ({ 
+            ...prev, 
+            [fieldName]: error.errors[0]?.message || 'Invalid value' 
+          }));
+        }
+      } finally {
+        setIsValidating(prev => ({ ...prev, [fieldName]: false }));
+      }
+    }, 300),
+    [schema]
+  );
+  
+  return { errors, isValidating, validateField };
+};
+```
+
+#### **Enhanced Error Handling:**
+```typescript
+// Comprehensive error state management
+interface FormErrorState {
+  fieldErrors: Record<string, string>;
+  serverErrors: string[];
+  validationErrors: ZodError | null;
+  submitError: string | null;
+}
+
+const useFormErrorManagement = () => {
+  const [errorState, setErrorState] = useState<FormErrorState>({
+    fieldErrors: {},
+    serverErrors: [],
+    validationErrors: null,
+    submitError: null
+  });
+  
+  const clearFieldError = (fieldName: string) => {
+    setErrorState(prev => ({
+      ...prev,
+      fieldErrors: { ...prev.fieldErrors, [fieldName]: '' }
+    }));
+  };
+  
+  const setFieldError = (fieldName: string, message: string) => {
+    setErrorState(prev => ({
+      ...prev,
+      fieldErrors: { ...prev.fieldErrors, [fieldName]: message }
+    }));
+  };
+  
+  const clearAllErrors = () => {
+    setErrorState({
+      fieldErrors: {},
+      serverErrors: [],
+      validationErrors: null,
+      submitError: null
+    });
+  };
+  
+  return { errorState, clearFieldError, setFieldError, clearAllErrors };
+};
+```
+
+### **STEP 3: Accessibility Enhancement Implementation**
+
+#### **Advanced ARIA Implementation:**
+```typescript
+// Enhanced accessibility with comprehensive ARIA support
+interface AccessibleFormFieldProps {
+  id: string;
+  label: string;
+  value: string;
+  error?: string;
+  helpText?: string;
+  required?: boolean;
+  validating?: boolean;
+  onChange: (value: string) => void;
+  onBlur?: () => void;
+}
+
+const AccessibleFormField = ({
+  id,
+  label,
+  value,
+  error,
+  helpText,
+  required = false,
+  validating = false,
+  onChange,
+  onBlur
+}: AccessibleFormFieldProps) => {
+  const helpId = helpText ? `${id}-help` : undefined;
+  const errorId = error ? `${id}-error` : undefined;
+  const describedBy = [helpId, errorId].filter(Boolean).join(' ');
+  
+  return (
+    <div className="form-field-group">
+      <label 
+        htmlFor={id}
+        className={cn(
+          "form-label",
+          required && "form-label-required",
+          error && "form-label-error"
+        )}
+      >
+        {label}
+        {required && (
+          <span aria-label=" (required)" className="text-red-500 ml-1">
+            *
+          </span>
+        )}
+      </label>
+      
+      <div className="relative">
+        <input
+          id={id}
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+          aria-describedby={describedBy || undefined}
+          aria-invalid={error ? 'true' : 'false'}
+          aria-required={required}
+          className={cn(
+            "form-input",
+            error && "form-input-error",
+            validating && "form-input-validating"
+          )}
+        />
+        
+        {validating && (
+          <div className="absolute right-3 top-3">
+            <Spinner size="sm" aria-hidden="true" />
+          </div>
+        )}
+      </div>
+      
+      {helpText && (
+        <p id={helpId} className="form-help-text">
+          {helpText}
+        </p>
+      )}
+      
+      {error && (
+        <p 
+          id={errorId} 
+          className="form-error-text" 
+          role="alert"
+          aria-live="polite"
+        >
+          <AlertCircleIcon className="inline w-4 h-4 mr-1" aria-hidden="true" />
+          {error}
+        </p>
+      )}
+    </div>
+  );
+};
+```
+
+#### **Keyboard Navigation Enhancements:**
+```typescript
+// Enhanced keyboard navigation and focus management
+const useFormKeyboardNavigation = (formRef: RefObject<HTMLFormElement>) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!formRef.current) return;
+      
+      switch (event.key) {
+        case 'Enter':
+          // Submit form if focus is on submit button or last field
+          if (event.target === getSubmitButton() || isLastField(event.target)) {
+            event.preventDefault();
+            handleFormSubmit();
+          }
+          break;
+          
+        case 'Escape':
+          // Clear current field or cancel form
+          if (hasFieldFocus()) {
+            clearCurrentField();
+          } else {
+            handleFormCancel();
+          }
+          break;
+          
+        case 'ArrowDown':
+        case 'ArrowUp':
+          // Navigate between fields in certain form types
+          if (isNavigableForm()) {
+            event.preventDefault();
+            navigateFields(event.key === 'ArrowDown' ? 1 : -1);
+          }
+          break;
+      }
+    };
+    
+    formRef.current?.addEventListener('keydown', handleKeyDown);
+    return () => formRef.current?.removeEventListener('keydown', handleKeyDown);
+  }, []);
+};
+```
+
+### **STEP 4: User Experience Improvements**
+
+#### **Enhanced Loading and State Management:**
+```typescript
+// Comprehensive form state management
+interface EnhancedFormState {
+  isSubmitting: boolean;
+  isValidating: boolean;
+  isDirty: boolean;
+  hasUnsavedChanges: boolean;
+  submitAttempts: number;
+  lastSubmitTime: Date | null;
+  autoSaveStatus: 'idle' | 'saving' | 'saved' | 'error';
+}
+
+const useEnhancedFormState = () => {
+  const [formState, setFormState] = useState<EnhancedFormState>({
+    isSubmitting: false,
+    isValidating: false,
+    isDirty: false,
+    hasUnsavedChanges: false,
+    submitAttempts: 0,
+    lastSubmitTime: null,
+    autoSaveStatus: 'idle'
+  });
+  
+  // Auto-save functionality
+  const { trigger: autoSave } = useDebouncedCallback(
+    async (formData: any) => {
+      setFormState(prev => ({ ...prev, autoSaveStatus: 'saving' }));
+      
+      try {
+        await saveFormDraft(formData);
+        setFormState(prev => ({ 
+          ...prev, 
+          autoSaveStatus: 'saved',
+          hasUnsavedChanges: false 
+        }));
+      } catch (error) {
+        setFormState(prev => ({ ...prev, autoSaveStatus: 'error' }));
+      }
+    },
+    2000
+  );
+  
+  return { formState, setFormState, autoSave };
+};
+```
+
+#### **Progress Indicators and Feedback:**
+```typescript
+// Enhanced progress tracking for multi-step forms
+const FormProgressIndicator = ({ 
+  currentStep, 
+  totalSteps, 
+  stepTitles 
+}: ProgressProps) => {
+  return (
+    <nav aria-label="Form progress" className="form-progress">
+      <ol className="flex items-center space-x-4">
+        {stepTitles.map((title, index) => {
+          const stepNumber = index + 1;
+          const isComplete = stepNumber < currentStep;
+          const isCurrent = stepNumber === currentStep;
+          
+          return (
+            <li key={stepNumber} className="flex items-center">
+              <div
+                className={cn(
+                  "step-indicator",
+                  isComplete && "step-complete",
+                  isCurrent && "step-current"
+                )}
+                aria-current={isCurrent ? 'step' : undefined}
+              >
+                {isComplete ? (
+                  <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                ) : (
+                  <span aria-hidden="true">{stepNumber}</span>
+                )}
+              </div>
+              <span className={cn(
+                "step-title",
+                !isCurrent && "text-gray-500"
+              )}>
+                {title}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+};
+```
+
+### **STEP 5: Performance Optimization**
+
+#### **Optimized Rendering Patterns:**
+```typescript
+// Memo-optimized form components
+const OptimizedFormField = memo(({ 
+  field, 
+  error, 
+  onChange 
+}: FormFieldProps) => {
+  return (
+    <FormField
+      {...field}
+      error={error}
+      onChange={onChange}
+    />
+  );
+}, (prevProps, nextProps) => {
+  // Custom comparison for optimal re-rendering
+  return (
+    prevProps.field.value === nextProps.field.value &&
+    prevProps.error === nextProps.error &&
+    prevProps.field.name === nextProps.field.name
+  );
+});
+
+// Optimized form validation
+const useOptimizedValidation = (schema: ZodSchema) => {
+  const validationCache = useRef(new Map());
+  
+  const validateWithCache = useCallback(async (data: any) => {
+    const dataHash = hashObject(data);
+    
+    if (validationCache.current.has(dataHash)) {
+      return validationCache.current.get(dataHash);
+    }
+    
+    const result = await schema.safeParseAsync(data);
+    validationCache.current.set(dataHash, result);
+    
+    // Clean cache if it gets too large
+    if (validationCache.current.size > 50) {
+      const firstKey = validationCache.current.keys().next().value;
+      validationCache.current.delete(firstKey);
+    }
+    
+    return result;
+  }, [schema]);
+  
+  return validateWithCache;
+};
+```
+
+## ✅ **FORM UPDATE IMPLEMENTATION REQUIREMENTS:**
+
+### **Enhancement Categories:**
+```
+Priority 1: Critical Improvements
+├── Validation Enhancement
+│   ├── Real-time validation with debouncing
+│   ├── Server-side validation integration
+│   └── Custom validation rules
+├── Accessibility Upgrades
+│   ├── Enhanced ARIA attributes
+│   ├── Keyboard navigation improvements
+│   └── Screen reader optimization
+└── Error Handling
+    ├── Comprehensive error states
+    ├── Error recovery patterns
+    └── User-friendly error messages
+
+Priority 2: User Experience
+├── Loading States
+│   ├── Field-level loading indicators
+│   ├── Form submission states
+│   └── Progress indicators
+├── Success Feedback
+│   ├── Success messages
+│   ├── Confirmation patterns
+│   └── Next steps guidance
+└── Auto-save Functionality
+    ├── Draft saving
+    ├── Data recovery
+    └── Conflict resolution
+
+Priority 3: Performance
+├── Rendering Optimization
+│   ├── Memo optimization
+│   ├── Callback optimization
+│   └── State optimization
+├── Validation Performance
+│   ├── Validation caching
+│   ├── Debounced validation
+│   └── Incremental validation
+└── Bundle Optimization
+    ├── Code splitting
+    ├── Lazy loading
+    └── Tree shaking
+```
+
+### **Update Requirements Checklist:**
+- [ ] **Enhanced Validation**: Improved validation logic with real-time feedback
+- [ ] **Accessibility Improvements**: WCAG 2.1 AA compliance with enhanced ARIA
+- [ ] **User Experience**: Loading states, success feedback, progress indicators
+- [ ] **Performance Optimization**: Optimized rendering and validation caching
+- [ ] **Backward Compatibility**: Maintain existing API while adding enhancements
+- [ ] **Testing Updates**: Updated test suite covering new functionality
+- [ ] **Documentation**: Updated usage examples and migration guide
+
+## 🔍 **FORM UPDATE QUALITY STANDARDS:**
+
+### **Enhancement Quality:**
+- **Meaningful Improvements**: Each enhancement provides clear user value
+- **Progressive Enhancement**: Existing functionality remains stable
+- **Performance Neutral**: Updates don't degrade existing performance
+- **Accessibility First**: All improvements prioritize accessibility
+
+### **Implementation Quality:**
+- **Type Safety**: Enhanced TypeScript coverage and type safety
+- **Error Handling**: Comprehensive error states and recovery
+- **Test Coverage**: Maintain or improve test coverage
+- **Code Quality**: Clean, maintainable, and well-documented code
+
+## 💡 **FORM UPDATE EXAMPLES:**
+
+### **Validation Enhancement Example:**
+```typescript
+// Before: Basic validation
+const validateEmail = (email: string) => {
+  return z.string().email().safeParse(email);
+};
+
+// After: Enhanced validation with context
+const validateEmailEnhanced = async (email: string) => {
+  const baseValidation = z.string().email().safeParse(email);
+  if (!baseValidation.success) return baseValidation;
+  
+  const uniquenessCheck = await checkEmailUniqueness(email);
+  const domainCheck = await validateEmailDomain(email);
+  
+  return {
+    success: uniquenessCheck && domainCheck,
+    errors: [
+      ...(!uniquenessCheck ? ['Email already exists'] : []),
+      ...(!domainCheck ? ['Email domain not allowed'] : [])
+    ]
+  };
+};
+```
+
+### **Accessibility Enhancement Example:**
+```typescript
+// Before: Basic form field
+<input
+  type="email"
+  value={email}
+  onChange={setEmail}
+  className={error ? 'error' : ''}
+/>
+
+// After: Enhanced accessible form field
+<AccessibleFormField
+  id="email-field"
+  label="Email Address"
+  value={email}
+  onChange={setEmail}
+  error={emailError}
+  helpText="We'll use this to send you important updates"
+  required
+  validating={isValidatingEmail}
+  onBlur={() => validateField('email', email)}
+/>
+```
+
+## 🚨 **COMMON UPDATE PITFALLS:**
+
+### **Enhancement Pitfalls:**
+- **Over-engineering**: Don't add unnecessary complexity
+- **Breaking changes**: Maintain backward compatibility
+- **Performance regression**: Monitor performance impact
+- **Accessibility conflicts**: Ensure improvements don't break existing accessibility
+
+### **Implementation Pitfalls:**
+- **State management complexity**: Keep state management simple and predictable
+- **Memory leaks**: Clean up new event listeners and subscriptions
+- **Bundle size growth**: Monitor impact on application bundle size
+- **Testing gaps**: Ensure new functionality is properly tested
+
+## 🔧 **INTEGRATION WITH PROJECT STANDARDS:**
+
+### **Update Standards Compliance:**
+- **Coding Standards**: Maintain TypeScript and code quality standards
+- **Testing Standards**: Update tests to cover new functionality
+- **Architecture Standards**: Follow established patterns and conventions
+- **Performance Standards**: Maintain or improve performance benchmarks
+
+### **Related Prompts:**
+- Use `component-create-form.mdc` for creating new forms from scratch
+- Reference `component-update-guide.mdc` for general update patterns
+- Consider accessibility and validation standards from project documentation
+
+## 📋 **FORM UPDATE DELIVERABLES:**
+
+Please provide:
+
+- [ ] **Enhanced form component** with improved validation and user experience
+- [ ] **Updated validation schemas** with real-time feedback and server integration
+- [ ] **Accessibility improvements** with enhanced ARIA attributes and keyboard navigation
+- [ ] **Performance optimizations** with memo optimization and validation caching
+- [ ] **Updated test suite** covering new functionality and edge cases
+- [ ] **Migration guide** explaining changes and upgrade path
+- [ ] **Implementation summary** with enhancement details and impact assessment
+
+## 📖 **USAGE EXAMPLES:**
+
+```
+Update the user registration form with real-time email validation, password strength indicators, and auto-save functionality.
+Apply the form component update prompt.
+```
+
+```
+Enhance the contact form with better accessibility, validation feedback, and success confirmation flow.
+Apply the form component update prompt.
+```
+
+```
+Improve the multi-step checkout form with progress indicators, validation improvements, and error recovery patterns.
+Apply the form component update prompt.

@@ -1,0 +1,288 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Rule Update and Maintenance Guide
+
+**This prompt provides a systematic approach to updating existing Cursor rules, ensuring they remain strategically composed, standards-compliant, and effective while preserving their core value and preventing rule proliferation.**
+
+## 🎯 **UPDATE OBJECTIVES:**
+
+1. **MAINTAIN rule effectiveness** while improving strategic composition
+2. **ALIGN with current standards** and composition principles
+3. **PRESERVE core constraints** and user familiarity
+4. **ENHANCE strategic cohesion** through better rule composition
+5. **PREVENT rule proliferation** by identifying consolidation opportunities
+
+## 📋 **RULE UPDATE PROCESS:**
+
+### **STEP 1: Current State Assessment**
+
+#### **Rule Analysis:**
+- **Current version** - Document existing version and last update date
+- **Usage patterns** - How frequently is this rule applied and in what contexts?
+- **Effectiveness metrics** - Is the rule consistently followed by agents?
+- **Integration status** - How well does it work with other rules and prompts?
+- **Standards compliance** - Compare against current rule standards and composition principles
+
+#### **Strategic Composition Assessment:**
+- **Rule overlap analysis** - Does this rule conflict or overlap with other rules?
+- **Composition opportunities** - Could this be merged with related rules for better cohesion?
+- **Agent adherence rate** - Do agents consistently apply this rule or ignore it?
+- **Scope clarity** - Is the rule's scope well-defined and appropriate?
+- **Constraint effectiveness** - Do the constraints actually improve outcomes?
+
+#### **Quality Baseline Measurement:**
+- **Standards compliance score** - Rate against docs/standards/standards-rule.md
+- **Strategic alignment score** - How well does it fit the composition-over-proliferation principle?
+- **Clarity and actionability** - Can agents easily understand and apply the rule?
+- **Integration score** - How well it works with the current rule ecosystem
+- **Effectiveness score** - Does it prevent issues and improve outcomes?
+
+#### **Change Requirements Identification:**
+- **Standards gaps** - What doesn't meet current rule standards?
+- **Composition opportunities** - What rules could be consolidated?
+- **Effectiveness issues** - Where is the rule ignored or misapplied?
+- **Scope problems** - Is the rule too broad, too narrow, or unclear?
+- **Integration conflicts** - Where does it conflict with other rules?
+
+### **STEP 2: Strategic Update Planning**
+
+#### **Composition Strategy:**
+- **Consolidation analysis** - Can this rule be merged with others for better cohesion?
+- **Scope optimization** - Should the rule scope be expanded or refined?
+- **Constraint refinement** - Which constraints are most effective and should be emphasized?
+- **Methodology integration** - How can methodology and constraints be better combined?
+
+#### **Rule Ecosystem Impact:**
+- **Related rules review** - How does this update affect other rules?
+- **Conflict resolution** - Address any conflicts with existing rules
+- **Synergy opportunities** - How can this rule enhance others?
+- **Agent cognitive load** - Will this update reduce or increase complexity for agents?
+
+#### **Standards Alignment Planning:**
+- **Rule standards** (docs/standards/standards-rule.md) - Structure, quality, composition requirements
+- **Composition principles** - Ensure alignment with strategic rule design
+- **Integration patterns** - How should this rule work with prompts and other rules?
+- **Override protocols** - Update exception handling approaches
+
+### **STEP 3: Update Implementation**
+
+#### **Frontmatter Updates:**
+```yaml
+---
+title: [Update if scope or composition changed]
+description: [Revise to reflect strategic purpose and composition]
+tags: [Update with current categorization and methodology tags]
+version: [Increment according to semantic versioning]
+lastUpdated: [Current date YYYY-MM-DD]
+usage: [Clarify how to apply strategically with prompts]
+audience: [claude, ai-assistants]
+scope: [Refine boundaries and applicability]
+related_rules: [List rules that work together or conflict]
+---
+```
+
+#### **Strategic Structure Modernization:**
+- **Scope clarity** - Precisely define what the rule applies to and doesn't apply to
+- **Composition integration** - Combine related constraints into cohesive sections
+- **Methodology emphasis** - Lead with approach, follow with specific constraints
+- **Application guidance** - Clear examples of how to use with different prompts
+- **Interaction documentation** - How this rule works with others
+
+#### **Constraint Optimization:**
+- **Forbidden actions consolidation** - Group related prohibitions logically
+- **Required actions composition** - Combine related requirements into workflows
+- **Methodology refinement** - Improve step-by-step processes for clarity
+- **Scope boundaries** - Clearly define applicability and exceptions
+- **Override protocols** - Update exception handling procedures
+
+#### **Integration Enhancement:**
+- **Prompt compatibility** - Ensure smooth integration with current prompts
+- **Rule ecosystem fit** - Optimize how this rule works with others
+- **Application examples** - Add current, practical usage scenarios
+- **Conflict resolution** - Address any conflicts with other rules
+- **Synergy documentation** - Explain how rules work better together
+
+### **STEP 4: Composition and Consolidation Analysis**
+
+#### **Strategic Consolidation Review:**
+- **Related rule analysis** - Identify rules that could be merged
+- **Overlap elimination** - Remove redundancy across multiple rules
+- **Scope optimization** - Expand rule scope to cover related constraints
+- **Methodology integration** - Combine related approaches into unified frameworks
+- **Agent cognitive load reduction** - Simplify the overall rule landscape
+
+#### **Consolidation Decision Matrix:**
+```
+MERGE when:
+✅ Rules address the same domain or context
+✅ Constraints are complementary, not conflicting
+✅ Combined rule would be more coherent
+✅ Agents would benefit from unified guidance
+
+KEEP SEPARATE when:
+❌ Rules apply to fundamentally different contexts
+❌ Constraints might conflict in some scenarios
+❌ Combined rule would become too complex
+❌ Different stakeholders need different rules
+```
+
+#### **Post-Consolidation Validation:**
+- **Coherence check** - Does the updated rule make logical sense?
+- **Completeness verification** - Are all necessary constraints included?
+- **Clarity assessment** - Is the rule easy to understand and apply?
+- **Integration testing** - Does it work well with prompts and other rules?
+
+### **STEP 5: Validation and Testing**
+
+#### **Standards Compliance Verification:**
+- [ ] **Frontmatter complete** - All required fields present and accurate
+- [ ] **Structure adherence** - Follows current rule organization patterns
+- [ ] **Composition principles** - Aligns with strategic composition guidelines
+- [ ] **Quality standards** - Meets clarity, actionability, effectiveness criteria
+- [ ] **Integration references** - Properly documents interactions with other rules
+
+#### **Strategic Effectiveness Testing:**
+- **Agent adherence simulation** - Test if agents can consistently follow the rule
+- **Application scenario testing** - Verify the rule works across different contexts
+- **Integration testing** - Ensure compatibility with prompts and other rules
+- **Edge case validation** - Test boundary conditions and exception scenarios
+- **Composition effectiveness** - Verify consolidated rules work better than separate ones
+
+#### **Ecosystem Impact Assessment:**
+- **Rule interaction validation** - No conflicts with other rules
+- **Prompt compatibility** - Works smoothly with current prompts
+- **Cognitive load evaluation** - Doesn't overwhelm agents with complexity
+- **Workflow integration** - Fits naturally into development processes
+
+### **STEP 6: Version Management and Documentation**
+
+#### **Version Update Strategy:**
+```
+Patch (x.x.1): Bug fixes, clarifications, minor constraint adjustments
+Minor (x.1.x): Enhanced constraints, improved methodology, better integration
+Major (1.x.x): Scope changes, rule consolidation, structural reorganization
+```
+
+#### **Change Documentation:**
+- **Consolidation notes** - Document what rules were merged and why
+- **Improvement summary** - Highlight key effectiveness enhancements
+- **Breaking changes** - Clearly identify any application changes
+- **Migration guidance** - Help users adapt to consolidated or restructured rules
+
+#### **Ecosystem Updates:**
+- **Related rules** - Update any rules that reference this one
+- **Prompt updates** - Update prompts that reference the modified rule
+- **Standards documents** - Update rule standards if new patterns introduced
+- **Usage examples** - Update examples in documentation
+
+## 🔧 **UPDATE TYPES AND APPROACHES:**
+
+### **Standards Compliance Update:**
+```markdown
+Purpose: Bring rule into compliance with current standards and composition principles
+Approach: Systematic comparison against rule standards and composition guidelines
+Focus: Structure, frontmatter, scope definition, interaction documentation
+Version Impact: Usually minor version bump
+```
+
+### **Strategic Consolidation Update:**
+```markdown
+Purpose: Merge related rules for better composition and reduced proliferation
+Approach: Analysis of rule overlap and opportunities for cohesive integration
+Focus: Constraint consolidation, methodology integration, scope optimization
+Version Impact: Major version bump due to structural changes
+```
+
+### **Effectiveness Enhancement Update:**
+```markdown
+Purpose: Improve agent adherence and rule application success
+Approach: Analysis of agent behavior and rule application patterns
+Focus: Clarity, actionability, scope boundaries, application guidance
+Version Impact: Minor version bump
+```
+
+### **Integration Optimization Update:**
+```markdown
+Purpose: Improve how rule works with prompts and other rules
+Approach: Ecosystem analysis and interaction pattern optimization
+Focus: Prompt compatibility, rule synergy, conflict resolution
+Version Impact: Minor for improvements, major for significant interaction changes
+```
+
+## 📊 **UPDATE SUCCESS METRICS:**
+
+### **Strategic Composition Improvement:**
+- **Rule count reduction** - Fewer, more comprehensive rules in the ecosystem
+- **Agent adherence increase** - Rules are followed more consistently
+- **Integration seamlessness** - Better compatibility with prompts and other rules
+- **Cognitive load reduction** - Agents can process rule guidance more effectively
+
+### **Quality Enhancement Metrics:**
+- **Clarity improvement** - Constraints are clearer and more actionable
+- **Completeness enhancement** - Rule covers its scope comprehensively
+- **Effectiveness improvement** - Rule prevents more issues and improves outcomes
+- **Standards compliance** - Meets current rule standards and composition principles
+
+### **Ecosystem Impact Assessment:**
+- **Workflow integration** - Rule fits naturally into development processes
+- **Conflict elimination** - No conflicts with other rules or prompts
+- **Synergy enhancement** - Rule works better with others after update
+- **User adoption** - Developers apply the rule more consistently
+
+## 💡 **UPDATE EXAMPLES:**
+
+### **Example 1: Strategic Consolidation Update**
+```
+Consolidate .cursor/rules/security-first.mdc and .cursor/rules/data-protection.mdc
+
+Following .cursor/prompts/prompt-engineering/rule-update.mdc:
+- Analyze overlap between security and data protection constraints
+- Merge into comprehensive .cursor/rules/security-and-data-protection.mdc
+- Integrate methodologies for cohesive security approach
+- Update related prompts to reference consolidated rule
+```
+
+### **Example 2: Effectiveness Enhancement Update**
+```
+Update .cursor/rules/code-change-minimal.mdc for better agent adherence
+
+Following .cursor/prompts/prompt-engineering/rule-update.mdc:
+- Analyze where agents ignore or misapply the rule
+- Clarify scope boundaries and application scenarios
+- Enhance methodology section with clearer steps
+- Add more specific constraint guidance
+- Improve integration examples with common prompts
+```
+
+### **Example 3: Standards Compliance Update**
+```
+Update .cursor/rules/test-driven.mdc for current rule standards
+
+Following .cursor/prompts/prompt-engineering/rule-update.mdc:
+- Fix frontmatter to include related_rules field
+- Reorganize structure to match current rule patterns
+- Add clear scope boundaries and interaction documentation
+- Update override protocol to match current standards
+- Enhance application examples with current technology
+```
+
+## 🎯 **STRATEGIC PRINCIPLES:**
+
+### **Composition Over Proliferation:**
+Always consider if updating a rule creates an opportunity to consolidate with others. The goal is fewer, more powerful rules that agents consistently follow.
+
+### **Agent-Centric Design:**
+Update rules with agent cognitive limitations in mind. Rules should be easy to understand, remember, and apply consistently.
+
+### **Ecosystem Harmony:**
+Ensure updated rules work synergistically with the entire prompt and rule ecosystem, not just in isolation.
+
+### **Effectiveness Validation:**
+Measure rule effectiveness by agent adherence and outcome improvement, not just completeness or comprehensiveness.
+
+---
+
+**The goal is maintaining a strategic, cohesive rule system that agents can successfully apply to consistently improve development outcomes.**

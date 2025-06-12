@@ -1,0 +1,260 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Create Integration Tests
+
+**FOCUS: End-to-end workflows, API integrations, and multi-component interactions**
+
+**EVALUATE NEED: Integration tests are for complex workflows that span multiple components or systems.**
+
+Please create integration test coverage for complex user workflows and component interactions, following our vitest-based testing standards.
+
+## 🧪 **MANDATORY TESTING FRAMEWORK REQUIREMENTS**
+
+### Testing Stack (NO EXCEPTIONS)
+- **Primary Framework**: vitest (NEVER Jest)
+- **DOM Environment**: happy-dom  
+- **Component Testing**: @testing-library/react
+- **User Interactions**: @testing-library/user-event
+- **API Mocking**: MSW (Mock Service Worker)
+- **Mocking**: Built-in vitest mocking capabilities
+
+### File Structure & Naming (STRICTLY ENFORCED)
+- **Location**: Co-located in `__tests__/` subdirectories next to components
+- **Integration Tests**: `ComponentName.integration.test.tsx`
+
+## 📋 **INTEGRATION TEST REQUIREMENTS**
+
+### Consider Integration Tests For:
+- ✅ Authentication flows
+- ✅ Form submissions with validation
+- ✅ Multi-step user journeys
+- ✅ API data fetching and state updates
+- ✅ Component communication
+- ✅ Context provider interactions
+- ✅ Navigation and routing workflows
+- ✅ Complex state management scenarios
+
+### Integration Tests Must Include:
+- [ ] Real API calls (using MSW for mocking)
+- [ ] End-to-end user workflows  
+- [ ] Cross-component data flow
+- [ ] State management integration
+- [ ] Error handling across components
+- [ ] Loading states and transitions
+- [ ] User journey completion scenarios
+
+## 🔧 **IMPLEMENTATION STANDARDS**
+
+### Integration Test Template
+```typescript
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { server } from '@/test/mocks/server'
+import { http, HttpResponse } from 'msw'
+import { ComponentName } from './ComponentName'
+
+describe('ComponentName Integration', () => {
+  beforeEach(() => {
+    server.listen()
+  })
+
+  afterEach(() => {
+    server.resetHandlers()
+  })
+
+  it('should complete user workflow end-to-end', async () => {
+    const user = userEvent.setup()
+    
+    // Mock API response
+    server.use(
+      http.post('/api/submit', () => {
+        return HttpResponse.json({ success: true })
+      })
+    )
+
+    render(<ComponentName />)
+    
+    // Simulate complete user workflow
+    await user.type(screen.getByLabelText('Email'), 'test@example.com')
+    await user.click(screen.getByRole('button', { name: 'Submit' }))
+    
+    // Verify end result
+    await waitFor(() => {
+      expect(screen.getByText('Success!')).toBeInTheDocument()
+    })
+  })
+
+  it('should handle API errors gracefully', async () => {
+    const user = userEvent.setup()
+    
+    // Mock API error
+    server.use(
+      http.post('/api/submit', () => {
+        return new HttpResponse(null, { status: 500 })
+      })
+    )
+
+    render(<ComponentName />)
+    
+    await user.click(screen.getByRole('button', { name: 'Submit' }))
+    
+    await waitFor(() => {
+      expect(screen.getByText('Something went wrong')).toBeInTheDocument()
+    })
+  })
+})
+```
+
+### Multi-Component Integration Template
+```typescript
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, it, expect } from 'vitest'
+import { AppProvider } from '@/providers/AppProvider'
+import { ParentComponent } from './ParentComponent'
+
+describe('Multi-Component Integration', () => {
+  it('should handle data flow between components', async () => {
+    const user = userEvent.setup()
+    
+    render(
+      <AppProvider>
+        <ParentComponent />
+      </AppProvider>
+    )
+    
+    // Test cross-component communication
+    await user.click(screen.getByRole('button', { name: 'Update Child' }))
+    
+    expect(screen.getByTestId('child-component')).toHaveTextContent('Updated')
+  })
+})
+```
+
+## 🎯 **TESTING SCENARIOS**
+
+### Authentication Flows
+```typescript
+// Login flow integration test
+it('should complete login workflow', async () => {
+  const user = userEvent.setup()
+  
+  render(<LoginPage />)
+  
+  await user.type(screen.getByLabelText('Email'), 'user@example.com')
+  await user.type(screen.getByLabelText('Password'), 'password')
+  await user.click(screen.getByRole('button', { name: 'Sign In' }))
+  
+  await waitFor(() => {
+    expect(screen.getByText('Welcome back!')).toBeInTheDocument()
+  })
+})
+```
+
+### Form Validation Workflows
+```typescript
+// Complex form with validation
+it('should validate form and submit successfully', async () => {
+  const user = userEvent.setup()
+  
+  render(<ContactForm />)
+  
+  // Test validation errors
+  await user.click(screen.getByRole('button', { name: 'Submit' }))
+  expect(screen.getByText('Email is required')).toBeInTheDocument()
+  
+  // Fill form correctly
+  await user.type(screen.getByLabelText('Email'), 'test@example.com')
+  await user.type(screen.getByLabelText('Message'), 'Test message')
+  await user.click(screen.getByRole('button', { name: 'Submit' }))
+  
+  await waitFor(() => {
+    expect(screen.getByText('Message sent successfully')).toBeInTheDocument()
+  })
+})
+```
+
+### Data Fetching Integration
+```typescript
+// API data fetching with loading states
+it('should fetch and display data with loading states', async () => {
+  server.use(
+    http.get('/api/users', async () => {
+      await delay(100) // Simulate network delay
+      return HttpResponse.json([
+        { id: 1, name: 'John Doe' }
+      ])
+    })
+  )
+
+  render(<UsersList />)
+  
+  // Check loading state
+  expect(screen.getByText('Loading...')).toBeInTheDocument()
+  
+  // Wait for data to load
+  await waitFor(() => {
+    expect(screen.getByText('John Doe')).toBeInTheDocument()
+  })
+  
+  expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
+})
+```
+
+## 🚀 **TEST EXECUTION & VALIDATION**
+
+### MANDATORY: Run Tests Before Completion
+```bash
+npm run test:integration
+npm run test:coverage
+```
+
+### Test Results Requirements
+- [ ] ALL integration tests must pass
+- [ ] End-to-end workflows complete successfully
+- [ ] Error scenarios handled gracefully
+- [ ] API mocking works correctly
+- [ ] State management integration verified
+
+## 📝 **DELIVERABLES CHECKLIST**
+
+**YOU MUST PROVIDE:**
+- [ ] **Integration test file** for each complex workflow
+- [ ] **MSW API mocks** for external dependencies
+- [ ] **Test execution results** showing all tests pass
+- [ ] **End-to-end scenario coverage** documentation
+- [ ] **Error handling verification** for failure cases
+
+## 🚨 **QUALITY GATES**
+
+### Before Completion, Verify:
+- [ ] Integration tests cover complete user workflows
+- [ ] API mocking is set up correctly with MSW
+- [ ] Error scenarios are tested
+- [ ] State management integration works
+- [ ] Cross-component communication is tested
+- [ ] Loading and transition states are verified
+
+### Failure Conditions (Must Fix):
+- ❌ Incomplete user workflow coverage
+- ❌ Missing API mocking setup
+- ❌ Untested error scenarios
+- ❌ State management integration failures
+
+## 💡 **USAGE EXAMPLES**
+
+```
+Create integration tests following .cursor/prompts/test/test-create-integration.mdc for the user authentication workflow
+```
+
+```
+Create integration test suite following .cursor/prompts/test/test-create-integration.mdc for the checkout process in src/components/checkout/
+```
+
+---
+
+**Goal: Ensure complex workflows and component interactions work correctly from end-to-end in realistic scenarios.**

@@ -1,0 +1,839 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Layout Component Update Request
+
+Please update and enhance an existing layout component following our responsive design improvement patterns and performance standards:
+
+## 🎯 **LAYOUT COMPONENT UPDATE OBJECTIVES:**
+
+1. **ENHANCE responsive design** with improved breakpoint handling, container queries, and mobile optimization
+2. **IMPROVE performance** with optimized rendering, layout stability, and resource efficiency
+3. **UPGRADE accessibility** with better landmark structure, focus management, and screen reader navigation
+4. **OPTIMIZE composition patterns** with flexible slots, better content organization, and reusable patterns
+5. **MAINTAIN backward compatibility** while implementing meaningful layout and architectural improvements
+
+## 📋 **LAYOUT UPDATE METHODOLOGY:**
+
+### **STEP 1: Current Layout Assessment**
+
+#### **Analyze Existing Implementation:**
+- **Responsive behavior**: Test layout across all breakpoints and device orientations
+- **Performance metrics**: Measure Cumulative Layout Shift (CLS) and rendering performance
+- **Accessibility audit**: Check landmarks, heading hierarchy, and navigation patterns
+- **Composition flexibility**: Evaluate slot system and content organization capabilities
+- **NextJS integration**: Review app router compatibility and server component optimization
+
+#### **Identify Enhancement Opportunities:**
+```typescript
+// Assessment checklist for layout improvements
+interface LayoutComponentAudit {
+  responsiveDesign: {
+    mobileFirst: boolean;
+    breakpointConsistency: boolean;
+    containerQueries: boolean;
+    touchOptimization: boolean;
+  };
+  performance: {
+    layoutStability: boolean;
+    renderingSpeed: boolean;
+    bundleSize: boolean;
+    memoryEfficiency: boolean;
+  };
+  accessibility: {
+    landmarks: boolean;
+    headingHierarchy: boolean;
+    skipLinks: boolean;
+    focusManagement: boolean;
+  };
+  composition: {
+    flexibleSlots: boolean;
+    reusablePatterns: boolean;
+    contentOrganization: boolean;
+    dynamicLayout: boolean;
+  };
+}
+```
+
+### **STEP 2: Responsive Design Enhancement**
+
+#### **Advanced Responsive Improvements:**
+```typescript
+// Enhanced responsive system with container queries
+interface EnhancedResponsiveProps {
+  /** Responsive behavior configuration */
+  responsive: {
+    /** Container-based responsive behavior */
+    container?: {
+      sm: 'stack' | 'grid' | 'flex';
+      md: 'grid' | 'sidebar' | 'columns';
+      lg: 'grid' | 'sidebar' | 'columns' | 'wide';
+    };
+    /** Viewport-based responsive behavior */
+    viewport?: {
+      mobile: 'stack' | 'scroll' | 'collapse';
+      tablet: 'grid' | 'sidebar' | 'hybrid';
+      desktop: 'grid' | 'sidebar' | 'columns' | 'wide';
+    };
+    /** Adaptive spacing */
+    spacing?: 'compact' | 'normal' | 'comfortable' | 'adaptive';
+  };
+  /** Dynamic grid configuration */
+  grid?: {
+    columns: number | 'auto' | 'responsive';
+    rows: number | 'auto' | 'min-content';
+    gap: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'responsive';
+    areas?: string[];
+  };
+}
+
+// Container query implementation
+const useContainerQueries = (containerRef: RefObject<HTMLElement>) => {
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        setContainerSize({ width, height });
+      }
+    });
+    
+    resizeObserver.observe(containerRef.current);
+    return () => resizeObserver.disconnect();
+  }, [containerRef]);
+  
+  const getContainerClasses = useCallback((breakpoints: Record<string, string>) => {
+    const { width } = containerSize;
+    
+    if (width >= 1024) return breakpoints.lg || breakpoints.md || breakpoints.sm;
+    if (width >= 768) return breakpoints.md || breakpoints.sm;
+    return breakpoints.sm;
+  }, [containerSize]);
+  
+  return { containerSize, getContainerClasses };
+};
+
+// Enhanced responsive layout implementation
+const EnhancedResponsiveLayout = ({
+  children,
+  responsive,
+  grid,
+  className,
+  ...props
+}: EnhancedLayoutProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { containerSize, getContainerClasses } = useContainerQueries(containerRef);
+  
+  const responsiveClasses = useMemo(() => {
+    const classes = [];
+    
+    // Container query classes
+    if (responsive.container) {
+      classes.push(getContainerClasses({
+        sm: responsive.container.sm,
+        md: responsive.container.md,
+        lg: responsive.container.lg
+      }));
+    }
+    
+    // Viewport responsive classes
+    if (responsive.viewport) {
+      classes.push(
+        `mobile:${responsive.viewport.mobile}`,
+        `tablet:${responsive.viewport.tablet}`,
+        `desktop:${responsive.viewport.desktop}`
+      );
+    }
+    
+    // Grid configuration
+    if (grid) {
+      if (typeof grid.columns === 'number') {
+        classes.push(`grid-cols-${grid.columns}`);
+      } else if (grid.columns === 'responsive') {
+        classes.push('grid-cols-1 md:grid-cols-2 lg:grid-cols-3');
+      }
+    }
+    
+    return classes;
+  }, [responsive, grid, getContainerClasses]);
+  
+  return (
+    <div
+      ref={containerRef}
+      className={cn(
+        'layout-container',
+        responsiveClasses,
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+```
+
+#### **Mobile-First Optimization:**
+```typescript
+// Mobile-first enhancement patterns
+const mobileOptimizations = {
+  // Touch-friendly spacing
+  touchSpacing: [
+    'min-h-[44px]', // Minimum touch target size
+    'p-3 md:p-4 lg:p-6', // Progressive spacing
+    'gap-4 md:gap-6 lg:gap-8' // Responsive gaps
+  ],
+  
+  // Mobile navigation patterns
+  mobileNavigation: [
+    'flex flex-col lg:flex-row',
+    'space-y-2 lg:space-y-0 lg:space-x-4',
+    'w-full lg:w-auto'
+  ],
+  
+  // Content prioritization
+  contentPriority: [
+    'order-1 lg:order-none', // Mobile-first content ordering
+    'hidden lg:block', // Progressive disclosure
+    'block lg:hidden' // Mobile-only content
+  ]
+};
+
+// Enhanced mobile layout component
+const MobileOptimizedLayout = ({ 
+  children, 
+  mobileFirst = true,
+  touchOptimized = true,
+  ...props 
+}: MobileLayoutProps) => {
+  return (
+    <div
+      className={cn(
+        'layout-mobile',
+        mobileFirst && 'mobile-first',
+        touchOptimized && mobileOptimizations.touchSpacing,
+        props.className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+```
+
+### **STEP 3: Performance Optimization Implementation**
+
+#### **Layout Stability Improvements:**
+```typescript
+// CLS optimization patterns
+const useLayoutStability = () => {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [isStable, setIsStable] = useState(false);
+  
+  useEffect(() => {
+    // Measure initial layout
+    const measureLayout = () => {
+      const element = document.documentElement;
+      setDimensions({
+        width: element.scrollWidth,
+        height: element.scrollHeight
+      });
+      
+      // Mark as stable after initial render
+      setTimeout(() => setIsStable(true), 100);
+    };
+    
+    measureLayout();
+    window.addEventListener('resize', measureLayout);
+    return () => window.removeEventListener('resize', measureLayout);
+  }, []);
+  
+  return { dimensions, isStable };
+};
+
+// Skeleton layout for loading states
+const SkeletonLayout = ({ variant = 'default' }: { variant?: string }) => {
+  const skeletonVariants = {
+    default: [
+      'animate-pulse',
+      'bg-gray-200 dark:bg-gray-700',
+      'rounded-md'
+    ],
+    header: ['h-12 w-full mb-4'],
+    sidebar: ['w-64 h-screen'],
+    content: ['flex-1 space-y-4'],
+    footer: ['h-16 w-full mt-8']
+  };
+  
+  return (
+    <div className={cn(skeletonVariants.default, skeletonVariants[variant])}>
+      <div className="space-y-3">
+        <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+        <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+        <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+      </div>
+    </div>
+  );
+};
+
+// Performance-optimized layout with streaming
+const StreamingOptimizedLayout = ({ children }: LayoutProps) => {
+  return (
+    <div className="layout-streaming">
+      {/* Critical above-the-fold content */}
+      <Suspense fallback={<SkeletonLayout variant="header" />}>
+        <header className="layout-header">
+          <CriticalHeader />
+        </header>
+      </Suspense>
+      
+      {/* Main content with progressive loading */}
+      <main className="layout-main">
+        <Suspense fallback={<SkeletonLayout variant="content" />}>
+          {children}
+        </Suspense>
+      </main>
+      
+      {/* Non-critical footer */}
+      <Suspense fallback={<SkeletonLayout variant="footer" />}>
+        <footer className="layout-footer">
+          <DeferredFooter />
+        </footer>
+      </Suspense>
+    </div>
+  );
+};
+```
+
+#### **Resource Optimization:**
+```typescript
+// Optimized layout rendering
+const OptimizedLayout = memo(({
+  children,
+  header,
+  sidebar,
+  footer,
+  variant,
+  ...props
+}: OptimizedLayoutProps) => {
+  // Memoize layout calculations
+  const layoutClasses = useMemo(() => {
+    return cn(
+      'layout-base',
+      variant && `layout-${variant}`,
+      'min-h-screen flex flex-col'
+    );
+  }, [variant]);
+  
+  // Optimize child rendering
+  const memoizedHeader = useMemo(() => header, [header]);
+  const memoizedSidebar = useMemo(() => sidebar, [sidebar]);
+  const memoizedFooter = useMemo(() => footer, [footer]);
+  
+  return (
+    <div className={layoutClasses} {...props}>
+      {memoizedHeader && (
+        <header className="layout-header">
+          {memoizedHeader}
+        </header>
+      )}
+      
+      <div className="layout-body flex flex-1">
+        {memoizedSidebar && (
+          <aside className="layout-sidebar">
+            {memoizedSidebar}
+          </aside>
+        )}
+        
+        <main className="layout-main flex-1">
+          {children}
+        </main>
+      </div>
+      
+      {memoizedFooter && (
+        <footer className="layout-footer">
+          {memoizedFooter}
+        </footer>
+      )}
+    </div>
+  );
+}, (prevProps, nextProps) => {
+  // Custom comparison for layout stability
+  return (
+    prevProps.variant === nextProps.variant &&
+    prevProps.header === nextProps.header &&
+    prevProps.sidebar === nextProps.sidebar &&
+    prevProps.footer === nextProps.footer &&
+    prevProps.children === nextProps.children
+  );
+});
+```
+
+### **STEP 4: Accessibility Enhancement Implementation**
+
+#### **Advanced Landmark and Navigation:**
+```typescript
+// Enhanced accessibility with comprehensive landmark structure
+interface AccessibleLayoutProps {
+  /** Main content label */
+  mainLabel?: string;
+  /** Navigation label */
+  navLabel?: string;
+  /** Complementary content label */
+  asideLabel?: string;
+  /** Content info label */
+  footerLabel?: string;
+  /** Skip links configuration */
+  skipLinks?: {
+    main: boolean;
+    navigation: boolean;
+    content: boolean;
+  };
+}
+
+const AccessibleLayout = ({
+  children,
+  header,
+  sidebar,
+  footer,
+  mainLabel = "Main content",
+  navLabel = "Main navigation",
+  asideLabel = "Additional information",
+  footerLabel = "Site information",
+  skipLinks = { main: true, navigation: true, content: true },
+  ...props
+}: AccessibleLayoutProps & LayoutProps) => {
+  const mainRef = useRef<HTMLElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+  
+  // Enhanced skip link functionality
+  const handleSkipToMain = useCallback(() => {
+    mainRef.current?.focus();
+    mainRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+  
+  const handleSkipToNav = useCallback(() => {
+    navRef.current?.focus();
+    navRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+  
+  return (
+    <div className="accessible-layout" {...props}>
+      {/* Enhanced skip links */}
+      <div className="skip-links sr-only focus-within:not-sr-only">
+        {skipLinks.main && (
+          <button
+            onClick={handleSkipToMain}
+            className="skip-link focus:absolute focus:top-4 focus:left-4 focus:z-50"
+          >
+            Skip to main content
+          </button>
+        )}
+        {skipLinks.navigation && header && (
+          <button
+            onClick={handleSkipToNav}
+            className="skip-link focus:absolute focus:top-4 focus:left-32 focus:z-50"
+          >
+            Skip to navigation
+          </button>
+        )}
+      </div>
+      
+      {/* Semantic structure with proper landmarks */}
+      {header && (
+        <header role="banner" className="layout-header">
+          <nav 
+            ref={navRef}
+            role="navigation" 
+            aria-label={navLabel}
+            tabIndex={-1}
+          >
+            {header}
+          </nav>
+        </header>
+      )}
+      
+      <div className="layout-content">
+        {sidebar && (
+          <aside 
+            role="complementary" 
+            aria-label={asideLabel}
+            className="layout-sidebar"
+          >
+            {sidebar}
+          </aside>
+        )}
+        
+        <main 
+          ref={mainRef}
+          role="main" 
+          aria-label={mainLabel}
+          tabIndex={-1}
+          className="layout-main"
+        >
+          {children}
+        </main>
+      </div>
+      
+      {footer && (
+        <footer 
+          role="contentinfo" 
+          aria-label={footerLabel}
+          className="layout-footer"
+        >
+          {footer}
+        </footer>
+      )}
+    </div>
+  );
+};
+```
+
+#### **Focus Management Enhancement:**
+```typescript
+// Advanced focus management for layout components
+const useLayoutFocusManagement = () => {
+  const [focusHistory, setFocusHistory] = useState<HTMLElement[]>([]);
+  
+  const saveCurrentFocus = useCallback(() => {
+    const activeElement = document.activeElement as HTMLElement;
+    if (activeElement && activeElement !== document.body) {
+      setFocusHistory(prev => [...prev.slice(-4), activeElement]);
+    }
+  }, []);
+  
+  const restorePreviousFocus = useCallback(() => {
+    const previousElement = focusHistory[focusHistory.length - 1];
+    if (previousElement && document.contains(previousElement)) {
+      previousElement.focus();
+      setFocusHistory(prev => prev.slice(0, -1));
+    }
+  }, [focusHistory]);
+  
+  const trapFocusInLayout = useCallback((containerRef: RefObject<HTMLElement>) => {
+    const container = containerRef.current;
+    if (!container) return;
+    
+    const focusableElements = container.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    const firstElement = focusableElements[0] as HTMLElement;
+    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+    
+    const handleTabKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+      
+      if (event.shiftKey) {
+        if (document.activeElement === firstElement) {
+          lastElement?.focus();
+          event.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          firstElement?.focus();
+          event.preventDefault();
+        }
+      }
+    };
+    
+    container.addEventListener('keydown', handleTabKey);
+    return () => container.removeEventListener('keydown', handleTabKey);
+  }, []);
+  
+  return {
+    saveCurrentFocus,
+    restorePreviousFocus,
+    trapFocusInLayout,
+    focusHistory
+  };
+};
+```
+
+### **STEP 5: Composition Pattern Enhancement**
+
+#### **Advanced Slot System:**
+```typescript
+// Enhanced composition with flexible slot system
+interface AdvancedLayoutSlots {
+  /** Header content with multiple sections */
+  header?: {
+    brand?: React.ReactNode;
+    navigation?: React.ReactNode;
+    actions?: React.ReactNode;
+  };
+  /** Sidebar with collapsible sections */
+  sidebar?: {
+    primary?: React.ReactNode;
+    secondary?: React.ReactNode;
+    footer?: React.ReactNode;
+    collapsible?: boolean;
+  };
+  /** Main content with regions */
+  main?: {
+    hero?: React.ReactNode;
+    content?: React.ReactNode;
+    aside?: React.ReactNode;
+  };
+  /** Footer with multiple sections */
+  footer?: {
+    links?: React.ReactNode;
+    social?: React.ReactNode;
+    legal?: React.ReactNode;
+  };
+}
+
+const AdvancedSlotLayout = ({
+  slots,
+  variant = 'default',
+  responsive,
+  ...props
+}: AdvancedLayoutProps) => {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  
+  return (
+    <div 
+      className={cn(
+        'advanced-layout',
+        variant && `layout-${variant}`,
+        sidebarCollapsed && 'sidebar-collapsed'
+      )}
+      {...props}
+    >
+      {slots.header && (
+        <header className="layout-header">
+          <div className="header-brand">{slots.header.brand}</div>
+          <nav className="header-navigation">{slots.header.navigation}</nav>
+          <div className="header-actions">{slots.header.actions}</div>
+        </header>
+      )}
+      
+      <div className="layout-body">
+        {slots.sidebar && (
+          <aside className={cn(
+            'layout-sidebar',
+            slots.sidebar.collapsible && 'collapsible'
+          )}>
+            {slots.sidebar.collapsible && (
+              <button
+                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                className="sidebar-toggle"
+              >
+                {sidebarCollapsed ? <ExpandIcon /> : <CollapseIcon />}
+              </button>
+            )}
+            
+            <div className="sidebar-primary">{slots.sidebar.primary}</div>
+            <div className="sidebar-secondary">{slots.sidebar.secondary}</div>
+            <div className="sidebar-footer">{slots.sidebar.footer}</div>
+          </aside>
+        )}
+        
+        <main className="layout-main">
+          {slots.main?.hero && (
+            <section className="main-hero">{slots.main.hero}</section>
+          )}
+          
+          <div className="main-content-wrapper">
+            <section className="main-content">{slots.main?.content}</section>
+            {slots.main?.aside && (
+              <aside className="main-aside">{slots.main.aside}</aside>
+            )}
+          </div>
+        </main>
+      </div>
+      
+      {slots.footer && (
+        <footer className="layout-footer">
+          <div className="footer-links">{slots.footer.links}</div>
+          <div className="footer-social">{slots.footer.social}</div>
+          <div className="footer-legal">{slots.footer.legal}</div>
+        </footer>
+      )}
+    </div>
+  );
+};
+```
+
+## ✅ **LAYOUT UPDATE IMPLEMENTATION REQUIREMENTS:**
+
+### **Enhancement Categories:**
+```
+Priority 1: Responsive Excellence
+├── Breakpoint Optimization
+│   ├── Container query integration
+│   ├── Mobile-first improvements
+│   └── Touch optimization
+├── Performance Enhancement
+│   ├── CLS optimization
+│   ├── Rendering performance
+│   └── Bundle optimization
+└── Accessibility Upgrades
+    ├── Enhanced landmarks
+    ├── Focus management
+    └── Screen reader navigation
+
+Priority 2: Composition Flexibility
+├── Advanced Slot System
+│   ├── Flexible content areas
+│   ├── Dynamic layout options
+│   └── Reusable patterns
+├── State Management
+│   ├── Layout state tracking
+│   ├── Responsive state
+│   └── Animation states
+└── Integration Improvements
+    ├── NextJS optimization
+    ├── Server component patterns
+    └── Streaming support
+
+Priority 3: Developer Experience
+├── TypeScript Enhancement
+│   ├── Better type definitions
+│   ├── Generic slot types
+│   └── Responsive type safety
+├── Testing Infrastructure
+│   ├── Layout testing utilities
+│   ├── Responsive testing
+│   └── Accessibility testing
+└── Documentation
+    ├── Usage examples
+    ├── Migration guides
+    └── Best practices
+```
+
+### **Update Requirements Checklist:**
+- [ ] **Responsive Enhancement**: Container queries and mobile-first optimization
+- [ ] **Performance Optimization**: CLS reduction and rendering improvements
+- [ ] **Accessibility Improvements**: Enhanced landmarks and focus management
+- [ ] **Composition Flexibility**: Advanced slot system and reusable patterns
+- [ ] **NextJS Integration**: Better app router and server component support
+- [ ] **Testing Updates**: Updated test suite covering new functionality
+- [ ] **Documentation**: Updated usage examples and migration guide
+
+## 🔍 **LAYOUT UPDATE QUALITY STANDARDS:**
+
+### **Responsive Quality:**
+- **Breakpoint Consistency**: Smooth transitions at all breakpoints
+- **Mobile Optimization**: Touch-friendly and performance-optimized
+- **Content Priority**: Important content accessible on all devices
+- **Container Adaptation**: Layout adapts to container size, not just viewport
+
+### **Performance Quality:**
+- **Layout Stability**: CLS score below 0.1
+- **Rendering Speed**: Fast initial paint and interaction readiness
+- **Resource Efficiency**: Optimized CSS and minimal JavaScript
+- **Memory Management**: Efficient component lifecycle and cleanup
+
+## 💡 **LAYOUT UPDATE EXAMPLES:**
+
+### **Responsive Grid Enhancement:**
+```typescript
+// Before: Basic responsive grid
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+  {items.map(item => <Card key={item.id} {...item} />)}
+</div>
+
+// After: Enhanced responsive grid with container queries
+<EnhancedGrid
+  responsive={{
+    container: {
+      sm: 'stack',
+      md: 'grid',
+      lg: 'grid'
+    },
+    spacing: 'adaptive'
+  }}
+  grid={{
+    columns: 'responsive',
+    gap: 'responsive'
+  }}
+>
+  {items.map(item => <Card key={item.id} {...item} />)}
+</EnhancedGrid>
+```
+
+### **Accessibility Enhancement:**
+```typescript
+// Before: Basic layout structure
+<div>
+  <header>{navigation}</header>
+  <main>{content}</main>
+  <footer>{footerContent}</footer>
+</div>
+
+// After: Enhanced accessible layout
+<AccessibleLayout
+  mainLabel="Article content"
+  navLabel="Main site navigation"
+  footerLabel="Site footer with links and legal information"
+  skipLinks={{ main: true, navigation: true, content: true }}
+  header={navigation}
+  footer={footerContent}
+>
+  {content}
+</AccessibleLayout>
+```
+
+## 🚨 **COMMON UPDATE PITFALLS:**
+
+### **Responsive Pitfalls:**
+- **Breakpoint conflicts**: Ensure new breakpoints don't conflict with existing ones
+- **Container query support**: Check browser support and provide fallbacks
+- **Touch target sizes**: Maintain minimum 44px touch targets on mobile
+- **Content overflow**: Test content behavior at all breakpoints
+
+### **Performance Pitfalls:**
+- **Layout thrashing**: Avoid frequent layout recalculations
+- **Memory leaks**: Clean up resize observers and event listeners
+- **Bundle growth**: Monitor CSS and JavaScript bundle size impact
+- **Rendering blocks**: Ensure updates don't block critical rendering path
+
+## 🔧 **INTEGRATION WITH PROJECT STANDARDS:**
+
+### **Update Standards Compliance:**
+- **Coding Standards**: Maintain TypeScript and responsive design standards
+- **Testing Standards**: Update tests to cover responsive and accessibility features
+- **Architecture Standards**: Follow NextJS and server component patterns
+- **Performance Standards**: Maintain or improve Core Web Vitals
+
+### **Related Prompts:**
+- Use `component-create-layout.mdc` for creating new layouts
+- Reference `component-update-guide.mdc` for general update patterns
+- Consider responsive design standards from project documentation
+
+## 📋 **LAYOUT UPDATE DELIVERABLES:**
+
+Please provide:
+
+- [ ] **Enhanced layout component** with improved responsive design and performance
+- [ ] **Responsive optimization** with container queries and mobile-first approach
+- [ ] **Accessibility improvements** with enhanced landmarks and focus management
+- [ ] **Performance optimizations** with CLS reduction and rendering improvements
+- [ ] **Composition enhancements** with flexible slot system and reusable patterns
+- [ ] **Updated test suite** covering responsive behavior and accessibility
+- [ ] **Implementation summary** with enhancement details and migration guide
+
+## 📖 **USAGE EXAMPLES:**
+
+```
+Update the dashboard layout with container queries, better mobile navigation, and enhanced accessibility landmarks.
+Apply the layout component update prompt.
+```
+
+```
+Enhance the article layout with improved responsive typography, reading progress, and better focus management.
+Apply the layout component update prompt.
+```
+
+```
+Improve the marketing page layout with performance optimizations, CLS reduction, and mobile-first enhancements.
+Apply the layout component update prompt.
+```

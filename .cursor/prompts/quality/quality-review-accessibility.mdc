@@ -1,0 +1,207 @@
+---
+description: Accessibility Audit & Compliance - Comprehensive prompt for auditing and improving accessibility compliance across components and pages
+globs: 
+alwaysApply: false
+---
+---
+title: Accessibility Audit & Compliance
+description: Comprehensive prompt for auditing and improving accessibility compliance across components and pages
+tags: [prompt, accessibility, a11y, wcag, screen-readers, keyboard-navigation, testing]
+version: 1.0.0
+lastUpdated: 2025-06-02
+usage: Use for comprehensive accessibility audits of components, pages, or entire features
+audience: [claude, ai-assistants]
+scope: [wcag-compliance, screen-readers, keyboard-navigation, accessibility-testing, inclusive-design]
+---
+
+# Accessibility Audit & Compliance Request
+
+Please conduct a comprehensive accessibility audit and implement improvements to ensure WCAG 2.1 Level AA compliance:
+
+## Audit Scope Analysis
+
+### 1. Identify Components for Review
+- **UI Components**: Forms, buttons, modals, navigation, interactive elements
+- **Page Components**: Full page layouts, content sections, headers/footers
+- **Dynamic Content**: Loading states, error messages, notifications, live regions
+- **Media Content**: Images, videos, audio, graphics with informational content
+
+### 2. User Experience Considerations
+- **Screen Reader Users**: Content structure, navigation, announcements
+- **Keyboard-Only Users**: Tab order, focus management, keyboard shortcuts
+- **Low Vision Users**: Color contrast, text scaling, focus indicators
+- **Motor Impairments**: Target size, click areas, timing considerations
+- **Cognitive Disabilities**: Clear language, consistent navigation, error prevention
+
+## WCAG 2.1 Level AA Compliance Check
+
+### 3. Perceivable
+- [ ] **Text Alternatives**: All images have appropriate alt text
+- [ ] **Captions**: Media content has captions/transcripts
+- [ ] **Color Contrast**: Minimum 4.5:1 for normal text, 3:1 for large text
+- [ ] **Resize Text**: Content usable when zoomed to 200%
+- [ ] **Images of Text**: Avoid using images of text where possible
+
+### 4. Operable
+- [ ] **Keyboard Access**: All functionality available via keyboard
+- [ ] **No Keyboard Trap**: Users can navigate away from any element
+- [ ] **Timing**: No time limits or adjustable timing
+- [ ] **Seizures**: No content that flashes more than 3 times per second
+- [ ] **Focus Order**: Logical tab order throughout interface
+- [ ] **Focus Visible**: Clear focus indicators on all interactive elements
+
+### 5. Understandable
+- [ ] **Language**: Page language is specified
+- [ ] **Predictable**: Navigation and functionality is consistent
+- [ ] **Input Assistance**: Form labels, error messages, and help text
+- [ ] **Error Prevention**: Important actions are reversible or confirmed
+
+### 6. Robust
+- [ ] **Valid HTML**: Clean, semantic markup
+- [ ] **Compatible**: Works with assistive technologies
+- [ ] **Progressive Enhancement**: Core functionality without JavaScript
+
+## Technical Implementation
+
+### 7. Semantic HTML & ARIA
+- Use proper heading hierarchy (h1-h6)
+- Implement semantic landmarks (nav, main, aside, footer)
+- Add appropriate ARIA roles, properties, and states
+- Use ARIA labels and descriptions where needed
+- Implement live regions for dynamic content
+
+### 8. Keyboard Navigation
+- Ensure logical tab order
+- Implement skip links for main content
+- Handle modal focus trapping
+- Provide keyboard shortcuts where beneficial
+- Manage focus on route changes and dynamic content
+
+### 9. Screen Reader Optimization
+- Provide meaningful page titles
+- Use descriptive link text
+- Implement proper form labels and fieldsets
+- Add screen reader-only text where needed
+- Ensure proper announcement of status changes
+
+## Testing Requirements
+
+### 10. Automated Testing (mandatory)
+- Create comprehensive `.a11y.test.tsx` files using vitest-axe
+- Test all component states and variations
+- Include keyboard navigation tests
+- Test with different viewport sizes
+- Validate ARIA implementation
+
+### 11. Manual Testing Checklist
+- [ ] **Keyboard Navigation**: Tab through entire interface
+- [ ] **Screen Reader**: Test with NVDA/JAWS/VoiceOver
+- [ ] **Zoom Testing**: Test at 200% zoom level
+- [ ] **Color Testing**: Test with high contrast mode
+- [ ] **Motion Testing**: Verify reduced motion preferences
+
+### 12. Real User Testing
+- Consider testing with actual users who rely on assistive technologies
+- Document any issues found through user testing
+- Implement feedback from accessibility consultations
+## Code Implementation
+
+### 13. Component Updates
+- Update existing components with accessibility improvements
+- Add missing ARIA attributes and semantic markup
+- Implement proper focus management
+- Add data-testid attributes for testing
+- Ensure color contrast compliance
+
+### 14. CSS Considerations
+- Implement focus indicators that meet contrast requirements
+- Use relative units for text sizing
+- Respect user motion preferences (prefers-reduced-motion)
+- Ensure sufficient target sizes (44px minimum)
+
+### 15. JavaScript Enhancements
+- Implement proper focus management for SPAs
+- Add keyboard event handlers where needed
+- Manage ARIA live regions for dynamic content
+- Handle screen reader announcements appropriately
+
+## Documentation & Standards
+
+### 16. Accessibility Documentation
+- Document accessibility features and patterns used
+- Create accessibility guidelines for future development
+- Document any accessibility compromises and alternatives
+- Include accessibility considerations in component READMEs
+
+### 17. Testing Documentation
+- Document manual testing procedures
+- Create accessibility testing checklist
+- Document screen reader testing results
+- Include accessibility test cases in component documentation
+
+## Remediation Priorities
+
+### 18. Critical Issues (Fix Immediately)
+- Keyboard inaccessible functionality
+- Missing form labels
+- Insufficient color contrast
+- Missing alt text for informational images
+
+### 19. High Priority Issues
+- Poor heading structure
+- Missing ARIA labels
+- Inconsistent navigation
+- Focus management problems
+
+### 20. Medium Priority Issues
+- Improved link text
+- Better error messaging
+- Enhanced keyboard shortcuts
+- Optimized screen reader experience
+
+## Standards Compliance
+
+- Follow WCAG 2.1 Level AA guidelines
+- Use vitest-axe for automated testing
+- Implement proper semantic HTML
+- Follow our testing standards with accessibility focus
+- Document all accessibility considerations
+
+## Deliverables
+
+Please provide:
+
+- [ ] Complete accessibility audit report with findings
+- [ ] Updated components with accessibility improvements
+- [ ] Comprehensive accessibility test suite
+- [ ] Manual testing results and documentation
+- [ ] Accessibility documentation and guidelines
+- [ ] Priority-ordered remediation plan for any remaining issues
+- [ ] Summary including:
+  - WCAG compliance status
+  - Key improvements made
+  - Remaining accessibility considerations
+  - Testing methodology and results
+  - Recommendations for ongoing accessibility maintenance
+
+## Usage Examples
+
+```
+Conduct a comprehensive accessibility audit of the user registration flow.
+Apply the accessibility audit prompt.
+```
+
+```
+Review the dashboard navigation components for WCAG 2.1 Level AA compliance.
+Apply the accessibility audit prompt.
+```
+
+```
+Audit the entire marketing website for accessibility compliance and screen reader optimization.
+Apply the accessibility audit prompt.
+```
+
+```
+Review the form components for keyboard navigation and screen reader compatibility.
+Apply the accessibility audit prompt.
+```

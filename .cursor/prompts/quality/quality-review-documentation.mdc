@@ -1,0 +1,522 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Documentation Quality Review and Assessment
+
+**This prompt provides comprehensive evaluation of project documentation including technical docs, user guides, API documentation, and maintenance materials with actionable improvement recommendations.**
+
+## 🎯 **DOCUMENTATION REVIEW OBJECTIVES:**
+
+1. **ASSESS documentation completeness** across all project areas
+2. **EVALUATE content quality** including accuracy, clarity, and usefulness
+3. **REVIEW structure and organization** for logical flow and discoverability
+4. **VALIDATE user experience** from different audience perspectives
+5. **IDENTIFY maintenance gaps** and sustainability issues
+
+## 📚 **DOCUMENTATION INVENTORY AND ANALYSIS:**
+
+### **STEP 1: Documentation Discovery and Categorization**
+
+#### **Automated Documentation Inventory:**
+```bash
+# Discover all documentation files
+echo "📋 Discovering project documentation..."
+
+# Find markdown files
+echo "## Markdown Documentation:"
+find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | sort
+
+# Find documentation directories
+echo -e "\n## Documentation Directories:"
+find . -type d -name "*doc*" -o -name "*guide*" -o -name "*manual*" | grep -v node_modules | sort
+
+# Find README files
+echo -e "\n## README Files:"
+find . -name "README*" -not -path "./node_modules/*" | sort
+
+# Find API documentation
+echo -e "\n## API Documentation:"
+find . -name "*.yaml" -o -name "*.yml" -o -name "swagger*" -o -name "openapi*" | grep -v node_modules | sort
+
+# Find JSDoc/TypeDoc files
+echo -e "\n## Code Documentation:"
+find . -name "*.jsdoc" -o -name "typedoc.json" | grep -v node_modules | sort
+
+# Check for documentation generators
+echo -e "\n## Documentation Tools:"
+[ -f "package.json" ] && grep -E "(jsdoc|typedoc|docusaurus|vitepress|gitbook)" package.json || echo "No documentation tools found in package.json"
+```
+
+#### **Documentation Categories Assessment:**
+```markdown
+## Documentation Categories Checklist
+
+### Project Overview Documentation:
+- [ ] **Main README.md** - Project introduction and quick start
+- [ ] **CONTRIBUTING.md** - Contribution guidelines
+- [ ] **CHANGELOG.md** - Version history and changes
+- [ ] **LICENSE** - Legal and usage terms
+- [ ] **CODE_OF_CONDUCT.md** - Community guidelines
+
+### Technical Documentation:
+- [ ] **Architecture Documentation** - System design and structure
+- [ ] **API Documentation** - Endpoint specifications and examples
+- [ ] **Database Schema** - Data model and relationships
+- [ ] **Deployment Guides** - Installation and deployment procedures
+- [ ] **Configuration Guides** - Environment setup and options
+
+### User Documentation:
+- [ ] **User Guides** - End-user instruction manuals
+- [ ] **Tutorials** - Step-by-step learning materials
+- [ ] **FAQ** - Frequently asked questions
+- [ ] **Troubleshooting** - Problem resolution guides
+- [ ] **Examples** - Working code samples and demos
+
+### Developer Documentation:
+- [ ] **Setup Instructions** - Development environment setup
+- [ ] **Coding Standards** - Style guides and conventions
+- [ ] **Testing Documentation** - Testing strategies and procedures
+- [ ] **Security Guidelines** - Security best practices
+- [ ] **Performance Guidelines** - Optimization recommendations
+
+### Operational Documentation:
+- [ ] **Monitoring Guides** - System monitoring and alerting
+- [ ] **Backup Procedures** - Data backup and recovery
+- [ ] **Disaster Recovery** - Business continuity plans
+- [ ] **Runbooks** - Operational procedures
+- [ ] **Incident Response** - Emergency response procedures
+```
+
+### **STEP 2: Content Quality Assessment**
+
+#### **Documentation Quality Metrics:**
+```bash
+# Generate content quality metrics
+echo "📊 Analyzing documentation quality metrics..."
+
+# Check documentation freshness
+echo "## Documentation Freshness:"
+find . -name "*.md" -not -path "./node_modules/*" -exec stat -f "%m %N" {} \; | sort -n | tail -10
+
+# Analyze documentation length and complexity
+echo -e "\n## Documentation Size Analysis:"
+find . -name "*.md" -not -path "./node_modules/*" -exec wc -l {} \; | sort -n
+
+# Check for broken links (if tools available)
+echo -e "\n## Link Validation:"
+if command -v markdown-link-check &> /dev/null; then
+    find . -name "*.md" -not -path "./node_modules/*" -exec markdown-link-check {} \;
+else
+    echo "Install markdown-link-check for automated link validation"
+fi
+
+# Check for TODO items and placeholders
+echo -e "\n## Outstanding Items:"
+grep -r "TODO\|FIXME\|XXX\|PLACEHOLDER" --include="*.md" . | head -10
+```
+
+#### **Content Quality Evaluation Criteria:**
+```markdown
+## Content Quality Assessment
+
+### Accuracy and Completeness:
+- [ ] **Information Accuracy** - All technical details are correct
+- [ ] **Up-to-date Content** - Documentation reflects current system state
+- [ ] **Complete Coverage** - All features and functionality documented
+- [ ] **No Placeholders** - No TODO or placeholder content remaining
+- [ ] **Version Alignment** - Documentation matches software version
+
+### Clarity and Readability:
+- [ ] **Clear Language** - Simple, jargon-free explanations
+- [ ] **Logical Structure** - Information organized logically
+- [ ] **Consistent Tone** - Uniform voice throughout documentation
+- [ ] **Appropriate Detail** - Right level of detail for target audience
+- [ ] **Good Examples** - Relevant, working examples provided
+
+### Usability and Accessibility:
+- [ ] **Easy Navigation** - Clear table of contents and cross-references
+- [ ] **Search-friendly** - Good headings and keywords
+- [ ] **Mobile-friendly** - Readable on different devices
+- [ ] **Accessible Format** - Proper heading hierarchy and alt text
+- [ ] **Multiple Formats** - Available in different formats if needed
+
+### Visual Design and Formatting:
+- [ ] **Consistent Formatting** - Uniform styling and layout
+- [ ] **Good Typography** - Readable fonts and spacing
+- [ ] **Effective Use of Images** - Diagrams and screenshots where helpful
+- [ ] **Code Formatting** - Proper syntax highlighting and indentation
+- [ ] **Visual Hierarchy** - Clear distinction between different content types
+```
+
+### **STEP 3: Structure and Organization Review**
+
+#### **Information Architecture Analysis:**
+```bash
+# Analyze documentation structure
+echo "🏗️ Analyzing documentation structure..."
+
+# Generate documentation tree
+echo "## Documentation Structure:"
+tree -I 'node_modules' -P '*.md|README*' --dirsfirst
+
+# Check for consistent naming conventions
+echo -e "\n## Naming Convention Analysis:"
+find . -name "*.md" -not -path "./node_modules/*" | while read file; do
+    basename "$file"
+done | sort
+
+# Analyze heading structure
+echo -e "\n## Heading Structure Analysis:"
+find . -name "*.md" -not -path "./node_modules/*" -exec grep -H "^#" {} \; | head -20
+```
+
+#### **Structure Quality Checklist:**
+```markdown
+## Documentation Structure Assessment
+
+### Organization and Hierarchy:
+- [ ] **Logical Grouping** - Related content grouped together
+- [ ] **Clear Hierarchy** - Proper use of heading levels (H1-H6)
+- [ ] **Consistent Structure** - Similar documents follow same format
+- [ ] **Progressive Disclosure** - Information revealed progressively
+- [ ] **Cross-references** - Appropriate links between related sections
+
+### Navigation and Discoverability:
+- [ ] **Main Index** - Central documentation index or table of contents
+- [ ] **Section Indexes** - Individual section navigation
+- [ ] **Breadcrumbs** - Clear path indicators
+- [ ] **Search Functionality** - Searchable content (if applicable)
+- [ ] **Tags and Categories** - Content properly categorized
+
+### File Organization:
+- [ ] **Intuitive File Names** - Self-explanatory file naming
+- [ ] **Logical Directory Structure** - Sensible folder organization
+- [ ] **Consistent Naming** - Uniform naming conventions
+- [ ] **Appropriate Granularity** - Right balance of files vs. content length
+- [ ] **Version Organization** - Clear versioning strategy
+```
+
+### **STEP 4: Audience-Specific User Experience Review**
+
+#### **Multi-Audience Perspective Analysis:**
+```markdown
+## User Experience Assessment by Audience
+
+### New Developer Experience:
+**Scenario**: First-time contributor setting up development environment
+
+#### Evaluation Criteria:
+- [ ] **Clear Entry Point** - Obvious starting documentation
+- [ ] **Prerequisites Listed** - Required knowledge and tools specified
+- [ ] **Step-by-step Setup** - Detailed installation instructions
+- [ ] **Verification Steps** - Ways to confirm successful setup
+- [ ] **Common Pitfalls** - Known issues and solutions documented
+- [ ] **Getting Help** - Clear paths for getting assistance
+
+#### Test Navigation Path:
+1. Find main README
+2. Locate setup instructions
+3. Follow development environment setup
+4. Find code contribution guidelines
+5. Locate testing procedures
+
+### End User Experience:
+**Scenario**: Non-technical user trying to use the application
+
+#### Evaluation Criteria:
+- [ ] **User-friendly Language** - No technical jargon
+- [ ] **Visual Aids** - Screenshots and diagrams
+- [ ] **Task-oriented** - Organized by user goals
+- [ ] **Quick Reference** - Easy access to common tasks
+- [ ] **Troubleshooting** - User-friendly error resolution
+
+### System Administrator Experience:
+**Scenario**: DevOps engineer deploying and maintaining the system
+
+#### Evaluation Criteria:
+- [ ] **Deployment Procedures** - Complete deployment documentation
+- [ ] **Configuration Options** - All settings explained
+- [ ] **Monitoring Setup** - Observability configuration
+- [ ] **Backup Procedures** - Data protection processes
+- [ ] **Emergency Procedures** - Incident response documentation
+
+### API Developer Experience:
+**Scenario**: External developer integrating with the API
+
+#### Evaluation Criteria:
+- [ ] **API Overview** - High-level API description
+- [ ] **Authentication** - Clear auth procedures
+- [ ] **Endpoint Documentation** - Complete API reference
+- [ ] **Code Examples** - Working integration examples
+- [ ] **Error Handling** - Error codes and resolution
+- [ ] **Rate Limiting** - Usage limits and guidelines
+```
+
+## 🔍 **SPECIALIZED DOCUMENTATION AUDITS:**
+
+### **STEP 5: Technical Accuracy Validation**
+
+#### **Code Documentation Sync Check:**
+```bash
+# Verify code and documentation alignment
+echo "🔍 Checking code-documentation alignment..."
+
+# Check for undocumented API endpoints
+echo "## API Endpoint Coverage:"
+if [ -d "src" ]; then
+    # Find API routes (adjust patterns for your framework)
+    grep -r "app\.\(get\|post\|put\|delete\)" src/ 2>/dev/null | head -10
+    echo "Verify these endpoints are documented in API docs"
+fi
+
+# Check for undocumented environment variables
+echo -e "\n## Environment Variables:"
+if [ -f ".env.example" ] || [ -f ".env" ]; then
+    echo "Environment variables found - verify documentation coverage"
+    grep "^[A-Z]" .env.example 2>/dev/null || grep "^[A-Z]" .env 2>/dev/null | head -10
+fi
+
+# Check package.json scripts documentation
+echo -e "\n## NPM Scripts Documentation:"
+if [ -f "package.json" ]; then
+    echo "NPM scripts found - verify documentation coverage"
+    jq -r '.scripts | keys[]' package.json 2>/dev/null | head -10
+fi
+```
+
+#### **Technical Accuracy Checklist:**
+```markdown
+## Technical Accuracy Validation
+
+### Code Alignment:
+- [ ] **API Endpoints** - All endpoints documented with examples
+- [ ] **Configuration Options** - All config variables explained
+- [ ] **CLI Commands** - All command-line options documented
+- [ ] **Environment Variables** - All required variables listed
+- [ ] **Database Schema** - Current schema accurately reflected
+
+### Version Consistency:
+- [ ] **Software Versions** - Documentation matches current software version
+- [ ] **Dependency Versions** - Required dependency versions specified
+- [ ] **API Versions** - API version compatibility documented
+- [ ] **Breaking Changes** - Migration guides for version changes
+- [ ] **Deprecation Notices** - Upcoming changes clearly communicated
+
+### Example Validation:
+- [ ] **Working Examples** - All code examples execute successfully
+- [ ] **Current Syntax** - Examples use current API/syntax
+- [ ] **Complete Examples** - Examples include all necessary context
+- [ ] **Error-free** - No syntax errors in documentation examples
+- [ ] **Tested Examples** - Examples verified to work as documented
+```
+
+### **STEP 6: Maintenance and Sustainability Assessment**
+
+#### **Documentation Maintenance Analysis:**
+```bash
+# Assess documentation maintenance status
+echo "🔧 Analyzing documentation maintenance..."
+
+# Check documentation age
+echo "## Documentation Age Analysis:"
+find . -name "*.md" -not -path "./node_modules/*" -exec stat -f "%Sm %N" -t "%Y-%m-%d" {} \; | sort
+
+# Look for maintenance indicators
+echo -e "\n## Maintenance Indicators:"
+grep -r "Last updated\|Updated:\|Version:" --include="*.md" . | head -10
+
+# Check for automated documentation generation
+echo -e "\n## Automation Status:"
+if [ -f ".github/workflows" ]; then
+    echo "GitHub Actions found - check for doc automation"
+    ls .github/workflows/
+fi
+```
+
+#### **Sustainability Checklist:**
+```markdown
+## Documentation Sustainability Assessment
+
+### Maintenance Processes:
+- [ ] **Update Procedures** - Clear process for updating documentation
+- [ ] **Review Schedule** - Regular documentation review schedule
+- [ ] **Ownership Assignment** - Clear ownership for different doc sections
+- [ ] **Change Notifications** - Process to notify of doc changes needed
+- [ ] **Quality Gates** - Documentation updates required for code changes
+
+### Automation and Tooling:
+- [ ] **Automated Generation** - Auto-generated docs where appropriate
+- [ ] **Link Checking** - Automated broken link detection
+- [ ] **Spell Checking** - Automated spelling and grammar checking
+- [ ] **Style Consistency** - Automated style guide enforcement
+- [ ] **Version Synchronization** - Automated version updates
+
+### Scalability:
+- [ ] **Template System** - Consistent templates for new documentation
+- [ ] **Style Guide** - Clear documentation style guidelines
+- [ ] **Contribution Guidelines** - Easy process for community contributions
+- [ ] **Translation Support** - Framework for multiple languages
+- [ ] **Maintenance Burden** - Reasonable maintenance overhead
+```
+
+## 📊 **COMPREHENSIVE DOCUMENTATION REPORT:**
+
+### **STEP 7: Generate Documentation Quality Report**
+
+#### **Automated Report Generation:**
+```bash
+# Generate comprehensive documentation quality report
+echo "📋 Generating documentation quality report..."
+
+cat > "DOCUMENTATION_QUALITY_REPORT.md" << EOF
+# Documentation Quality Assessment Report
+
+**Assessment Date**: $(date)
+**Assessed By**: $(git config user.name) <$(git config user.email)>
+**Project**: $(basename $(pwd))
+
+## 📊 **Executive Summary**
+
+### Overall Documentation Health: 🟡 NEEDS_IMPROVEMENT
+### Priority Areas: [List top 3 areas needing attention]
+### Estimated Effort: [Hours/Days to address major issues]
+
+## 📚 **Documentation Inventory**
+
+### Files Discovered:
+$(find . -name "*.md" -not -path "./node_modules/*" | wc -l) markdown files found
+
+### Categories Present:
+- [ ] Project Overview Documentation
+- [ ] Technical Documentation  
+- [ ] User Documentation
+- [ ] Developer Documentation
+- [ ] Operational Documentation
+
+### Missing Critical Documentation:
+- [ ] [List missing critical docs]
+
+## 🎯 **Quality Assessment Results**
+
+### Content Quality: [EXCELLENT/GOOD/FAIR/POOR]
+**Strengths:**
+- [List positive findings]
+
+**Areas for Improvement:**
+- [List content quality issues]
+
+### Structure and Organization: [EXCELLENT/GOOD/FAIR/POOR]
+**Strengths:**
+- [List organizational strengths]
+
+**Areas for Improvement:**
+- [List structural issues]
+
+### User Experience: [EXCELLENT/GOOD/FAIR/POOR]
+**Strengths:**
+- [List UX strengths]
+
+**Areas for Improvement:**
+- [List UX issues]
+
+### Technical Accuracy: [EXCELLENT/GOOD/FAIR/POOR]
+**Verification Status:**
+- [ ] Code examples tested
+- [ ] API documentation current
+- [ ] Configuration accurate
+- [ ] Links functional
+
+### Maintenance and Sustainability: [EXCELLENT/GOOD/FAIR/POOR]
+**Current State:**
+- Documentation age: [Analysis]
+- Update frequency: [Analysis]
+- Automation level: [Analysis]
+
+## 🚀 **Recommended Actions**
+
+### Immediate Priorities (Next 1-2 weeks):
+1. [High-priority action 1]
+2. [High-priority action 2]
+3. [High-priority action 3]
+
+### Short-term Improvements (Next month):
+1. [Medium-priority action 1]
+2. [Medium-priority action 2]
+3. [Medium-priority action 3]
+
+### Long-term Enhancements (Next quarter):
+1. [Long-term improvement 1]
+2. [Long-term improvement 2]
+3. [Long-term improvement 3]
+
+## 📈 **Success Metrics**
+
+### Measurable Goals:
+- [ ] Documentation coverage: [Target percentage]
+- [ ] User satisfaction: [Target score]
+- [ ] Time to onboard new developers: [Target time]
+- [ ] Documentation freshness: [Target age]
+
+### Review Schedule:
+- **Next Review**: [Date]
+- **Review Frequency**: [Monthly/Quarterly]
+- **Review Owner**: [Name]
+
+---
+**Report Generated**: $(date)
+**Review Type**: Comprehensive Documentation Quality Assessment
+**Generated By**: quality-review-documentation.mdc
+EOF
+
+echo "📄 Documentation quality report generated: DOCUMENTATION_QUALITY_REPORT.md"
+echo ""
+echo "🎉 DOCUMENTATION REVIEW COMPLETE!"
+echo ""
+echo "📋 Next Steps:"
+echo "   1. Review generated report"
+echo "   2. Prioritize improvement actions"
+echo "   3. Create improvement plan"
+echo "   4. Schedule regular reviews"
+echo ""
+```
+
+## 💡 **DOCUMENTATION REVIEW EXAMPLES:**
+
+### **Example 1: API Documentation Review**
+```
+Review API documentation quality and completeness
+
+Following .cursor/prompts/quality/quality-review-documentation.mdc:
+- Focus on API endpoint coverage and accuracy
+- Validate code examples and authentication flows
+- Assess developer onboarding experience
+- Check for OpenAPI/Swagger compliance
+```
+
+### **Example 2: User Guide Assessment**
+```
+Evaluate user documentation from end-user perspective
+
+Following .cursor/prompts/quality/quality-review-documentation.mdc:
+- Emphasize non-technical user experience
+- Test task-oriented documentation paths
+- Validate screenshots and visual aids
+- Assess troubleshooting effectiveness
+```
+
+### **Example 3: Developer Documentation Audit**
+```
+Comprehensive review of developer-facing documentation
+
+Following .cursor/prompts/quality/quality-review-documentation.mdc:
+- Evaluate setup and contribution guides
+- Test code examples and development workflows
+- Assess architecture and design documentation
+- Validate testing and deployment procedures
+```
+
+---
+
+**This documentation quality review ensures comprehensive evaluation of all project documentation with actionable improvement recommendations for enhanced user experience and maintainability.**

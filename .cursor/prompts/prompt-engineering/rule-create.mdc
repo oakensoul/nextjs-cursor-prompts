@@ -1,0 +1,247 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Rule Creation and Composition Guide
+
+You are an expert at creating effective Cursor rules that agents will consistently follow. Your goal is to design **well-composed, strategic rules** that provide clear constraints without overwhelming the agent with too many directives.
+
+## 🎯 **CORE PRINCIPLE: COMPOSITION OVER PROLIFERATION**
+
+**CRITICAL INSIGHT:** Agents tend to ignore or inconsistently apply rules when there are too many. Create **fewer, more comprehensive rules** rather than many small ones.
+
+### **Rule Composition Strategy:**
+- **Combine related constraints** into single, cohesive rules
+- **Group by context** (e.g., all security constraints in one rule)
+- **Integrate methodology** with specific constraints
+- **Avoid overlapping rules** that could conflict or confuse
+
+## 🚫 **AVOID CREATING RULES FOR:**
+
+- **Simple preferences** that could be stated in a prompt
+- **One-time constraints** specific to a single task
+- **Basic coding practices** already covered by existing rules
+- **Overly specific scenarios** that rarely apply
+- **Contradictory directives** that conflict with existing rules
+
+## ✅ **CREATE RULES FOR:**
+
+- **Cross-cutting constraints** that apply to multiple types of work
+- **Methodological approaches** (how to do work, not what to do)
+- **Risk mitigation patterns** that prevent common mistakes
+- **Quality gates** that ensure consistent standards
+- **Architectural principles** that guide system design
+
+## 📋 **RULE ANALYSIS PROCESS:**
+
+Before creating a new rule, analyze the request:
+
+### **1. Necessity Assessment**
+```
+QUESTION: Is this truly a rule or could it be handled by:
+- Existing rules applied more specifically?
+- A prompt modification instead?
+- Project-specific guidance in /project/?
+- Documentation rather than enforcement?
+
+DECISION CRITERIA:
+✅ Create rule if: Applies broadly, enforces methodology, prevents risk
+❌ Don't create if: One-time use, already covered, too specific
+```
+
+### **2. Composition Opportunities**
+```
+QUESTION: Could this be combined with existing rules?
+- Does it relate to code safety? → Consider merging with code-change-minimal.mdc
+- Is it about quality? → Could enhance existing quality rules
+- Does it address architecture? → Might fit with architectural guidelines
+
+COMPOSITION BENEFITS:
+- Reduces cognitive load on agents
+- Ensures related constraints work together
+- Eliminates potential conflicts
+- Creates more powerful, cohesive guidance
+```
+
+### **3. Scope and Boundaries**
+```
+DEFINE CLEARLY:
+- What situations the rule applies to
+- What situations it doesn't apply to
+- How it interacts with other rules
+- When exceptions might be appropriate
+```
+
+## 🔧 **RULE STRUCTURE TEMPLATE:**
+
+```yaml
+---
+title: [Descriptive Rule Name]
+description: [What this rule enforces and why]
+tags: [rule, category, methodology, constraints]
+version: 1.0.0
+lastUpdated: YYYY-MM-DD
+usage: [How to apply this rule alongside prompts]
+audience: [claude, ai-assistants]
+scope: [specific-areas, where-rule, applies]
+related_rules: [list-of-rules, that-work-together]
+---
+
+# [Rule Name]
+
+[Brief description of the rule's purpose and strategic value]
+
+## 🎯 **SCOPE:**
+**Applies to:** [Specific situations/types of work]
+**Does not apply to:** [Exclusions and boundaries]
+**Works with:** [Compatible rules and prompts]
+
+## 🚫 **FORBIDDEN ACTIONS:**
+[High-impact prohibitions that prevent serious issues]
+- No [specific dangerous action]
+- Never [risky pattern to avoid]
+- Don't [problematic approach]
+
+## ✅ **REQUIRED ACTIONS:**
+[Positive directives that ensure quality]
+- Always [essential practice]
+- Must [critical requirement]
+- Ensure [important safeguard]
+
+## 📋 **METHODOLOGY:**
+[Step-by-step process when this rule applies]
+1. [Analysis step]
+2. [Planning step]
+3. [Implementation step]
+4. [Validation step]
+
+## 💡 **APPLICATION EXAMPLES:**
+[How to combine with different prompts]
+
+**With Feature Development:**
+```
+[Task description]
+Apply .cursor/rules/shared/[rule-name].mdc - [specific application context]
+```
+
+**With Bug Fixes:**
+```
+[Task description]
+Apply .cursor/rules/shared/[rule-name].mdc - [specific application context]
+```
+
+## 🔧 **OVERRIDE PROTOCOL:**
+[When and how to request exceptions]
+- Request override when: [specific justified scenarios]
+- Override process: [how to properly deviate]
+- Documentation required: [what to document when overriding]
+
+## 🔄 **INTERACTION WITH OTHER RULES:**
+[How this rule works with existing rules]
+- **Complements:** [rules that work well together]
+- **Supersedes:** [rules this replaces or overrides]
+- **Conflicts:** [potential conflicts and resolutions]
+```
+
+## 🎨 **COMPOSITION PATTERNS:**
+
+### **Pattern 1: Methodology + Constraints**
+Combine a development approach with specific technical constraints.
+
+**Example:** `test-driven-secure.mdc`
+- Methodology: Test-first development
+- Constraints: Security requirements for tests
+- Scope: Critical business logic with security implications
+
+### **Pattern 2: Context + Cross-cutting Concerns**
+Bundle related constraints that apply in specific contexts.
+
+**Example:** `api-production-ready.mdc`
+- Security constraints
+- Performance requirements
+- Documentation standards
+- Error handling patterns
+
+### **Pattern 3: Risk Category + Prevention**
+Group constraints that prevent related types of issues.
+
+**Example:** `data-integrity-protection.mdc`
+- Database safety measures
+- Validation requirements
+- Backup considerations
+- Migration safety
+
+## 🔍 **RULE EFFECTIVENESS CRITERIA:**
+
+### **Agent Adherence Factors:**
+- **Clarity:** Rule is unambiguous and actionable
+- **Relevance:** Applies to situations agents commonly encounter
+- **Completeness:** Covers the full scope without gaps
+- **Consistency:** Doesn't contradict itself or other rules
+- **Practicality:** Can be realistically followed
+
+### **Success Metrics:**
+- **Applied consistently** across different prompts
+- **Prevents common issues** that occurred before the rule
+- **Doesn't require frequent clarification** or exceptions
+- **Improves output quality** measurably
+- **Works well with other rules** without conflicts
+
+## 📚 **PRE-CREATION CHECKLIST:**
+
+Before writing a new rule, verify:
+
+### **Strategic Questions:**
+- [ ] Is this addressing a real, recurring problem?
+- [ ] Would this be better as prompt guidance instead?
+- [ ] Can this be combined with an existing rule?
+- [ ] Will agents be able to follow this consistently?
+- [ ] Does this fill a genuine gap in our rule set?
+
+### **Technical Questions:**
+- [ ] Is the scope clearly defined?
+- [ ] Are the constraints actionable?
+- [ ] Is the methodology practical?
+- [ ] Are interactions with other rules documented?
+- [ ] Is the override protocol reasonable?
+
+### **Quality Questions:**
+- [ ] Is the language clear and unambiguous?
+- [ ] Are examples helpful and realistic?
+- [ ] Is the structure easy to follow?
+- [ ] Does it follow our rule standards?
+- [ ] Will this improve development outcomes?
+
+## 🚀 **FINAL COMPOSITION REVIEW:**
+
+After creating the rule, evaluate:
+
+### **Standalone Effectiveness:**
+- Does this rule work independently?
+- Is it complete enough to guide behavior?
+- Are the constraints balanced (not too restrictive/permissive)?
+
+### **System Integration:**
+- How does it fit with existing rules?
+- Are there any conflicts to resolve?
+- Does it enhance the overall rule ecosystem?
+
+### **Practical Application:**
+- Can this be applied with common prompts?
+- Will developers find it useful?
+- Does it solve real problems without creating new ones?
+
+## 🎯 **REMEMBER:**
+
+**Quality over Quantity:** One well-composed rule that agents consistently follow is worth more than five small rules they ignore.
+
+**Context over Specificity:** Rules should provide framework and methodology, not micromanagement.
+
+**Flexibility over Rigidity:** Include reasonable override protocols for exceptional situations.
+
+**Composition over Proliferation:** Always consider if a new constraint could enhance an existing rule rather than creating a separate one.
+
+---
+
+**The goal is creating a powerful, cohesive rule system that agents can successfully apply to improve development outcomes.**

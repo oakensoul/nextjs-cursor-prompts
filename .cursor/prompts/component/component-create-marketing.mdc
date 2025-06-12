@@ -1,0 +1,673 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Marketing Component Creation Request
+
+**Please create a new marketing component following our specialized marketing patterns, conversion optimization principles, and performance standards.**
+
+## 🎯 **MARKETING CREATION OBJECTIVES:**
+
+1. **OPTIMIZE for conversion** with effective messaging, clear CTAs, and persuasive design patterns
+2. **ENSURE SEO excellence** with structured data, semantic HTML, and search optimization
+3. **IMPLEMENT performance optimization** with efficient image loading, code splitting, and Core Web Vitals
+4. **PROVIDE engaging UX** with animations, interactions, and responsive design
+5. **FOLLOW marketing best practices** for accessibility, analytics integration, and A/B testing readiness
+
+## 📋 **MARKETING DEVELOPMENT METHODOLOGY:**
+
+### **STEP 1: Marketing Component Planning and Strategy**
+
+#### **Determine Marketing Component Type and Location:**
+- **Server Component**: `src/components/server/marketing/` - Static marketing content, SEO-focused
+- **Client Component**: `src/components/client/marketing/` - Interactive marketing elements, animations
+- **Marketing Categories**:
+  - **Hero Sections**: Primary landing area with key value proposition (`hero/`)
+  - **Feature Blocks**: Product/service feature showcases (`features/`)
+  - **Call-to-Action**: Conversion-focused action elements (`cta/`)
+  - **Social Proof**: Testimonials, reviews, trust indicators (`social-proof/`)
+  - **Content Sections**: About, benefits, how-it-works (`content/`)
+
+#### **Conversion Strategy Assessment:**
+- **Primary Goal**: Lead generation, sales, signup, engagement
+- **Target Audience**: Demographics, pain points, motivation triggers
+- **Value Proposition**: Unique selling points and competitive advantages
+- **User Journey**: Awareness, consideration, decision, action stages
+- **Success Metrics**: Conversion rate, engagement, bounce rate, scroll depth
+
+### **STEP 2: Content and Messaging Design**
+
+#### **Conversion-Focused Content Structure:**
+```typescript
+interface MarketingContent {
+  /** Primary headline with benefit focus */
+  headline: string
+  /** Supporting subheadline with context */
+  subheadline?: string
+  /** Key value propositions or benefits */
+  benefits: string[]
+  /** Primary call-to-action */
+  primaryCTA: CTAConfig
+  /** Secondary call-to-action (optional) */
+  secondaryCTA?: CTAConfig
+  /** Social proof elements */
+  socialProof?: SocialProofConfig
+  /** Visual assets configuration */
+  visuals?: VisualConfig
+}
+
+interface CTAConfig {
+  text: string
+  href?: string
+  onClick?: () => void
+  variant: 'primary' | 'secondary' | 'ghost'
+  size: 'sm' | 'md' | 'lg'
+  analytics: AnalyticsConfig
+}
+```
+
+#### **SEO and Structured Data Integration:**
+```typescript
+// Structured data for marketing components
+const HeroStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Company Name",
+  "description": "Value proposition description",
+  "url": "https://company.com",
+  "logo": "https://company.com/logo.png",
+  "sameAs": [
+    "https://twitter.com/company",
+    "https://linkedin.com/company/company"
+  ]
+}
+
+const ProductStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Product Name",
+  "description": "Product description",
+  "offers": {
+    "@type": "Offer",
+    "price": "99",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+```
+
+### **STEP 3: Component Implementation Requirements**
+
+#### **Marketing Component Structure:**
+```typescript
+interface MarketingComponentProps {
+  /** Content configuration */
+  content: MarketingContent
+  /** Layout variant */
+  variant?: 'default' | 'centered' | 'split' | 'full-width'
+  /** Background treatment */
+  background?: 'none' | 'gradient' | 'image' | 'video'
+  /** Animation preferences */
+  animations?: boolean
+  /** A/B testing variant */
+  testVariant?: string
+  /** Analytics tracking */
+  analytics?: AnalyticsConfig
+  /** Additional CSS classes */
+  className?: string
+  /** Test identifier */
+  'data-testid'?: string
+}
+```
+
+#### **Required Marketing Features:**
+- **Responsive design** with mobile-first approach and optimized layouts
+- **Performance optimization** with image optimization and lazy loading
+- **Accessibility compliance** with WCAG 2.1 AA standards
+- **SEO optimization** with semantic HTML and structured data
+- **Analytics integration** with conversion tracking and user behavior
+- **A/B testing readiness** with variant support and experimentation
+- **Animation and interaction** with Framer Motion for engaging experiences
+
+#### **Hero Section Implementation:**
+```typescript
+const HeroSection = ({ 
+  content, 
+  variant = 'default',
+  background = 'gradient',
+  animations = true 
+}) => {
+  const controls = useAnimation()
+  const [ref, inView] = useInView({ threshold: 0.1 })
+
+  useEffect(() => {
+    if (inView && animations) {
+      controls.start('visible')
+    }
+  }, [controls, inView, animations])
+
+  const heroVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  }
+
+  return (
+    <section 
+      ref={ref}
+      className={cn(
+        "hero-section",
+        `hero-${variant}`,
+        `bg-${background}`
+      )}
+      data-testid="hero-section"
+    >
+      {/* Structured Data */}
+      <script 
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ 
+          __html: JSON.stringify(HeroStructuredData) 
+        }}
+      />
+
+      <div className="hero-container">
+        <motion.div
+          initial="hidden"
+          animate={controls}
+          variants={heroVariants}
+          className="hero-content"
+        >
+          <h1 className="hero-headline">
+            {content.headline}
+          </h1>
+          {content.subheadline && (
+            <p className="hero-subheadline">
+              {content.subheadline}
+            </p>
+          )}
+          <div className="hero-cta-group">
+            <CTA config={content.primaryCTA} />
+            {content.secondaryCTA && (
+              <CTA config={content.secondaryCTA} />
+            )}
+          </div>
+        </motion.div>
+
+        {content.visuals && (
+          <div className="hero-visuals">
+            <OptimizedImage
+              src={content.visuals.image}
+              alt={content.visuals.alt}
+              priority={true}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+```
+
+### **STEP 4: Performance and SEO Optimization**
+
+#### **Image and Media Optimization:**
+```typescript
+// Optimized image component for marketing
+const OptimizedMarketingImage = ({ 
+  src, 
+  alt, 
+  priority = false,
+  sizes,
+  className 
+}) => {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      priority={priority}
+      sizes={sizes}
+      className={className}
+      quality={85}
+      placeholder="blur"
+      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..."
+      onLoadingComplete={(result) => {
+        // Track image load performance
+        analytics.track('Image Loaded', {
+          src: result.naturalWidth,
+          loadTime: performance.now()
+        })
+      }}
+    />
+  )
+}
+```
+
+#### **Core Web Vitals Optimization:**
+```typescript
+// Performance monitoring for marketing components
+const useMarketingPerformance = () => {
+  useEffect(() => {
+    // Monitor Largest Contentful Paint (LCP)
+    const observer = new PerformanceObserver((list) => {
+      const entries = list.getEntries()
+      const lastEntry = entries[entries.length - 1]
+      
+      analytics.track('Core Web Vital', {
+        metric: 'LCP',
+        value: lastEntry.startTime,
+        rating: lastEntry.startTime < 2500 ? 'good' : 
+                lastEntry.startTime < 4000 ? 'needs-improvement' : 'poor'
+      })
+    })
+
+    observer.observe({ entryTypes: ['largest-contentful-paint'] })
+    return () => observer.disconnect()
+  }, [])
+
+  // Monitor Cumulative Layout Shift (CLS)
+  useEffect(() => {
+    let clsValue = 0
+    const observer = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        if (!entry.hadRecentInput) {
+          clsValue += entry.value
+        }
+      }
+      
+      analytics.track('Core Web Vital', {
+        metric: 'CLS',
+        value: clsValue,
+        rating: clsValue < 0.1 ? 'good' : 
+                clsValue < 0.25 ? 'needs-improvement' : 'poor'
+      })
+    })
+
+    observer.observe({ entryTypes: ['layout-shift'] })
+    return () => observer.disconnect()
+  }, [])
+}
+```
+
+#### **SEO Metadata Integration:**
+```typescript
+// SEO-optimized marketing component
+const SEOMarketingComponent = ({ content, seoConfig }) => {
+  return (
+    <>
+      <Head>
+        <title>{seoConfig.title}</title>
+        <meta name="description" content={seoConfig.description} />
+        <meta property="og:title" content={seoConfig.ogTitle} />
+        <meta property="og:description" content={seoConfig.ogDescription} />
+        <meta property="og:image" content={seoConfig.ogImage} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoConfig.twitterTitle} />
+        <meta name="twitter:description" content={seoConfig.twitterDescription} />
+        <meta name="twitter:image" content={seoConfig.twitterImage} />
+        <link rel="canonical" href={seoConfig.canonicalUrl} />
+      </Head>
+      
+      <MarketingComponent content={content} />
+    </>
+  )
+}
+```
+
+### **STEP 5: Conversion and Analytics Integration**
+
+#### **A/B Testing Implementation:**
+```typescript
+// A/B testing ready marketing component
+const TestableMarketingComponent = ({ content, testConfig }) => {
+  const [variant, setVariant] = useState('control')
+  
+  useEffect(() => {
+    // Determine A/B test variant
+    const assignedVariant = determineTestVariant(testConfig)
+    setVariant(assignedVariant)
+    
+    // Track variant assignment
+    analytics.track('A/B Test Assignment', {
+      testName: testConfig.testName,
+      variant: assignedVariant,
+      userId: getUserId()
+    })
+  }, [testConfig])
+
+  const variantContent = {
+    ...content,
+    ...testConfig.variants[variant]
+  }
+
+  return (
+    <MarketingComponent 
+      content={variantContent}
+      data-test-variant={variant}
+    />
+  )
+}
+```
+
+#### **Conversion Tracking:**
+```typescript
+// Comprehensive conversion tracking
+const useConversionTracking = () => {
+  const trackCTAClick = useCallback((ctaData) => {
+    analytics.track('CTA Clicked', {
+      cta_text: ctaData.text,
+      cta_position: ctaData.position,
+      page_section: ctaData.section,
+      timestamp: new Date().toISOString()
+    })
+  }, [])
+
+  const trackSectionView = useCallback((sectionName, timeSpent) => {
+    analytics.track('Section Viewed', {
+      section: sectionName,
+      time_spent: timeSpent,
+      scroll_depth: getScrollDepth(),
+      page_url: window.location.href
+    })
+  }, [])
+
+  const trackFormInteraction = useCallback((formData) => {
+    analytics.track('Form Interaction', {
+      form_name: formData.name,
+      field_name: formData.field,
+      action: formData.action
+    })
+  }, [])
+
+  return { trackCTAClick, trackSectionView, trackFormInteraction }
+}
+```
+
+## ✅ **MARKETING IMPLEMENTATION REQUIREMENTS:**
+
+### **File Structure:**
+```
+marketing-component/
+├── MarketingComponent.tsx         # Main marketing component
+├── components/
+│   ├── HeroSection.tsx           # Hero section implementation
+│   ├── FeatureBlock.tsx          # Feature showcase component
+│   ├── CTASection.tsx            # Call-to-action component
+│   └── SocialProof.tsx           # Testimonials and trust indicators
+├── __tests__/
+│   ├── MarketingComponent.test.tsx    # Unit tests
+│   ├── MarketingComponent.a11y.test.tsx # Accessibility tests
+│   └── MarketingComponent.conversion.test.tsx # Conversion tests
+├── hooks/
+│   ├── useConversionTracking.ts  # Conversion analytics
+│   ├── useABTesting.ts          # A/B testing logic
+│   └── useMarketingPerformance.ts # Performance monitoring
+├── utils/
+│   ├── seo.ts                   # SEO utilities and structured data
+│   └── optimization.ts         # Performance optimization utilities
+└── types/
+    └── marketing.types.ts       # Marketing component types
+```
+
+### **Component Requirements:**
+- [ ] **TypeScript Props Interface**: Comprehensive marketing prop typing with JSDoc
+- [ ] **SEO Optimization**: Structured data, meta tags, and semantic HTML
+- [ ] **Performance Optimization**: Image optimization, lazy loading, Core Web Vitals
+- [ ] **Conversion Tracking**: Analytics integration and user behavior tracking
+- [ ] **A/B Testing Ready**: Variant support and experimentation framework
+- [ ] **Accessibility Compliance**: WCAG 2.1 AA compliance for marketing content
+
+### **Testing Requirements:**
+- [ ] **Unit Testing**: Component behavior and content rendering
+- [ ] **Accessibility Testing**: Screen reader compatibility and keyboard navigation
+- [ ] **Performance Testing**: Core Web Vitals and loading performance
+- [ ] **Conversion Testing**: CTA functionality and tracking accuracy
+
+### **Quality Standards:**
+- [ ] **Semantic HTML**: Proper heading hierarchy and content structure
+- [ ] **Performance**: Fast loading and optimal Core Web Vitals scores
+- [ ] **SEO**: Search engine optimization and structured data
+- [ ] **Conversion Focus**: Clear messaging and compelling call-to-actions
+- [ ] **Mobile Optimization**: Mobile-first responsive design
+
+## 🔍 **MARKETING-SPECIFIC PATTERNS:**
+
+### **Feature Block Pattern:**
+```typescript
+const FeatureBlock = ({ features, layout = 'grid' }) => {
+  return (
+    <section className="features-section" data-testid="features">
+      <div className="features-container">
+        <motion.div
+          className={`features-grid features-${layout}`}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          {features.map((feature, index) => (
+            <motion.div
+              key={feature.id}
+              className="feature-item"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { delay: index * 0.1 }
+                }
+              }}
+            >
+              <div className="feature-icon">
+                {feature.icon}
+              </div>
+              <h3 className="feature-title">
+                {feature.title}
+              </h3>
+              <p className="feature-description">
+                {feature.description}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+```
+
+### **Social Proof Pattern:**
+```typescript
+interface TestimonialProps {
+  testimonials: Testimonial[]
+  autoplay?: boolean
+  showRating?: boolean
+}
+
+const SocialProofSection = ({ 
+  testimonials, 
+  autoplay = true,
+  showRating = true 
+}) => {
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  useEffect(() => {
+    if (autoplay) {
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => 
+          (prev + 1) % testimonials.length
+        )
+      }, 5000)
+      
+      return () => clearInterval(interval)
+    }
+  }, [autoplay, testimonials.length])
+
+  return (
+    <section className="social-proof-section">
+      <div className="testimonials-container">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="testimonial-item"
+          >
+            <blockquote className="testimonial-quote">
+              {testimonials[currentIndex].quote}
+            </blockquote>
+            <cite className="testimonial-author">
+              <img 
+                src={testimonials[currentIndex].avatar}
+                alt={testimonials[currentIndex].name}
+                className="author-avatar"
+              />
+              <div className="author-info">
+                <span className="author-name">
+                  {testimonials[currentIndex].name}
+                </span>
+                <span className="author-title">
+                  {testimonials[currentIndex].title}
+                </span>
+                {showRating && (
+                  <div className="testimonial-rating">
+                    {[...Array(5)].map((_, i) => (
+                      <StarIcon 
+                        key={i}
+                        className={i < testimonials[currentIndex].rating ? 
+                          'star-filled' : 'star-empty'
+                        }
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </cite>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </section>
+  )
+}
+```
+
+## 💡 **MARKETING EXAMPLES:**
+
+### **Example 1: Product Hero Section**
+```typescript
+const ProductHero = () => {
+  const heroContent = {
+    headline: "Build Better Apps Faster",
+    subheadline: "The complete React component library for modern web applications",
+    benefits: [
+      "50+ pre-built components",
+      "TypeScript-first design",
+      "Built-in accessibility"
+    ],
+    primaryCTA: {
+      text: "Get Started Free",
+      href: "/signup",
+      variant: "primary",
+      size: "lg",
+      analytics: { event: "cta_click", position: "hero_primary" }
+    },
+    secondaryCTA: {
+      text: "View Documentation",
+      href: "/docs",
+      variant: "secondary",
+      size: "lg",
+      analytics: { event: "cta_click", position: "hero_secondary" }
+    }
+  }
+
+  return (
+    <HeroSection
+      content={heroContent}
+      variant="split"
+      background="gradient"
+      animations={true}
+    />
+  )
+}
+```
+
+### **Example 2: Feature Showcase**
+```typescript
+const ProductFeatures = () => {
+  const features = [
+    {
+      id: 1,
+      icon: <ComponentIcon />,
+      title: "Pre-built Components",
+      description: "50+ production-ready components for faster development"
+    },
+    {
+      id: 2,
+      icon: <TypeScriptIcon />,
+      title: "TypeScript First",
+      description: "Full TypeScript support with comprehensive type definitions"
+    },
+    {
+      id: 3,
+      icon: <AccessibilityIcon />,
+      title: "Accessibility Built-in",
+      description: "WCAG 2.1 AA compliant components out of the box"
+    }
+  ]
+
+  return (
+    <FeatureBlock
+      features={features}
+      layout="grid"
+      animations={true}
+    />
+  )
+}
+```
+
+## 🚨 **COMMON MARKETING PITFALLS:**
+
+### **Performance Issues:**
+- **Image optimization neglect** - Always optimize images for web and use Next.js Image
+- **Bundle size bloat** - Code-split marketing components and lazy load animations
+- **Poor Core Web Vitals** - Monitor LCP, FID, and CLS for marketing pages
+- **Blocking JavaScript** - Ensure marketing components don't block page rendering
+
+### **SEO Problems:**
+- **Missing structured data** - Include relevant schema.org markup
+- **Poor heading hierarchy** - Use proper H1-H6 structure for content
+- **Duplicate content** - Ensure unique, valuable content for each marketing component
+- **Missing meta tags** - Include comprehensive Open Graph and Twitter meta tags
+
+### **Conversion Issues:**
+- **Weak call-to-actions** - Use clear, benefit-focused CTA copy
+- **Poor value proposition** - Clearly communicate unique benefits and outcomes
+- **Missing social proof** - Include testimonials, reviews, and trust indicators
+- **Complex user journey** - Minimize friction in conversion flows
+
+### **Accessibility Concerns:**
+- **Poor color contrast** - Ensure sufficient contrast for marketing text
+- **Missing alt text** - Provide descriptive alt text for marketing images
+- **Inaccessible animations** - Respect prefers-reduced-motion setting
+- **Keyboard navigation** - Ensure all interactive elements are keyboard accessible
+
+## 🔧 **INTEGRATION WITH OTHER PROMPTS:**
+
+### **Layout Integration:**
+- Use with `component-create-layout.mdc` for complete landing page structures
+- Coordinate with page layout patterns for consistent user experience
+
+### **Form Integration:**
+- Combine with `component-create-form.mdc` for lead generation and conversion forms
+- Integrate form components within marketing sections for seamless user flow
+
+### **UI Component Integration:**
+- Leverage `component-create-ui.mdc` for consistent button and interaction patterns
+- Use established design system components for marketing elements
+
+**This marketing creation prompt ensures conversion-focused, performance-optimized, and SEO-friendly marketing components that drive business results while maintaining technical excellence.**

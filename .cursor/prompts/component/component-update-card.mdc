@@ -1,0 +1,753 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Component Update: Card Components
+
+> **Specialized prompt for updating existing card components with advanced patterns, enhanced accessibility, performance optimizations, and modern UX features while maintaining backward compatibility.**
+
+## 🎯 **UPDATE OBJECTIVES**
+
+### **1. FEATURE ENHANCEMENT**
+Add new capabilities to existing card components:
+- **Advanced interaction patterns** (hover states, click behaviors, selection)
+- **Enhanced content slots** (header actions, footer controls, overlay content)
+- **Dynamic sizing and layout** (auto-height, aspect ratios, responsive breakpoints)
+- **Loading and skeleton states** (progressive loading, shimmer effects)
+- **Animation and transitions** (entrance effects, state changes, micro-interactions)
+
+### **2. ACCESSIBILITY IMPROVEMENTS**
+Enhance existing accessibility implementation:
+- **Advanced ARIA patterns** (live regions, expanded states, selected states)
+- **Keyboard navigation enhancements** (arrow key navigation, focus trapping)
+- **Screen reader optimizations** (meaningful announcements, content structure)
+- **High contrast and reduced motion** support
+- **Focus management** for interactive cards and card collections
+
+### **3. PERFORMANCE OPTIMIZATION**
+Optimize existing card performance:
+- **Virtualization support** for large card lists
+- **Image optimization** (lazy loading, responsive images, placeholder states)
+- **Bundle size reduction** (tree shaking, dynamic imports)
+- **Render optimization** (memo patterns, stable references)
+- **Layout stability** (CLS prevention, dimension management)
+
+### **4. UX PATTERN MODERNIZATION**
+Update user experience patterns:
+- **Interactive card behaviors** (selection, multi-select, drag and drop)
+- **Advanced filtering and sorting** integration
+- **Contextual actions** (quick actions, overflow menus)
+- **Status indicators** (badges, progress bars, notifications)
+- **Responsive design improvements** (mobile-first, touch interactions)
+
+### **5. INTEGRATION ENHANCEMENTS**
+Improve system integration capabilities:
+- **Enhanced Catalyst compatibility** (design token updates, theme integration)
+- **Form integration** (card-based form layouts, validation display)
+- **Data loading patterns** (suspense boundaries, error boundaries)
+- **Analytics integration** (interaction tracking, performance metrics)
+- **Testing infrastructure** (component testing, accessibility testing)
+
+---
+
+## 📋 **IMPLEMENTATION METHODOLOGY**
+
+### **Step 1: Current State Assessment**
+```typescript
+// Analyze existing card implementation
+interface CurrentCardAnalysis {
+  props: Record<string, unknown>;
+  variants: string[];
+  accessibility: string[];
+  performance: {
+    renderTime: number;
+    bundleSize: number;
+    memoryUsage: number;
+  };
+  usagePatterns: string[];
+  dependencies: string[];
+}
+
+// Document breaking change risks
+interface BreakingChangeRisk {
+  propChanges: string[];
+  behaviorChanges: string[];
+  styleChanges: string[];
+  migrationComplexity: 'low' | 'medium' | 'high';
+}
+```
+
+### **Step 2: Enhanced Interface Design**
+```typescript
+// Enhanced card props with backward compatibility
+interface EnhancedCardProps extends BaseCardProps {
+  // Advanced interaction
+  interactive?: boolean;
+  selectable?: boolean;
+  selected?: boolean;
+  onSelect?: (selected: boolean) => void;
+  
+  // Enhanced content
+  headerActions?: React.ReactNode;
+  footerActions?: React.ReactNode;
+  overlay?: React.ReactNode;
+  badge?: React.ReactNode;
+  
+  // Layout enhancements
+  aspectRatio?: 'square' | '16:9' | '4:3' | 'auto';
+  minHeight?: string | number;
+  maxHeight?: string | number;
+  
+  // Loading states
+  loading?: boolean;
+  skeleton?: boolean;
+  loadingText?: string;
+  
+  // Animation
+  animateOnHover?: boolean;
+  enterAnimation?: 'fade' | 'slide' | 'scale' | 'none';
+  exitAnimation?: 'fade' | 'slide' | 'scale' | 'none';
+  
+  // Enhanced accessibility
+  role?: 'button' | 'article' | 'listitem' | 'gridcell';
+  labelledBy?: string;
+  describedBy?: string;
+  announcement?: string;
+  
+  // Performance
+  virtualized?: boolean;
+  lazyLoad?: boolean;
+  priority?: 'high' | 'normal' | 'low';
+}
+
+// Enhanced variant system
+interface CardVariantProps {
+  variant?: 'default' | 'elevated' | 'outlined' | 'filled' | 'ghost';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'auto';
+  density?: 'compact' | 'normal' | 'comfortable';
+  orientation?: 'vertical' | 'horizontal' | 'responsive';
+}
+```
+
+### **Step 3: Advanced Feature Implementation**
+```typescript
+// Interactive card with selection
+const InteractiveCard: React.FC<EnhancedCardProps> = ({
+  interactive,
+  selectable,
+  selected,
+  onSelect,
+  children,
+  ...props
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (interactive && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault();
+      if (selectable && onSelect) {
+        onSelect(!selected);
+      }
+    }
+  }, [interactive, selectable, selected, onSelect]);
+  
+  const cardClasses = cn(
+    'transition-all duration-200',
+    {
+      'cursor-pointer': interactive,
+      'ring-2 ring-primary': selected,
+      'hover:shadow-lg': interactive && isHovered,
+      'focus-visible:ring-2 focus-visible:ring-primary': interactive,
+    }
+  );
+  
+  return (
+    <div
+      className={cardClasses}
+      role={interactive ? 'button' : 'article'}
+      tabIndex={interactive ? 0 : undefined}
+      aria-selected={selectable ? selected : undefined}
+      onKeyDown={handleKeyDown}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+
+// Loading and skeleton states
+const CardSkeleton: React.FC<{ variant?: CardVariantProps['variant'] }> = ({ 
+  variant = 'default' 
+}) => (
+  <div className={cn('animate-pulse', getVariantClasses(variant))}>
+    <div className="h-4 bg-gray-200 rounded mb-2" />
+    <div className="h-3 bg-gray-200 rounded mb-2 w-3/4" />
+    <div className="h-3 bg-gray-200 rounded w-1/2" />
+  </div>
+);
+
+// Enhanced content slots
+const CardWithSlots: React.FC<EnhancedCardProps> = ({
+  header,
+  headerActions,
+  children,
+  footerActions,
+  overlay,
+  badge,
+  ...props
+}) => (
+  <Card {...props}>
+    {overlay && (
+      <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50">
+        {overlay}
+      </div>
+    )}
+    
+    {badge && (
+      <div className="absolute top-2 right-2 z-20">
+        {badge}
+      </div>
+    )}
+    
+    {(header || headerActions) && (
+      <CardHeader className="flex justify-between items-start">
+        <div>{header}</div>
+        {headerActions && (
+          <div className="flex gap-1">{headerActions}</div>
+        )}
+      </CardHeader>
+    )}
+    
+    <CardContent>{children}</CardContent>
+    
+    {footerActions && (
+      <CardFooter className="flex justify-end gap-2">
+        {footerActions}
+      </CardFooter>
+    )}
+  </Card>
+);
+```
+
+### **Step 4: Performance Optimizations**
+```typescript
+// Virtualized card list for performance
+import { FixedSizeList as List } from 'react-window';
+
+const VirtualizedCardList: React.FC<{
+  items: any[];
+  cardHeight: number;
+  containerHeight: number;
+  renderCard: (item: any, index: number) => React.ReactNode;
+}> = ({ items, cardHeight, containerHeight, renderCard }) => {
+  const Row = useCallback(({ index, style }: any) => (
+    <div style={style}>
+      {renderCard(items[index], index)}
+    </div>
+  ), [items, renderCard]);
+  
+  return (
+    <List
+      height={containerHeight}
+      itemCount={items.length}
+      itemSize={cardHeight}
+      overscanCount={5}
+    >
+      {Row}
+    </List>
+  );
+};
+
+// Optimized image loading
+const OptimizedCardImage: React.FC<{
+  src: string;
+  alt: string;
+  priority?: boolean;
+  aspectRatio?: string;
+}> = ({ src, alt, priority = false, aspectRatio = '16:9' }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  
+  return (
+    <div className={`relative overflow-hidden ${getAspectRatioClass(aspectRatio)}`}>
+      {!isLoaded && !hasError && (
+        <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+      )}
+      
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        priority={priority}
+        className={cn(
+          'object-cover transition-opacity duration-300',
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        )}
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setHasError(true)}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      />
+      
+      {hasError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          <ImageIcon className="h-8 w-8 text-gray-400" />
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Memoized card component
+const MemoizedCard = React.memo<EnhancedCardProps>(
+  ({ children, ...props }) => {
+    return <Card {...props}>{children}</Card>;
+  },
+  (prevProps, nextProps) => {
+    // Custom comparison logic for optimal re-rendering
+    return (
+      prevProps.selected === nextProps.selected &&
+      prevProps.loading === nextProps.loading &&
+      prevProps.variant === nextProps.variant &&
+      React.isValidElement(prevProps.children) &&
+      React.isValidElement(nextProps.children) &&
+      prevProps.children.key === nextProps.children.key
+    );
+  }
+);
+```
+
+### **Step 5: Enhanced Testing Strategy**
+```typescript
+// Advanced card testing
+describe('Enhanced Card Component', () => {
+  describe('Interactive Behavior', () => {
+    it('should handle selection state correctly', async () => {
+      const mockOnSelect = jest.fn();
+      render(
+        <Card 
+          interactive 
+          selectable 
+          selected={false} 
+          onSelect={mockOnSelect}
+        >
+          Test Content
+        </Card>
+      );
+      
+      const card = screen.getByRole('button');
+      await user.keyboard('{Enter}');
+      
+      expect(mockOnSelect).toHaveBeenCalledWith(true);
+    });
+    
+    it('should support keyboard navigation', async () => {
+      render(
+        <div>
+          <Card interactive data-testid="card-1">Card 1</Card>
+          <Card interactive data-testid="card-2">Card 2</Card>
+        </div>
+      );
+      
+      const card1 = screen.getByTestId('card-1');
+      const card2 = screen.getByTestId('card-2');
+      
+      card1.focus();
+      await user.keyboard('{Tab}');
+      
+      expect(card2).toHaveFocus();
+    });
+  });
+  
+  describe('Performance', () => {
+    it('should not re-render unnecessarily', () => {
+      const renderSpy = jest.fn();
+      const TestCard = () => {
+        renderSpy();
+        return <Card>Test</Card>;
+      };
+      
+      const { rerender } = render(<TestCard />);
+      rerender(<TestCard />);
+      
+      expect(renderSpy).toHaveBeenCalledTimes(1);
+    });
+    
+    it('should handle large lists efficiently', () => {
+      const items = Array.from({ length: 1000 }, (_, i) => ({ id: i }));
+      
+      const { container } = render(
+        <VirtualizedCardList
+          items={items}
+          cardHeight={100}
+          containerHeight={400}
+          renderCard={(item) => <Card key={item.id}>{item.id}</Card>}
+        />
+      );
+      
+      // Only visible items should be rendered
+      expect(container.querySelectorAll('[role="button"]').length).toBeLessThan(10);
+    });
+  });
+  
+  describe('Accessibility', () => {
+    it('should announce selection changes', async () => {
+      const { rerender } = render(
+        <Card selectable selected={false} announcement="Card selected">
+          Test
+        </Card>
+      );
+      
+      rerender(
+        <Card selectable selected={true} announcement="Card selected">
+          Test
+        </Card>
+      );
+      
+      await waitFor(() => {
+        expect(screen.getByRole('status')).toHaveTextContent('Card selected');
+      });
+    });
+  });
+});
+
+// Visual regression testing
+describe('Card Visual Tests', () => {
+  it('should match snapshot for all variants', () => {
+    const variants = ['default', 'elevated', 'outlined', 'filled', 'ghost'];
+    
+    variants.forEach(variant => {
+      const { container } = render(
+        <Card variant={variant as any}>
+          <CardHeader>Header</CardHeader>
+          <CardContent>Content</CardContent>
+          <CardFooter>Footer</CardFooter>
+        </Card>
+      );
+      
+      expect(container).toMatchSnapshot(`card-${variant}`);
+    });
+  });
+});
+```
+
+---
+
+## 🎨 **DESIGN SYSTEM INTEGRATION**
+
+### **Enhanced Catalyst Integration**
+```typescript
+// Design token integration
+const cardTokens = {
+  spacing: {
+    xs: 'p-2',
+    sm: 'p-3',
+    md: 'p-4',
+    lg: 'p-6',
+    xl: 'p-8',
+  },
+  borderRadius: {
+    none: 'rounded-none',
+    sm: 'rounded-sm',
+    md: 'rounded-md',
+    lg: 'rounded-lg',
+    xl: 'rounded-xl',
+  },
+  shadows: {
+    none: 'shadow-none',
+    sm: 'shadow-sm',
+    md: 'shadow-md',
+    lg: 'shadow-lg',
+    xl: 'shadow-xl',
+  },
+  borders: {
+    none: 'border-0',
+    default: 'border border-gray-200',
+    strong: 'border-2 border-gray-300',
+  }
+} as const;
+
+// Theme-aware card variants
+const getCardVariantClasses = (
+  variant: CardVariantProps['variant'],
+  theme: 'light' | 'dark' = 'light'
+) => {
+  const baseClasses = 'transition-all duration-200';
+  
+  const variantClasses = {
+    default: theme === 'light' 
+      ? 'bg-white border border-gray-200' 
+      : 'bg-gray-900 border border-gray-700',
+    elevated: theme === 'light'
+      ? 'bg-white shadow-md hover:shadow-lg'
+      : 'bg-gray-900 shadow-md hover:shadow-lg shadow-gray-900/20',
+    outlined: theme === 'light'
+      ? 'border-2 border-gray-200 hover:border-gray-300'
+      : 'border-2 border-gray-600 hover:border-gray-500',
+    filled: theme === 'light'
+      ? 'bg-gray-50 hover:bg-gray-100'
+      : 'bg-gray-800 hover:bg-gray-700',
+    ghost: 'hover:bg-gray-50 dark:hover:bg-gray-800',
+  };
+  
+  return cn(baseClasses, variantClasses[variant || 'default']);
+};
+```
+
+### **Advanced Animation Patterns**
+```typescript
+// Framer Motion integration for enhanced animations
+import { motion, AnimatePresence } from 'framer-motion';
+
+const AnimatedCard: React.FC<EnhancedCardProps> = ({
+  enterAnimation = 'fade',
+  exitAnimation = 'fade',
+  children,
+  ...props
+}) => {
+  const animations = {
+    fade: {
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 },
+    },
+    slide: {
+      initial: { opacity: 0, y: 20 },
+      animate: { opacity: 1, y: 0 },
+      exit: { opacity: 0, y: -20 },
+    },
+    scale: {
+      initial: { opacity: 0, scale: 0.95 },
+      animate: { opacity: 1, scale: 1 },
+      exit: { opacity: 0, scale: 0.95 },
+    },
+  };
+  
+  return (
+    <motion.div
+      {...animations[enterAnimation]}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <Card {...props}>{children}</Card>
+    </motion.div>
+  );
+};
+```
+
+---
+
+## 📚 **UPDATE EXAMPLES**
+
+### **Before: Basic Card**
+```typescript
+// Original basic card
+const BasicCard: React.FC<{ title: string; content: string }> = ({ 
+  title, 
+  content 
+}) => (
+  <Card>
+    <CardHeader>
+      <CardTitle>{title}</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p>{content}</p>
+    </CardContent>
+  </Card>
+);
+```
+
+### **After: Enhanced Card**
+```typescript
+// Updated enhanced card
+const EnhancedCard: React.FC<EnhancedCardProps> = ({
+  title,
+  content,
+  interactive = false,
+  selectable = false,
+  selected = false,
+  onSelect,
+  headerActions,
+  footerActions,
+  loading = false,
+  variant = 'default',
+  ...props
+}) => {
+  if (loading) {
+    return <CardSkeleton variant={variant} />;
+  }
+  
+  return (
+    <Card
+      variant={variant}
+      interactive={interactive}
+      selectable={selectable}
+      selected={selected}
+      onSelect={onSelect}
+      role={interactive ? 'button' : 'article'}
+      aria-selected={selectable ? selected : undefined}
+      {...props}
+    >
+      <CardHeader className="flex justify-between items-start">
+        <CardTitle>{title}</CardTitle>
+        {headerActions && (
+          <div className="flex gap-1">{headerActions}</div>
+        )}
+      </CardHeader>
+      
+      <CardContent>
+        <p>{content}</p>
+      </CardContent>
+      
+      {footerActions && (
+        <CardFooter className="flex justify-end gap-2">
+          {footerActions}
+        </CardFooter>
+      )}
+    </Card>
+  );
+};
+
+// Usage example with new features
+<EnhancedCard
+  title="Enhanced Card"
+  content="This card now supports selection, actions, and loading states"
+  interactive
+  selectable
+  selected={isSelected}
+  onSelect={setIsSelected}
+  headerActions={
+    <Button variant="ghost" size="sm">
+      <MoreHorizontal className="h-4 w-4" />
+    </Button>
+  }
+  footerActions={
+    <>
+      <Button variant="outline" size="sm">Cancel</Button>
+      <Button size="sm">Save</Button>
+    </>
+  }
+  variant="elevated"
+  loading={isLoading}
+/>
+```
+
+---
+
+## ⚠️ **COMMON UPDATE PITFALLS**
+
+### **1. Breaking Changes Without Migration**
+```typescript
+// ❌ Don't: Remove props without deprecation
+interface OldCardProps {
+  variant: 'default' | 'outlined';
+  // Removing 'outlined' without migration
+}
+
+// ✅ Do: Provide backward compatibility
+interface NewCardProps {
+  variant: 'default' | 'elevated' | 'outlined' | 'filled' | 'ghost';
+  /** @deprecated Use variant="outlined" instead */
+  outlined?: boolean;
+}
+
+const Card: React.FC<NewCardProps> = ({ variant, outlined, ...props }) => {
+  // Handle deprecated prop
+  const actualVariant = outlined ? 'outlined' : variant;
+  return <CardImplementation variant={actualVariant} {...props} />;
+};
+```
+
+### **2. Performance Regression from Over-Features**
+```typescript
+// ❌ Don't: Add expensive operations in render
+const Card = ({ children, ...props }) => {
+  // Expensive calculation on every render
+  const complexValue = expensiveCalculation();
+  
+  return <div>{children}</div>;
+};
+
+// ✅ Do: Memoize expensive operations
+const Card = ({ children, ...props }) => {
+  const complexValue = useMemo(() => expensiveCalculation(), [dependency]);
+  
+  return <div>{children}</div>;
+};
+```
+
+### **3. Accessibility Regression**
+```typescript
+// ❌ Don't: Add interactivity without proper ARIA
+const InteractiveCard = ({ onClick, children }) => (
+  <div onClick={onClick}>{children}</div>
+);
+
+// ✅ Do: Proper interactive element with accessibility
+const InteractiveCard = ({ onClick, children, ...props }) => (
+  <div
+    role="button"
+    tabIndex={0}
+    onClick={onClick}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onClick();
+      }
+    }}
+    aria-label="Interactive card"
+    {...props}
+  >
+    {children}
+  </div>
+);
+```
+
+---
+
+## 🚀 **DELIVERY CHECKLIST**
+
+### **Core Updates**
+- [ ] Enhanced props interface with backward compatibility
+- [ ] Advanced interaction patterns (selection, keyboard nav)
+- [ ] Loading and skeleton states implementation
+- [ ] Performance optimizations (memoization, virtualization)
+- [ ] Enhanced accessibility (ARIA, screen reader support)
+
+### **Integration**
+- [ ] Catalyst design system compatibility maintained
+- [ ] Theme support (light/dark mode)
+- [ ] Animation system integration (Framer Motion)
+- [ ] Form integration capabilities
+- [ ] Analytics and tracking support
+
+### **Testing & Quality**
+- [ ] Unit tests covering new features (80%+ coverage)
+- [ ] Accessibility testing (automated and manual)
+- [ ] Performance testing (render times, memory usage)
+- [ ] Visual regression tests for all variants
+- [ ] Integration tests with other components
+
+### **Documentation**
+- [ ] Updated TypeScript interfaces and JSDoc
+- [ ] Migration guide for breaking changes
+- [ ] Usage examples for new features
+- [ ] Performance guidelines and best practices
+- [ ] Accessibility implementation notes
+
+### **Deployment**
+- [ ] Backward compatibility verification
+- [ ] Bundle size impact analysis
+- [ ] Performance benchmarking
+- [ ] Cross-browser testing results
+- [ ] Production deployment validation
+
+---
+
+**Focus on enhancing existing functionality while maintaining stability and performance. Each update should add meaningful value without compromising the component's core reliability.**

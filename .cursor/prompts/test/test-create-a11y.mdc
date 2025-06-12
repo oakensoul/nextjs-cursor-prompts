@@ -1,0 +1,169 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Create Accessibility Tests
+
+**FOCUS: Accessibility compliance testing for UI components**
+
+**MANDATORY FOR ALL UI COMPONENTS: Any component that renders to the DOM must have accessibility tests.**
+
+Please create comprehensive accessibility test coverage for the UI components I'm working on, following our vitest-axe testing standards.
+
+## 🧪 **MANDATORY TESTING FRAMEWORK REQUIREMENTS**
+
+### Testing Stack (NO EXCEPTIONS)
+- **Primary Framework**: vitest (NEVER Jest)
+- **DOM Environment**: happy-dom  
+- **Accessibility**: vitest-axe with `expectNoA11yViolations()`
+- **Component Testing**: @testing-library/react
+
+### File Structure & Naming (STRICTLY ENFORCED)
+- **Location**: Co-located in `__tests__/` subdirectories next to components
+- **Accessibility Tests**: `ComponentName.a11y.test.tsx` (SEPARATE files from unit tests)
+
+## 📋 **ACCESSIBILITY TEST REQUIREMENTS**
+
+### Components That REQUIRE A11Y Tests:
+- ✅ Buttons, links, form elements
+- ✅ Navigation components
+- ✅ Modals, dialogs, overlays
+- ✅ Cards, layouts, containers
+- ✅ Interactive elements
+- ✅ Custom input components
+- ✅ Any component with user interaction
+
+### Components That SKIP A11Y Tests:
+- ❌ Server actions, API routes
+- ❌ Utilities, hooks, data services
+- ❌ Non-visual components
+- ❌ Pure data processing functions
+
+### A11Y Tests Must Include:
+- [ ] `expectNoA11yViolations()` for all component states
+- [ ] Keyboard navigation testing
+- [ ] Screen reader compatibility
+- [ ] WCAG compliance verification
+- [ ] Focus management
+- [ ] ARIA attributes validation
+
+## 🔧 **IMPLEMENTATION STANDARDS**
+
+### Accessibility Test Template
+```typescript
+import { render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, it } from 'vitest'
+import { expectNoA11yViolations } from '@/test/utils/a11y-helpers'
+import { ComponentName } from './ComponentName'
+
+describe('ComponentName Accessibility', () => {
+  it('should have no accessibility violations', async () => {
+    await expectNoA11yViolations(<ComponentName />)
+  })
+  
+  it('should have no accessibility violations with props', async () => {
+    await expectNoA11yViolations(
+      <ComponentName variant="primary" disabled />
+    )
+  })
+  
+  it('should support keyboard navigation', async () => {
+    const user = userEvent.setup()
+    render(<ComponentName />)
+    
+    // Test Tab navigation
+    await user.tab()
+    // Add specific keyboard interaction tests
+  })
+  
+  it('should have proper ARIA attributes', async () => {
+    render(<ComponentName />)
+    // Test specific ARIA requirements for this component
+  })
+})
+```
+
+### A11Y Testing Patterns
+```typescript
+// Test all component states
+await expectNoA11yViolations(<Button />)
+await expectNoA11yViolations(<Button disabled />)
+await expectNoA11yViolations(<Button loading />)
+await expectNoA11yViolations(<Button variant="destructive" />)
+
+// Test with dynamic content
+await expectNoA11yViolations(
+  <Modal open>
+    <ModalContent>Test content</ModalContent>
+  </Modal>
+)
+```
+
+## 🎯 **WCAG COMPLIANCE STANDARDS**
+
+### Required Compliance Level: WCAG 2.1 AA
+- [ ] **Perceivable**: Text alternatives, captions, color contrast
+- [ ] **Operable**: Keyboard accessible, no seizures, navigable
+- [ ] **Understandable**: Readable, predictable functionality
+- [ ] **Robust**: Compatible with assistive technologies
+
+### Specific Test Areas:
+- [ ] **Color Contrast**: Minimum 4.5:1 for normal text, 3:1 for large text
+- [ ] **Keyboard Navigation**: All interactive elements accessible via keyboard
+- [ ] **Focus Management**: Visible focus indicators, logical tab order
+- [ ] **Screen Reader Support**: Proper semantic markup and ARIA labels
+- [ ] **Alternative Text**: Images and icons have appropriate alt text
+
+## 🚀 **TEST EXECUTION & VALIDATION**
+
+### MANDATORY: Run Tests Before Completion
+```bash
+npm run test:a11y
+npm run test:coverage
+```
+
+### Test Results Requirements
+- [ ] ALL accessibility tests must pass
+- [ ] No WCAG violations detected
+- [ ] Keyboard navigation works correctly
+- [ ] Screen reader compatibility verified
+
+## 📝 **DELIVERABLES CHECKLIST**
+
+**YOU MUST PROVIDE:**
+- [ ] **Accessibility test file** (`.a11y.test.tsx`) for each UI component
+- [ ] **Test execution results** showing all a11y tests pass
+- [ ] **WCAG compliance verification** for each component
+- [ ] **Keyboard navigation testing** results
+- [ ] **Complete inventory** of all UI components analyzed
+
+## 🚨 **QUALITY GATES**
+
+### Before Completion, Verify:
+- [ ] All UI components have separate `.a11y.test.tsx` files
+- [ ] All tests use `expectNoA11yViolations()` from vitest-axe
+- [ ] Keyboard navigation is tested for interactive components
+- [ ] All accessibility tests pass without violations
+- [ ] Components meet WCAG 2.1 AA standards
+
+### Failure Conditions (Must Fix):
+- ❌ Any accessibility violations detected
+- ❌ Missing accessibility tests for UI components
+- ❌ Keyboard navigation failures
+- ❌ WCAG compliance violations
+
+## 💡 **USAGE EXAMPLES**
+
+```
+Create accessibility tests following .cursor/prompts/test/test-create-a11y.mdc for src/components/ui/Button.tsx
+```
+
+```
+Create complete a11y test suite following .cursor/prompts/test/test-create-a11y.mdc for all components in src/components/forms/
+```
+
+---
+
+**Goal: Ensure all UI components are accessible to users with disabilities and comply with WCAG 2.1 AA standards.**

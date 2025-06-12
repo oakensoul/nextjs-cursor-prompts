@@ -1,0 +1,279 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Prompt Quality Review Guide
+
+**This prompt provides comprehensive quality assessment for existing prompts, measuring compliance with established standards and offering specific improvement recommendations.**
+
+## 🎯 **REVIEW OBJECTIVES:**
+
+1. **ASSESS standards compliance** against established prompt engineering guidelines
+2. **MEASURE quality metrics** for clarity, completeness, and effectiveness
+3. **IDENTIFY improvement opportunities** for better outcomes
+4. **ENSURE consistency** with project documentation standards
+5. **PROVIDE actionable recommendations** for enhancement
+
+## 📋 **COMPREHENSIVE REVIEW PROCESS:**
+
+### **STEP 1: Standards Compliance Assessment**
+
+#### **Prompt Standards Compliance (docs/standards/standards-prompt.md):**
+- [ ] **Frontmatter completeness** - All required YAML fields present and accurate
+- [ ] **Title clarity** - Descriptive and follows naming conventions
+- [ ] **Description accuracy** - Clear, concise explanation of purpose
+- [ ] **Tag appropriateness** - Relevant, discoverable tags used
+- [ ] **Version tracking** - Proper semantic versioning
+- [ ] **Usage instructions** - Clear guidance on when/how to apply
+- [ ] **Audience targeting** - Appropriate for intended users
+- [ ] **Scope definition** - Clear boundaries and applicability
+
+#### **Content Structure Quality:**
+- [ ] **Clear objective statement** - Purpose is immediately obvious
+- [ ] **Logical organization** - Information flows naturally
+- [ ] **Actionable instructions** - Steps are concrete and executable
+- [ ] **Complete coverage** - No missing critical information
+- [ ] **Appropriate depth** - Right level of detail for complexity
+- [ ] **Consistency** - Terminology and formatting are uniform
+
+#### **Integration with Project Standards:**
+- [ ] **Coding standards alignment** (docs/standards/standards-coding.md) - References current practices
+- [ ] **Testing standards integration** (docs/standards/standards-testing.md) - Includes appropriate testing guidance
+- [ ] **Architecture standards compliance** (docs/standards/standards-architecture.md) - Follows established patterns
+- [ ] **Git standards incorporation** (docs/standards/standards-git.md) - Includes workflow considerations
+
+### **STEP 2: Quality Metrics Assessment**
+
+#### **Clarity & Readability (Score: /10):**
+- **Language precision** - Terms are specific and unambiguous
+- **Instruction clarity** - Steps are easy to understand and follow
+- **Example quality** - Examples are relevant and helpful
+- **Visual organization** - Headers, bullets, formatting aid comprehension
+- **Terminology consistency** - Same concepts use same terms throughout
+
+#### **Completeness & Coverage (Score: /10):**
+- **Scope coverage** - All aspects of the stated scope are addressed
+- **Edge case consideration** - Common variations and exceptions are covered
+- **Prerequisites identification** - Dependencies and setup requirements are clear
+- **Success criteria** - Clear definition of successful completion
+- **Error handling** - Guidance for when things go wrong
+
+#### **Effectiveness & Usability (Score: /10):**
+- **Practical applicability** - Instructions can be realistically followed
+- **Outcome predictability** - Following the prompt leads to expected results
+- **User experience** - Easy to navigate and use
+- **Flexibility** - Adaptable to different contexts within scope
+- **Maintenance burden** - Doesn't require frequent updates
+
+#### **Technical Accuracy (Score: /10):**
+- **Current technology alignment** - Uses up-to-date practices and tools
+- **Best practices integration** - Incorporates established industry standards
+- **Security considerations** - Includes appropriate security guidance
+- **Performance awareness** - Considers performance implications
+- **Error prevention** - Helps avoid common mistakes
+
+### **STEP 3: Detailed Content Analysis**
+
+#### **Frontmatter Quality Review:**
+```yaml
+---
+title: [Evaluate: Descriptive? Follows naming conventions?]
+description: [Evaluate: Clear? Concise? Accurate scope?]
+tags: [Evaluate: Relevant? Discoverable? Properly categorized?]
+version: [Evaluate: Follows semantic versioning?]
+lastUpdated: [Evaluate: Current? Reflects recent changes?]
+usage: [Evaluate: Clear when/how to use?]
+audience: [Evaluate: Appropriate targeting?]
+scope: [Evaluate: Clear boundaries?]
+---
+```
+
+#### **Content Structure Analysis:**
+- **Opening statement** - Does it clearly communicate purpose and value?
+- **Section organization** - Are topics logically grouped and sequenced?
+- **Instruction specificity** - Are steps concrete enough to execute?
+- **Example integration** - Do examples effectively illustrate concepts?
+- **Reference completeness** - Are all necessary external references included?
+
+#### **Language & Tone Evaluation:**
+- **Professional consistency** - Maintains appropriate professional tone
+- **Action-oriented** - Uses imperative voice for clear direction
+- **Inclusive language** - Avoids assumptions about user experience level
+- **Consistent terminology** - Key terms are defined and used consistently
+- **Appropriate complexity** - Language matches intended audience
+
+### **STEP 4: Standards Integration Assessment**
+
+#### **Coding Standards Integration:**
+- Does the prompt reference current TypeScript/NextJS best practices?
+- Are security considerations appropriately integrated?
+- Does it promote proper error handling and validation?
+- Are performance implications addressed?
+- Does it encourage accessible development practices?
+
+#### **Testing Standards Integration:**
+- Does the prompt include testing guidance where appropriate?
+- Are test-driven approaches encouraged for suitable scenarios?
+- Does it reference appropriate testing tools and frameworks?
+- Are quality gates and coverage expectations clear?
+
+#### **Architecture Standards Integration:**
+- Does the prompt align with established NextJS App Router patterns?
+- Are component organization principles reflected?
+- Does it promote proper separation of concerns?
+- Are data flow patterns consistent with architecture guidelines?
+
+#### **Git Standards Integration:**
+- Does the prompt consider commit and branching implications?
+- Are code review considerations included where relevant?
+- Does it promote proper documentation practices?
+- Are deployment and release considerations addressed?
+
+## 📊 **QUALITY SCORING FRAMEWORK:**
+
+### **Overall Quality Score Calculation:**
+- **Standards Compliance**: 25% (Frontmatter, Structure, Integration)
+- **Clarity & Readability**: 25% (Language, Organization, Examples)
+- **Completeness & Coverage**: 25% (Scope, Edge Cases, Prerequisites)
+- **Effectiveness & Usability**: 25% (Practical Application, User Experience)
+
+### **Quality Grade Scale:**
+- **90-100**: Exceptional - Ready for production use, exemplary quality
+- **80-89**: Excellent - High quality with minor improvement opportunities
+- **70-79**: Good - Solid foundation with some enhancement needed
+- **60-69**: Adequate - Functional but needs significant improvement
+- **50-59**: Poor - Major issues requiring substantial revision
+- **Below 50**: Inadequate - Requires complete restructuring
+
+## 🔍 **DETAILED REVIEW DELIVERABLES:**
+
+### **1. Executive Summary**
+- Overall quality score and grade
+- Key strengths and primary concerns
+- Priority improvement recommendations
+- Compliance status with project standards
+
+### **2. Detailed Findings Report**
+
+#### **Strengths Identified:**
+- What the prompt does exceptionally well
+- Particularly effective sections or approaches
+- Good examples of standards compliance
+- User experience highlights
+
+#### **Issues and Gaps:**
+- Missing or incomplete sections
+- Standards compliance violations
+- Clarity or usability problems
+- Technical accuracy concerns
+
+#### **Improvement Opportunities:**
+- Specific, actionable enhancement suggestions
+- Priority ranking of recommended changes
+- Effort estimation for implementing improvements
+- Expected impact of each improvement
+
+### **3. Standards Compliance Checklist**
+- Detailed checklist showing compliance status for each standard
+- Specific citations of violations or gaps
+- Recommendations for achieving full compliance
+
+### **4. Recommendations for Enhancement**
+
+#### **High Priority (Critical):**
+- Issues that significantly impact usability or correctness
+- Standards violations that affect consistency
+- Missing critical information or guidance
+
+#### **Medium Priority (Important):**
+- Improvements that would enhance user experience
+- Opportunities to better align with best practices
+- Clarity enhancements for complex sections
+
+#### **Low Priority (Nice to Have):**
+- Polish and refinement opportunities
+- Additional examples or explanations
+- Enhanced formatting or organization
+
+## 📋 **REVIEW EXECUTION TEMPLATE:**
+
+### **Prompt(s) Under Review:**
+[Specify the prompt file(s) or folder being reviewed]
+
+### **Review Context:**
+- Purpose of the review (quality check, standards update, etc.)
+- Specific standards or criteria to emphasize
+- Target audience considerations
+- Integration requirements
+
+### **Quality Assessment Results:**
+
+#### **Standards Compliance Score: ___/100**
+- Frontmatter quality: ___/25
+- Content structure: ___/25  
+- Project integration: ___/25
+- Documentation alignment: ___/25
+
+#### **Content Quality Score: ___/100**
+- Clarity & readability: ___/25
+- Completeness & coverage: ___/25
+- Effectiveness & usability: ___/25
+- Technical accuracy: ___/25
+
+#### **Overall Quality Grade: ___**
+
+### **Detailed Findings:**
+
+#### **✅ Strengths:**
+[List specific strengths and effective elements]
+
+#### **❌ Issues Identified:**
+[List specific problems, gaps, or violations]
+
+#### **🔧 Improvement Recommendations:**
+[Prioritized list of specific, actionable improvements]
+
+### **Standards Compliance Summary:**
+- [ ] Prompt standards compliant
+- [ ] Coding standards integrated
+- [ ] Testing standards referenced
+- [ ] Architecture standards aligned
+- [ ] Git standards considered
+
+### **Next Steps:**
+[Specific recommendations for improvement implementation]
+
+## 🚨 **QUALITY RED FLAGS:**
+
+**Stop and flag for immediate attention if:**
+- Prompt contains factually incorrect information
+- Instructions could lead to security vulnerabilities
+- Guidance contradicts established project standards
+- Content is significantly outdated (>6 months for tech content)
+- User experience is severely compromised
+- Prompt scope extends far beyond stated boundaries
+
+## 💡 **REVIEW BEST PRACTICES:**
+
+### **Approach:**
+- Review with fresh eyes, as if seeing the prompt for the first time
+- Consider multiple user skill levels and contexts
+- Test instructions mentally or practically when possible
+- Compare against similar, high-quality prompts
+
+### **Focus Areas:**
+- Does this prompt actually solve the problem it claims to solve?
+- Would a developer new to the project be able to follow it successfully?
+- Does it integrate well with the rest of the prompt collection?
+- Is it maintainable and likely to remain current?
+
+### **Documentation:**
+- Provide specific examples of issues rather than vague criticism
+- Suggest concrete improvements with rationale
+- Reference specific standards documents when citing violations
+- Balance criticism with recognition of effective elements
+
+---
+
+**This review process ensures prompts meet high standards for quality, usability, and integration with project practices, creating a consistently excellent prompt engineering experience.**

@@ -1,0 +1,216 @@
+---
+description: This rule applies when refactoring existing code to improve quality, adopt new patterns, or integrate with newly created functionality.
+globs: 
+alwaysApply: false
+---
+# Code Refactoring Rule
+
+**This rule applies when refactoring existing code to improve quality, adopt new patterns, or integrate with newly created functionality.**
+
+## 🎯 **REFACTORING PRINCIPLES:**
+
+1. **PRESERVE FUNCTIONALITY** - External behavior must remain identical
+2. **IMPROVE INCREMENTALLY** - Make steady, measurable improvements
+3. **MAINTAIN TESTABILITY** - Keep or improve test coverage
+4. **FOLLOW EXISTING PATTERNS** - Adopt established project conventions
+5. **REDUCE COMPLEXITY** - Simplify without breaking existing contracts
+
+## 🚫 **FORBIDDEN ACTIONS:**
+
+1. **DO NOT change external APIs** or public interfaces without explicit approval
+2. **DO NOT break existing functionality** or user-facing behavior
+3. **DO NOT refactor without tests** - ensure test coverage exists or create it first
+4. **DO NOT make massive changes** in a single refactoring session
+5. **DO NOT introduce new dependencies** unless necessary for the improvement
+6. **DO NOT refactor multiple concerns** simultaneously (separate data flow from UI changes)
+7. **DO NOT remove error handling** or validation without replacement
+8. **DO NOT change business logic** while refactoring structure
+
+## ✅ **ENCOURAGED ACTIONS:**
+
+1. **EXTRACT reusable components** and utilities from duplicated code
+2. **CONSOLIDATE similar patterns** into consistent implementations
+3. **IMPROVE naming** to be more descriptive and intention-revealing
+4. **ENHANCE error handling** and edge case management
+5. **OPTIMIZE data flow** and state management patterns
+6. **STRENGTHEN type safety** and validation
+7. **SIMPLIFY complex functions** by breaking them into smaller, focused units
+8. **ADOPT project standards** and established patterns
+
+## 🏗️ **BUILT-IN ARCHITECTURAL REQUIREMENTS:**
+
+- **Follow NextJS App Router patterns** - use app directory structure, proper layouts
+- **Maintain server/client boundaries** - use 'use client' appropriately, avoid server-side DOM
+- **Implement proper error boundaries** - handle errors at appropriate component levels
+- **Follow established folder structure** - components, utils, hooks, types in standard locations
+- **Use consistent naming conventions** - kebab-case files, PascalCase components
+
+## 📚 **BUILT-IN DOCUMENTATION REQUIREMENTS:**
+
+- **Update JSDoc comments** - document public functions and complex logic
+- **Maintain README sections** - update relevant documentation for major changes
+- **Document API changes** - update OpenAPI specs or API documentation
+- **Add code comments** - explain business logic and non-obvious decisions
+- **Update type definitions** - ensure interfaces reflect actual implementation
+
+## 🔄 **BUILT-IN BACKWARD COMPATIBILITY REQUIREMENTS:**
+
+- **Preserve existing APIs** - maintain function signatures and component props
+- **Add deprecation warnings** - for features being phased out
+- **Provide migration paths** - clear upgrade instructions for breaking changes
+- **Maintain data contracts** - preserve database and API response structures
+- **Version breaking changes** - use proper semantic versioning
+
+## 📊 **BUILT-IN PERFORMANCE MEASUREMENT REQUIREMENTS:**
+
+- **Benchmark before refactoring** - establish baseline performance metrics
+- **Monitor bundle size changes** - track impact on application size
+- **Measure render performance** - verify component optimization effectiveness
+- **Test with production data** - ensure refactoring works at scale
+- **Document performance improvements** - quantify gains from refactoring
+
+## 📋 **REFACTORING PROCESS:**
+
+### 1. **Assessment Phase**
+- **Identify the refactoring scope** - what needs to change and why
+- **Verify test coverage** - ensure existing functionality has adequate tests
+- **Document current behavior** - understand what must be preserved
+- **Plan incremental steps** - break large refactorings into smaller chunks
+
+### 2. **Safety Preparation**
+- **Ensure tests pass** - establish green baseline
+- **Add missing tests** - cover any untested critical paths
+- **Identify integration points** - understand dependencies and consumers
+- **Plan rollback strategy** - know how to revert if needed
+
+### 3. **Incremental Implementation**
+- **Make one change at a time** - refactor in small, verifiable steps
+- **Test after each step** - ensure functionality remains intact
+- **Commit frequently** - create restore points for each working state
+- **Validate assumptions** - check that improvements actually improve the code
+
+### 4. **Validation & Cleanup**
+- **Run full test suite** - verify all functionality works
+- **Check performance impact** - ensure refactoring doesn't degrade performance
+- **Update documentation** - reflect any interface or usage changes
+- **Remove dead code** - clean up unused functions and imports
+
+## 🎯 **REFACTORING SCOPE GUIDELINES:**
+
+### **Good Refactoring Targets:**
+- **Duplicated code** → Extract shared utilities
+- **Large functions** → Break into smaller, focused functions
+- **Unclear naming** → Use descriptive, intention-revealing names
+- **Inconsistent patterns** → Adopt established project conventions
+- **Missing error handling** → Add comprehensive error management
+- **Poor separation of concerns** → Separate data, logic, and presentation
+- **Outdated patterns** → Upgrade to current project standards
+
+### **Approach with Caution:**
+- **Database schema changes** → Requires migration strategy
+- **External API interfaces** → May break consumers
+- **Shared utility functions** → May impact multiple modules
+- **Core business logic** → High risk of breaking functionality
+- **Performance-critical paths** → Requires careful benchmarking
+
+### **Avoid Refactoring:**
+- **Code that works and rarely changes** → Leave stable code alone
+- **Legacy integrations** → May have hidden dependencies
+- **Code you don't understand** → Learn it first, then refactor
+- **Multiple concerns simultaneously** → Separate into different refactoring sessions
+
+## 🔍 **QUALITY CHECKPOINTS:**
+
+### **Before Starting:**
+- [ ] Current functionality is well-tested
+- [ ] Refactoring goals are clearly defined
+- [ ] Scope is appropriately limited
+- [ ] Rollback plan is identified
+
+### **During Refactoring:**
+- [ ] Each change maintains functionality
+- [ ] Tests continue to pass
+- [ ] Progress is incremental and measurable
+- [ ] Changes follow project patterns
+
+### **After Completion:**
+- [ ] All tests pass (unit, integration, e2e)
+- [ ] Performance is maintained or improved
+- [ ] Code is more readable/maintainable
+- [ ] Documentation is updated
+
+## 💡 **APPLICATION EXAMPLES:**
+
+### **Example 1: Adopting New Component Pattern**
+```
+Refactor the user profile components to use the new UserCard component we just created.
+
+Apply .cursor/rules/code-change-refactor.mdc - maintain existing functionality while consolidating the profile display logic into the new component pattern.
+```
+
+### **Example 2: Improving Error Handling**
+```
+Refactor the authentication flow to use the new error handling patterns.
+
+Apply .cursor/rules/code-change-refactor.mdc - preserve existing auth behavior while improving error management and user feedback.
+```
+
+### **Example 3: Extracting Shared Logic**
+```
+Refactor the form validation logic across the app to use the new validation utilities.
+
+Apply .cursor/rules/code-change-refactor.mdc - maintain existing validation behavior while consolidating logic into shared utilities.
+```
+
+## 🚨 **ESCALATION TRIGGERS:**
+
+Stop and ask for guidance if:
+- **Refactoring scope expands** beyond the original plan
+- **Tests start failing** and the cause isn't immediately clear
+- **Performance degrades** significantly
+- **External interfaces need modification** to complete the refactoring
+- **Business logic changes** are required for the refactoring
+- **Multiple team members** are affected by the changes
+
+## 🔧 **REFACTORING STRATEGIES:**
+
+### **The Strangler Fig Pattern**
+Gradually replace old code by building new functionality alongside it, then removing the old code once the new is proven.
+
+### **Extract and Replace**
+1. Extract the logic into a new function/component
+2. Test the extracted functionality
+3. Replace old usage with new implementation
+4. Remove the old code
+
+### **Parallel Implementation**
+1. Build new implementation alongside old
+2. Add feature flag or gradual rollout
+3. Validate new implementation in production
+4. Switch over and remove old implementation
+
+### **Incremental Migration**
+1. Identify migration units (files, components, modules)
+2. Migrate one unit at a time
+3. Test each migration thoroughly
+4. Update all consumers of the migrated unit
+
+## 🔄 **REFACTORING vs. REWRITING:**
+
+### **Choose Refactoring When:**
+- Core functionality works correctly
+- Architecture is fundamentally sound
+- Changes can be made incrementally
+- Risk tolerance is low
+- Timeline is flexible
+
+### **Consider Rewriting When:**
+- Architecture is fundamentally flawed
+- Technical debt is overwhelming
+- Performance issues are architectural
+- Maintenance cost exceeds rewrite cost
+- Technology stack is obsolete
+
+---
+
+**This rule ensures refactoring improves code quality safely while maintaining the reliability users depend on.**

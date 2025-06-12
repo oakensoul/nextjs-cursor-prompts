@@ -1,0 +1,262 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Database Safety Rule
+
+**This rule enforces safe practices for database operations that could cause data loss, corruption, or application downtime.**
+
+## 🎯 **DATABASE SAFETY PRINCIPLES:**
+
+1. **BACKUP FIRST** - Always have a recovery plan
+2. **TEST MIGRATIONS** - Verify on non-production data
+3. **ROLLBACK READY** - Ensure reversible operations
+4. **VALIDATE CONSTRAINTS** - Check data integrity
+5. **MONITOR PERFORMANCE** - Watch for blocking operations
+
+## 🚫 **FORBIDDEN ACTIONS:**
+
+1. **DO NOT modify production database** without tested migration
+2. **DO NOT drop columns or tables** without explicit backup verification
+3. **DO NOT run migrations** during peak traffic hours
+4. **DO NOT ignore foreign key constraints** or data relationships
+5. **DO NOT use raw SQL** without parameterized queries
+6. **DO NOT modify schema** without updating application code
+7. **DO NOT skip migration testing** on realistic data volumes
+8. **DO NOT create migrations** that lock tables for extended periods
+
+## ✅ **REQUIRED SAFETY MEASURES:**
+
+### **🔒 SECURITY REQUIREMENTS:**
+- **Use parameterized queries** - prevent SQL injection attacks
+- **Validate all inputs** - sanitize user data before database operations
+- **Implement proper permissions** - least privilege access for database users
+- **Audit sensitive operations** - log data access and modifications
+- **Encrypt sensitive data** - protect PII and financial information
+
+### **🔄 MIGRATION REQUIREMENTS:**
+- **Write reversible migrations** - provide both up and down migrations
+- **Test on realistic data** - verify with production-sized datasets
+- **Check for blocking operations** - avoid long-running locks
+- **Validate data integrity** - ensure referential integrity after migration
+- **Document breaking changes** - explain impact on application code
+
+### **📊 PERFORMANCE REQUIREMENTS:**
+- **Index new columns** - ensure queries remain performant
+- **Monitor query performance** - watch for N+1 queries and slow operations
+- **Use connection pooling** - prevent connection exhaustion
+- **Implement timeouts** - avoid hanging database connections
+- **Batch large operations** - process bulk changes in chunks
+
+### **🛡️ DATA INTEGRITY REQUIREMENTS:**
+- **Validate constraints** - ensure foreign keys and unique constraints
+- **Check data consistency** - verify business rules after changes
+- **Handle concurrent access** - use appropriate transaction isolation
+- **Implement soft deletes** - preserve data for audit and recovery
+- **Version sensitive records** - track changes to critical data
+
+## 📋 **DATABASE OPERATION PROCESS:**
+
+### **1. PLANNING PHASE**
+- **Assess impact** - identify affected tables, relationships, and queries
+- **Plan rollback strategy** - prepare reversal steps before starting
+- **Schedule downtime** - coordinate with stakeholders for maintenance windows
+- **Prepare monitoring** - set up alerts for performance degradation
+
+### **2. PREPARATION PHASE**
+- **Backup production data** - create verified, restorable backups
+- **Create test environment** - replicate production data structure and volume
+- **Write migration scripts** - include both forward and reverse operations
+- **Test thoroughly** - verify migrations work with realistic data
+
+### **3. EXECUTION PHASE**
+- **Start with development** - test migration in dev environment first
+- **Progress to staging** - validate with production-like data
+- **Monitor during execution** - watch for locks, performance issues
+- **Validate immediately** - check data integrity after completion
+
+### **4. VERIFICATION PHASE**
+- **Run integrity checks** - verify all constraints and relationships
+- **Test application functionality** - ensure all features work correctly
+- **Monitor performance** - watch for degradation after changes
+- **Document results** - record outcomes and lessons learned
+
+## 🎯 **MIGRATION SAFETY GUIDELINES:**
+
+### **SAFE MIGRATION PATTERNS:**
+
+#### **Adding Columns:**
+```sql
+-- ✅ Safe: Add nullable column
+ALTER TABLE users ADD COLUMN phone VARCHAR(20);
+
+-- ✅ Safe: Add column with default
+ALTER TABLE users ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+-- ❌ Risky: Add NOT NULL column without default
+ALTER TABLE users ADD COLUMN email VARCHAR(255) NOT NULL;
+```
+
+#### **Removing Columns:**
+```sql
+-- ✅ Safe: Two-phase removal
+-- Phase 1: Stop using column in application
+-- Phase 2: Remove column after verification
+ALTER TABLE users DROP COLUMN old_field;
+
+-- ❌ Risky: Immediate removal
+-- Don't drop columns without application update
+```
+
+#### **Renaming Columns:**
+```sql
+-- ✅ Safe: Three-phase approach
+-- Phase 1: Add new column
+ALTER TABLE users ADD COLUMN email_address VARCHAR(255);
+
+-- Phase 2: Copy data and update application
+UPDATE users SET email_address = email;
+
+-- Phase 3: Remove old column after verification
+ALTER TABLE users DROP COLUMN email;
+```
+
+### **INDEX MANAGEMENT:**
+```sql
+-- ✅ Safe: Create index concurrently (PostgreSQL)
+CREATE INDEX CONCURRENTLY idx_users_email ON users(email);
+
+-- ✅ Safe: Drop unused indexes
+DROP INDEX idx_old_column;
+
+-- ❌ Risky: Create blocking index on large table
+CREATE INDEX idx_users_email ON users(email);
+```
+
+## 🔍 **DATA OPERATION SAFETY:**
+
+### **BULK OPERATIONS:**
+```typescript
+// ✅ Safe: Batch processing
+async function bulkUpdateUsers(updates: UserUpdate[]) {
+  const batchSize = 100;
+  for (let i = 0; i < updates.length; i += batchSize) {
+    const batch = updates.slice(i, i + batchSize);
+    await db.transaction(async (tx) => {
+      for (const update of batch) {
+        await tx.user.update({
+          where: { id: update.id },
+          data: update.data
+        });
+      }
+    });
+  }
+}
+
+// ❌ Risky: Single large transaction
+async function bulkUpdateUsersRisky(updates: UserUpdate[]) {
+  await db.transaction(async (tx) => {
+    for (const update of updates) {
+      await tx.user.update({
+        where: { id: update.id },
+        data: update.data
+      });
+    }
+  });
+}
+```
+
+### **QUERY SAFETY:**
+```typescript
+// ✅ Safe: Parameterized query
+const user = await db.user.findFirst({
+  where: { email: userEmail }
+});
+
+// ✅ Safe: Input validation
+const userId = parseInt(req.params.id);
+if (isNaN(userId)) {
+  throw new Error('Invalid user ID');
+}
+
+// ❌ Risky: SQL injection vulnerability
+const query = `SELECT * FROM users WHERE email = '${userEmail}'`;
+```
+
+## 💡 **DATABASE SAFETY EXAMPLES:**
+
+### **Example 1: Schema Migration**
+```
+Add user preferences table and migrate existing settings
+
+Apply .cursor/rules/database-safe.mdc - create reversible migration, test with production data volume, ensure foreign key constraints are properly handled.
+```
+
+### **Example 2: Data Cleanup Operation**
+```
+Remove orphaned records from orders table
+
+Apply .cursor/rules/database-safe.mdc - backup affected data, run in batches, verify referential integrity before and after cleanup.
+```
+
+### **Example 3: Performance Optimization**
+```
+Add indexes to improve dashboard query performance
+
+Apply .cursor/rules/database-safe.mdc - create indexes concurrently, monitor impact on write operations, measure performance improvement.
+```
+
+## 🚨 **ESCALATION TRIGGERS:**
+
+Stop and ask for guidance if:
+- **Migration affects millions of records** - requires special planning
+- **Operation locks critical tables** - may cause application downtime  
+- **Data relationships are unclear** - risk of orphaned or corrupted data
+- **Performance impact is unknown** - could degrade application performance
+- **Rollback strategy is complex** - difficult to reverse changes
+- **Multiple applications** use the same database tables
+
+## 🔧 **DATABASE SAFETY TOOLS:**
+
+### **Migration Tools:**
+- **Prisma migrate** - Schema version control and deployment
+- **Flyway/Liquibase** - Database migration frameworks
+- **Custom scripts** - Application-specific migration logic
+
+### **Backup Tools:**
+- **pg_dump/mysqldump** - Database-specific backup utilities
+- **Cloud backups** - Automated cloud provider backups
+- **Point-in-time recovery** - Transaction log backups
+
+### **Monitoring Tools:**
+- **Query performance** - Slow query logs and monitoring
+- **Connection monitoring** - Track connection usage and pools
+- **Lock monitoring** - Detect blocking operations
+
+### **Testing Tools:**
+- **Database seeding** - Realistic test data generation
+- **Migration testing** - Automated migration verification
+- **Load testing** - Performance impact assessment
+
+## 📊 **SAFETY CHECKLISTS:**
+
+### **Pre-Migration Checklist:**
+- [ ] Backup verified and tested
+- [ ] Migration tested on staging with production data volume
+- [ ] Rollback procedure documented and tested
+- [ ] Application code updated to handle schema changes
+- [ ] Performance impact assessed
+- [ ] Maintenance window scheduled
+
+### **Post-Migration Checklist:**
+- [ ] All tests passing
+- [ ] Data integrity verified
+- [ ] Performance monitoring shows no degradation
+- [ ] Application functionality confirmed
+- [ ] Rollback procedure still available
+- [ ] Documentation updated
+
+---
+
+**This rule ensures database operations maintain data integrity and application availability while enabling safe evolution of the data layer.**

@@ -1,0 +1,471 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# SEO Quality Audit & Optimization
+
+**IMPORTANT: This prompt requires completing ALL applicable SEO audit tasks listed below. Do not skip any sections without explicitly explaining why.**
+
+**FOLLOW MINIMAL CHANGE PRINCIPLES: When optimizing SEO, preserve existing functionality and user experience. Focus on enhancing discoverability without breaking existing features.**
+
+Please conduct a comprehensive SEO audit of the specified code/pages and ensure they meet modern SEO standards and best practices. Based on the content type and functionality, determine which tasks are applicable:
+
+## 🎯 **CORE SEO AUDIT OBJECTIVES:**
+
+1. **AUDIT technical SEO** implementation and compliance
+2. **OPTIMIZE meta tags** and structured data for search engines
+3. **ENHANCE content discoverability** and search rankings
+4. **ENSURE accessibility** supports SEO performance
+5. **VALIDATE performance** metrics affecting SEO scores
+6. **IMPLEMENT structured data** for rich search results
+
+## 📋 **SEO AUDIT PROCESS:**
+
+### **STEP 1: Technical SEO Audit**
+
+#### **Meta Tags Analysis:**
+- **Title tags** - Unique, descriptive, 50-60 characters optimal
+- **Meta descriptions** - Compelling, 150-160 characters, include keywords
+- **Open Graph tags** - Complete social media sharing optimization
+- **Twitter Cards** - Proper card type and metadata
+- **Canonical URLs** - Prevent duplicate content issues
+- **Robot directives** - Appropriate index/noindex, follow/nofollow
+- **Viewport meta** - Mobile-first responsive configuration
+- **Charset declaration** - UTF-8 encoding specification
+
+#### **URL Structure Review:**
+- **Clean URLs** - Semantic, keyword-rich, hierarchical structure
+- **URL parameters** - Minimize query strings, use semantic paths
+- **Trailing slashes** - Consistent handling across site
+- **Redirects** - Proper 301/302 usage, avoid redirect chains
+- **HTTPS enforcement** - SSL implementation and security headers
+
+#### **Technical Implementation:**
+- **XML sitemaps** - Complete, up-to-date, submitted to search engines
+- **Robots.txt** - Proper directives, accessible, not blocking important content
+- **Schema markup** - Structured data for rich snippets
+- **Internal linking** - Strategic link architecture and anchor text
+- **Image optimization** - Alt tags, proper sizing, modern formats
+- **Core Web Vitals** - LCP, FID, CLS performance metrics
+
+### **STEP 2: Content Optimization**
+
+#### **Content Structure:**
+- **Heading hierarchy** - Proper H1-H6 usage, semantic structure
+- **Keyword optimization** - Natural integration, avoid stuffing
+- **Content length** - Appropriate depth for topic coverage
+- **Readability** - Clear, scannable, user-focused content
+- **Duplicate content** - Identify and resolve duplication issues
+- **Content freshness** - Update strategies and evergreen optimization
+
+#### **Semantic HTML:**
+- **Proper element usage** - Semantic tags (article, section, nav, etc.)
+- **ARIA labels** - Accessibility attributes supporting SEO
+- **Microformats** - Additional semantic markup where appropriate
+- **Link context** - Descriptive anchor text and proper link structure
+
+### **STEP 3: Performance SEO Audit**
+
+#### **Core Web Vitals Assessment:**
+- **Largest Contentful Paint (LCP)** - Target <2.5 seconds
+- **First Input Delay (FID)** - Target <100 milliseconds  
+- **Cumulative Layout Shift (CLS)** - Target <0.1
+- **First Contentful Paint (FCP)** - Target <1.8 seconds
+- **Time to Interactive (TTI)** - Target <3.8 seconds
+
+#### **Performance Optimization:**
+- **Image optimization** - WebP/AVIF formats, proper sizing, lazy loading
+- **CSS optimization** - Critical CSS inlining, unused CSS removal
+- **JavaScript optimization** - Code splitting, tree shaking, minification
+- **Font optimization** - Font display strategies, subset loading
+- **Caching strategies** - HTTP headers, service workers, CDN usage
+- **Bundle analysis** - Identify and optimize large dependencies
+
+### **STEP 4: Mobile SEO Audit**
+
+#### **Mobile-First Requirements:**
+- **Responsive design** - Proper viewport and media queries
+- **Touch targets** - Minimum 44px sizing for touch elements
+- **Mobile page speed** - Optimized for mobile connection speeds
+- **Mobile usability** - No horizontal scrolling, readable text
+- **AMP implementation** - If applicable, proper AMP setup
+- **Mobile-specific features** - Click-to-call, location services
+
+### **STEP 5: Structured Data Implementation**
+
+#### **Schema.org Markup:**
+- **Organization schema** - Company/brand information
+- **WebSite schema** - Site search box, navigation
+- **Article schema** - Blog posts, news articles
+- **Product schema** - E-commerce products, reviews
+- **LocalBusiness schema** - Location-based businesses
+- **BreadcrumbList schema** - Navigation breadcrumbs
+- **FAQ schema** - Frequently asked questions
+- **Review schema** - Customer reviews and ratings
+
+#### **Rich Results Optimization:**
+- **Featured snippets** - Structure content for snippet capture
+- **Knowledge panels** - Entity optimization and verification
+- **Rich cards** - Product, recipe, event rich results
+- **Sitelinks** - Internal link optimization for search display
+
+## ✅ **SEO STANDARDS & REQUIREMENTS:**
+
+### **Technical Requirements:**
+- [ ] **Unique title tags** - Every page has unique, optimized titles
+- [ ] **Meta descriptions** - Compelling descriptions under 160 characters
+- [ ] **Canonical URLs** - Prevent duplicate content across domains
+- [ ] **SSL certificate** - HTTPS implementation across entire site
+- [ ] **Mobile responsiveness** - Works perfectly on all device sizes
+- [ ] **Fast loading** - Core Web Vitals meet Google standards
+- [ ] **Clean URLs** - Semantic, keyword-rich URL structure
+- [ ] **XML sitemap** - Complete, updated, submitted to search engines
+
+### **Content Requirements:**
+- [ ] **H1 tags** - One unique H1 per page with primary keyword
+- [ ] **Heading hierarchy** - Logical H1-H6 structure throughout
+- [ ] **Alt text** - Descriptive alt tags for all images
+- [ ] **Internal links** - Strategic linking with descriptive anchors
+- [ ] **Original content** - No duplicate content issues
+- [ ] **Keyword optimization** - Natural keyword integration
+- [ ] **Content depth** - Comprehensive coverage of topics
+- [ ] **User intent** - Content matches search intent
+
+### **Structured Data Requirements:**
+- [ ] **Schema markup** - Appropriate structured data implementation
+- [ ] **Validation** - All markup passes Google's structured data testing
+- [ ] **Rich results** - Eligible for enhanced search appearance
+- [ ] **Local SEO** - Location-based schema for applicable businesses
+- [ ] **Product markup** - Complete product information for e-commerce
+- [ ] **Article markup** - Proper news/blog article structured data
+
+## 🔍 **SEO ANALYSIS TOOLS & VALIDATION:**
+
+### **Technical Analysis:**
+```bash
+# Core Web Vitals testing
+npx lighthouse-ci autorun --upload.target=temporary-public-storage
+
+# SEO audit with Lighthouse
+lighthouse --only-categories=seo --output=json --output-path=seo-audit.json [URL]
+
+# Structured data validation
+curl -X GET "https://validator.schema.org/validate?url=[URL]"
+```
+
+### **Performance Testing:**
+```bash
+# WebPageTest analysis
+curl -X POST "https://www.webpagetest.org/runtest.php" \
+  -d "url=[URL]" \
+  -d "runs=3" \
+  -d "location=Dulles:Chrome" \
+  -d "fvonly=1"
+
+# Core Web Vitals field data
+curl "https://chromeuxreport.googleapis.com/v1/records:queryRecord" \
+  -H "Content-Type: application/json" \
+  -d '{"url": "[URL]"}'
+```
+
+### **SEO Validation Checklist:**
+- [ ] **Google Search Console** - No crawl errors or warnings
+- [ ] **Lighthouse SEO score** - 90+ score on all tested pages
+- [ ] **Rich Results Test** - All structured data validates successfully
+- [ ] **Mobile-Friendly Test** - Passes Google's mobile usability test
+- [ ] **PageSpeed Insights** - Green scores for mobile and desktop
+- [ ] **Schema Validator** - All markup validates without errors
+
+## 🚨 **COMMON SEO PITFALLS TO AVOID:**
+
+### **Technical Issues:**
+- **Duplicate title tags** - Each page must have unique titles
+- **Missing meta descriptions** - Every page needs compelling descriptions
+- **Broken internal links** - Regular link auditing and fixing
+- **Slow page speed** - Monitor and optimize Core Web Vitals
+- **Mobile usability issues** - Ensure proper responsive design
+- **Missing SSL certificate** - HTTPS is required for modern SEO
+- **Crawl errors** - Regular monitoring in Search Console
+- **Orphaned pages** - Ensure all important pages are linked
+
+### **Content Problems:**
+- **Keyword stuffing** - Natural keyword integration only
+- **Thin content** - Provide comprehensive, valuable content
+- **Duplicate content** - Use canonical tags and unique content
+- **Poor heading structure** - Logical H1-H6 hierarchy
+- **Missing alt text** - All images need descriptive alt attributes
+- **Weak internal linking** - Strategic link building within site
+
+### **Structured Data Mistakes:**
+- **Invalid schema markup** - Always validate before deployment
+- **Incomplete product data** - All required fields for rich results
+- **Wrong schema type** - Use most specific applicable schema
+- **Multiple conflicting schemas** - Avoid redundant markup
+- **Missing required properties** - Check schema.org requirements
+
+## 💡 **SEO IMPLEMENTATION EXAMPLES:**
+
+### **Next.js App Router SEO Setup:**
+```typescript
+// app/layout.tsx - Root layout SEO
+export const metadata: Metadata = {
+  title: {
+    template: '%s | Brand Name',
+    default: 'Default Page Title - Brand Name'
+  },
+  description: 'Default meta description for the website',
+  keywords: ['keyword1', 'keyword2', 'keyword3'],
+  authors: [{ name: 'Author Name' }],
+  creator: 'Brand Name',
+  publisher: 'Brand Name',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://yourdomain.com'),
+  alternates: {
+    canonical: '/',
+    languages: {
+      'en-US': '/en-US',
+      'es-ES': '/es-ES',
+    },
+  },
+  openGraph: {
+    title: 'Default Open Graph Title',
+    description: 'Default Open Graph Description',
+    url: 'https://yourdomain.com',
+    siteName: 'Site Name',
+    images: [
+      {
+        url: 'https://yourdomain.com/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Site Default Image Description',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Default Twitter Title',
+    description: 'Default Twitter Description',
+    images: ['https://yourdomain.com/twitter-image.jpg'],
+    creator: '@twitterhandle',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+}
+```
+
+### **Dynamic Page SEO:**
+```typescript
+// app/blog/[slug]/page.tsx - Dynamic blog post SEO
+import { Metadata } from 'next'
+
+interface Props {
+  params: { slug: string }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const post = await getPostBySlug(params.slug)
+  
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+      description: 'The requested blog post could not be found.',
+    }
+  }
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    keywords: post.tags,
+    authors: [{ name: post.author.name }],
+    publishedTime: post.publishedAt,
+    modifiedTime: post.updatedAt,
+    alternates: {
+      canonical: `/blog/${params.slug}`,
+    },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: 'article',
+      publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt,
+      authors: [post.author.name],
+      images: [
+        {
+          url: post.featuredImage.url,
+          width: post.featuredImage.width,
+          height: post.featuredImage.height,
+          alt: post.featuredImage.alt,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
+      images: [post.featuredImage.url],
+    },
+  }
+}
+```
+
+### **Structured Data Component:**
+```typescript
+// components/StructuredData.tsx
+import { Organization, WebSite, Article } from 'schema-dts'
+
+interface StructuredDataProps {
+  data: Organization | WebSite | Article | any
+}
+
+export function StructuredData({ data }: StructuredDataProps) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(data)
+      }}
+    />
+  )
+}
+
+// Usage examples:
+const organizationSchema: Organization = {
+  '@type': 'Organization',
+  '@id': 'https://yourdomain.com/#organization',
+  name: 'Your Company Name',
+  url: 'https://yourdomain.com',
+  logo: 'https://yourdomain.com/logo.png',
+  description: 'Your company description',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '123 Main St',
+    addressLocality: 'City',
+    addressRegion: 'State',
+    postalCode: '12345',
+    addressCountry: 'US',
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: '+1-555-123-4567',
+    contactType: 'Customer Service',
+  },
+  sameAs: [
+    'https://facebook.com/yourcompany',
+    'https://twitter.com/yourcompany',
+    'https://linkedin.com/company/yourcompany',
+  ],
+}
+
+const articleSchema: Article = {
+  '@type': 'Article',
+  headline: 'Article Title',
+  description: 'Article description',
+  image: 'https://yourdomain.com/article-image.jpg',
+  author: {
+    '@type': 'Person',
+    name: 'Author Name',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Publisher Name',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://yourdomain.com/logo.png',
+    },
+  },
+  datePublished: '2024-01-01',
+  dateModified: '2024-01-15',
+}
+```
+
+## 🔧 **SEO INTEGRATION WITH EXISTING PROMPTS:**
+
+### **Related Quality Prompts:**
+- **Accessibility audit** - `.cursor/prompts/quality/quality-review-accessibility.mdc`
+- **Performance review** - Link performance metrics to SEO impact
+- **Code quality** - Ensure semantic HTML supports SEO objectives
+
+### **Development Integration:**
+- **Component creation** - Include SEO considerations in component design
+- **API development** - Structure data for SEO-friendly responses
+- **Testing strategies** - Include SEO validation in test suites
+
+## 📊 **SEO AUDIT DELIVERABLES:**
+
+**YOU MUST PROVIDE ALL APPLICABLE ITEMS FOR THE SPECIFIED SCOPE:**
+
+### **Technical SEO Analysis:**
+- [ ] **Meta tag audit** - Complete analysis of all meta tags across pages
+- [ ] **URL structure review** - Assessment and recommendations for URL optimization
+- [ ] **Technical implementation** - Schema markup, sitemaps, robots.txt validation
+- [ ] **Performance metrics** - Core Web Vitals analysis and optimization plan
+- [ ] **Mobile optimization** - Mobile-first audit and recommendations
+
+### **Content SEO Review:**
+- [ ] **Content structure** - Heading hierarchy and semantic HTML assessment
+- [ ] **Keyword analysis** - Current keyword usage and optimization opportunities
+- [ ] **Internal linking** - Link architecture review and improvement plan
+- [ ] **Image optimization** - Alt text audit and image SEO recommendations
+
+### **Implementation Recommendations:**
+- [ ] **Priority matrix** - High/medium/low impact changes with effort estimates
+- [ ] **Code examples** - Specific implementation snippets for identified issues
+- [ ] **Testing validation** - SEO testing strategy and validation checkpoints
+- [ ] **Performance benchmarks** - Before/after metrics and success criteria
+- [ ] **Monitoring setup** - Ongoing SEO monitoring and maintenance recommendations
+
+### **Documentation & Reporting:**
+- [ ] **SEO audit report** - Comprehensive findings and recommendations document
+- [ ] **Implementation guide** - Step-by-step optimization instructions
+- [ ] **Success metrics** - KPIs and measurement strategies for SEO improvements
+- [ ] **Maintenance checklist** - Ongoing SEO health monitoring procedures
+
+## 📈 **SUCCESS METRICS & VALIDATION:**
+
+### **Technical Metrics:**
+- **Lighthouse SEO score** - Target 90+ across all audited pages
+- **Core Web Vitals** - All metrics in "Good" range (green)
+- **Mobile usability** - Zero mobile usability issues in Search Console
+- **Structured data** - 100% validation rate for implemented schemas
+- **Crawl efficiency** - Zero crawl errors or blocked resources
+
+### **Search Performance:**
+- **Organic visibility** - Improved search engine rankings for target keywords
+- **Click-through rates** - Enhanced CTR from search results pages
+- **Rich results** - Increased appearance in enhanced search features
+- **Local search** - Improved local pack visibility (if applicable)
+- **Site authority** - Overall domain authority and page authority improvements
+
+## 🚀 **USAGE EXAMPLES:**
+
+```
+Please conduct a comprehensive SEO audit following .cursor/prompts/quality/quality-review-seo.mdc for our homepage at /app/page.tsx
+```
+
+```
+Audit the entire blog system for SEO compliance: /app/blog/ directory and all related components following .cursor/prompts/quality/quality-review-seo.mdc
+```
+
+```
+Perform SEO optimization for our e-commerce product pages following the complete guidelines in .cursor/prompts/quality/quality-review-seo.mdc - focus on /app/products/[id]/ and product components
+```
+
+```
+Full site SEO audit following .cursor/prompts/quality/quality-review-seo.mdc - analyze /app/ directory structure, metadata implementation, and structured data across the entire Next.js application
+```

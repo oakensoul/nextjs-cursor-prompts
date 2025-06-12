@@ -1,0 +1,294 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Git Code Commit Execution Guide
+
+**This prompt handles the commit execution phase - final validation of prepared changes and clean commit execution with proper messaging.**
+
+## 🎯 **COMMIT EXECUTION OBJECTIVES:**
+
+1. **PERFORM final validation** of staged changes and documentation
+2. **EXECUTE commits** following planned strategy from preparation phase
+3. **VERIFY commit integrity** and proper formatting
+4. **HANDLE multiple commits** with appropriate sequencing
+5. **CONFIRM repository state** after commit completion
+
+## 📋 **COMMIT EXECUTION PROCESS:**
+
+### **STEP 1: Pre-Commit Final Validation**
+
+#### **Staged Changes Review:**
+```bash
+# Review what's about to be committed
+git status                    # Overall repository status
+git diff --staged            # Review all staged changes
+git diff --staged --stat     # Summary of staged file changes
+```
+
+#### **Final Quality Checks:**
+```bash
+# Run final validation suite
+npm run precommit           # Project-specific precommit hooks
+npm run lint --staged       # Lint only staged files
+npm run type-check          # TypeScript validation
+npm run test:quick          # Quick test suite (if available)
+```
+
+#### **Pre-Commit Validation Checklist:**
+- [ ] **All required files staged** - Documentation, code, configuration
+- [ ] **No unintended files staged** - No temporary files, logs, or secrets
+- [ ] **Precommit hooks pass** - All automated checks succeed
+- [ ] **Commit messages prepared** - Clear, conventional format planned
+- [ ] **Documentation complete** - Changelog, README, API docs updated
+
+### **STEP 2: Commit Message Validation**
+
+#### **Conventional Commit Format Verification:**
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+#### **Commit Message Quality Standards:**
+- **Subject line** - ≤50 characters, imperative mood, no period
+- **Body** - Wrapped at 72 characters, explains what and why
+- **Footer** - References issues, breaking changes, co-authors
+- **Type accuracy** - Matches actual change type (feat, fix, docs, etc.)
+- **Scope relevance** - Accurately represents affected area
+
+#### **Example Quality Commit Messages:**
+```
+feat(auth): add two-factor authentication support
+
+Implement TOTP-based 2FA using authenticator apps:
+- Add QR code generation for account setup
+- Implement backup codes for account recovery  
+- Add 2FA requirement enforcement for admin users
+- Include comprehensive error handling and user guidance
+
+Closes #234
+BREAKING CHANGE: Admin users must now enable 2FA within 7 days
+```
+
+```
+fix(api): resolve race condition in user session handling
+
+- Add proper locking mechanism for concurrent session updates
+- Implement exponential backoff for session conflict resolution
+- Add monitoring for session-related errors
+- Include unit tests for concurrent access scenarios
+
+Fixes #456
+```
+
+### **STEP 3: Commit Execution Strategy**
+
+#### **Single Commit Execution:**
+```bash
+# For cohesive, single-concern changes
+git commit -m "type(scope): subject
+
+Body explanation...
+
+Footer references"
+```
+
+#### **Multiple Commit Execution:**
+```bash
+# Execute planned commit sequence
+# Commit 1: Core functionality
+git add [specific files for commit 1]
+git commit -m "[commit message 1]"
+
+# Commit 2: Documentation/tests
+git add [specific files for commit 2]  
+git commit -m "[commit message 2]"
+
+# Commit 3: Additional changes
+git add [specific files for commit 3]
+git commit -m "[commit message 3]"
+```
+
+#### **Commit Sequencing Principles:**
+- **Maintain working state** - Each commit should leave code in working condition
+- **Logical progression** - Commits build upon each other naturally
+- **Independent units** - Each commit represents complete, testable change
+- **Dependency order** - Dependencies committed before dependents
+
+### **STEP 4: Commit Verification**
+
+#### **Post-Commit Verification:**
+```bash
+# Verify commit integrity
+git log --oneline -5         # Review recent commit history
+git show HEAD                # Examine the latest commit details
+git status                   # Confirm clean working directory
+```
+
+#### **Commit Quality Verification:**
+- [ ] **Commit hash generated** - Successful commit creation
+- [ ] **Working directory clean** - No uncommitted changes remain
+- [ ] **Commit message format** - Follows conventional commit standards
+- [ ] **File changes accurate** - Committed changes match intention
+- [ ] **Repository state valid** - No corrupted or incomplete commits
+
+### **STEP 5: Multiple Commit Coordination**
+
+#### **Commit Sequence Validation:**
+For multiple commits, verify:
+- [ ] **Each commit builds successfully** - No broken intermediate states
+- [ ] **Commit messages are distinct** - Clear differentiation between commits
+- [ ] **Logical progression maintained** - Story told through commit sequence
+- [ ] **No orphaned changes** - All modifications properly committed
+- [ ] **Documentation distributed appropriately** - Docs with relevant code
+
+#### **Commit History Quality:**
+```bash
+# Review commit sequence
+git log --oneline -10        # Recent commit overview
+git log --graph --oneline    # Visual commit history
+```
+
+## 🔍 **COMMIT EXECUTION STANDARDS:**
+
+### **Commit Message Standards:**
+```
+feat: A new feature for users
+fix: A bug fix for users  
+docs: Documentation only changes
+style: Changes that don't affect code meaning (formatting, etc.)
+refactor: Code change that neither fixes bug nor adds feature
+test: Adding missing tests or correcting existing tests
+chore: Changes to build process or auxiliary tools
+perf: Performance improvements
+ci: Changes to CI configuration files and scripts
+build: Changes that affect the build system or dependencies
+```
+
+### **Commit Size Guidelines:**
+- **Optimal size** - 5-15 files with related changes
+- **Too small** - Single line changes that could be combined
+- **Too large** - >20 files or multiple unrelated concerns
+- **Breaking point** - If you can't write clear commit message, split it
+
+### **Commit Testing Standards:**
+- [ ] **Code compiles** after each commit
+- [ ] **Tests pass** for committed functionality
+- [ ] **Linting clean** for all committed files
+- [ ] **No broken dependencies** introduced
+- [ ] **Documentation matches** committed code
+
+## 📊 **COMMIT EXECUTION DELIVERABLES:**
+
+### **REQUIRED OUTPUTS:**
+
+#### **1. Commit Execution Summary:**
+```markdown
+## Commit Execution Results
+
+**Total commits created**: [number]
+**Repository status**: [clean/pending changes]
+**Final validation**: [PASS/FAIL]
+
+### Commits Created:
+1. **[commit hash]**: [type](scope): [subject]
+   - Files: [list of committed files]
+   - Status: [SUCCESS/FAILED]
+
+2. **[commit hash]**: [type](scope): [subject]
+   - Files: [list of committed files]  
+   - Status: [SUCCESS/FAILED]
+```
+
+#### **2. Pre-Commit Validation Results:**
+```bash
+# Final validation outputs
+✅ npm run precommit     - [PASS/FAIL with details]
+✅ npm run lint          - [PASS/FAIL with details]
+✅ npm run type-check    - [PASS/FAIL with details]
+✅ Git status clean      - [PASS/FAIL with details]
+```
+
+#### **3. Commit Message Verification:**
+```markdown
+## Commit Messages Review
+**Conventional format**: [COMPLIANT/NON-COMPLIANT]
+**Message quality**: [GOOD/NEEDS-IMPROVEMENT]
+**Scope accuracy**: [ACCURATE/INACCURATE]
+
+### Messages Created:
+1. [Full commit message with analysis]
+2. [Full commit message with analysis]
+```
+
+#### **4. Repository State Confirmation:**
+```bash
+# Post-commit repository status
+Working directory: [clean/has changes]
+Staged changes: [none/remaining]
+Recent commits: [list last 3 commits]
+```
+
+## 🚨 **COMMIT EXECUTION RED FLAGS:**
+
+**Stop and address if:**
+- **Precommit hooks fail** - Quality gates not met
+- **Commit message unclear** - Cannot articulate what/why clearly
+- **Mixed concerns in commit** - Multiple unrelated changes together
+- **Breaking intermediate state** - Commit leaves code non-functional
+- **Missing documentation** - Changelog or docs not updated appropriately
+- **Security concerns** - Potential credentials or sensitive data included
+
+## 💡 **COMMIT EXECUTION EXAMPLES:**
+
+### **Example 1: Single Feature Commit**
+```
+Execute commit for new user notification system
+
+Following .cursor/prompts/git/git-code-commit.mdc:
+- Validate: All files staged, precommit passes
+- Message: feat(notifications): add real-time user notifications
+- Execute: Single commit with comprehensive changes
+```
+
+### **Example 2: Multiple Logical Commits**
+```
+Execute planned commit sequence for authentication refactor
+
+Following .cursor/prompts/git/git-code-commit.mdc:
+- Commit 1: refactor(auth): extract authentication utilities
+- Commit 2: feat(auth): add OAuth provider support  
+- Commit 3: docs(auth): update authentication documentation
+```
+
+### **Example 3: Bug Fix with Tests**
+```
+Execute commit for pagination bug fix
+
+Following .cursor/prompts/git/git-code-commit.mdc:
+- Validate: Fix and tests staged together
+- Message: fix(pagination): resolve off-by-one error in page calculation
+- Execute: Single commit with fix and comprehensive tests
+```
+
+## 🔄 **POST-COMMIT NEXT STEPS:**
+
+After successful commit execution:
+1. **Review commit history** - Verify clean, logical progression
+2. **Confirm repository state** - Working directory clean, no pending changes
+3. **Prepare for push phase** - Ready for quality gates and GitHub push
+4. **Document commit outcomes** - Record any lessons learned or issues
+
+### **Integration with Workflow:**
+- **Previous phase**: `.cursor/prompts/git/git-code-prep.mdc` (preparation)
+- **Next phase**: `.cursor/prompts/git/git-code-push.mdc` (push validation)
+- **Full workflow**: `.cursor/prompts/git/git-code-shipit.mdc` (complete automation)
+
+---
+
+**This commit execution phase ensures clean, well-documented commits that maintain repository integrity and support effective collaboration.**

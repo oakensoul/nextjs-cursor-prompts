@@ -1,0 +1,562 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Card Component Creation Request
+
+Please create a new card component following our data display patterns and content organization standards:
+
+## 🎯 **CARD COMPONENT CREATION OBJECTIVES:**
+
+1. **ORGANIZE content effectively** with clear visual hierarchy and structured information display
+2. **PROVIDE flexible composition** with configurable sections and content slots
+3. **IMPLEMENT responsive design** with consistent spacing and mobile-optimized layouts
+4. **ENSURE accessibility** with proper semantic structure and keyboard navigation
+5. **FOLLOW project standards** for TypeScript, testing, and component architecture
+
+## 📋 **CARD DEVELOPMENT METHODOLOGY:**
+
+### **STEP 1: Card Planning and Content Architecture**
+
+#### **Determine Card Type and Location:**
+- **Server Component**: `src/components/server/cards/` - Static content display, data cards
+- **Client Component**: `src/components/client/cards/` - Interactive cards with user actions
+- **Card Categories**:
+  - **Data Cards**: User profiles, statistics, metrics display (`data/`)
+  - **Content Cards**: Articles, posts, media content (`content/`)
+  - **Action Cards**: CTAs, forms, interactive elements (`action/`)
+  - **Product Cards**: E-commerce, catalog items (`product/`)
+  - **Navigation Cards**: Links, menu items, feature highlights (`navigation/`)
+
+#### **Content Structure Assessment:**
+- **Header section**: Title, subtitle, actions, status indicators
+- **Body content**: Main content area with flexible layout
+- **Footer section**: Actions, metadata, navigation elements
+- **Media integration**: Images, videos, icons, avatars
+- **Interactive elements**: Buttons, links, hover states
+
+### **STEP 2: Card Variants and States Design**
+
+#### **Card Variant System:**
+```typescript
+// Define comprehensive card variants
+interface CardVariants {
+  /** Visual appearance variant */
+  variant: 'default' | 'outlined' | 'elevated' | 'flat' | 'ghost';
+  /** Size configuration */
+  size: 'sm' | 'md' | 'lg' | 'xl' | 'auto';
+  /** Content density */
+  density: 'compact' | 'normal' | 'comfortable';
+  /** Interactive state */
+  interactive?: boolean;
+  /** Loading state */
+  loading?: boolean;
+  /** Selection state */
+  selected?: boolean;
+}
+
+// Card state management
+interface CardStates {
+  /** Hover interaction state */
+  isHovered: boolean;
+  /** Focus state for keyboard navigation */
+  isFocused: boolean;
+  /** Active/pressed state */
+  isActive: boolean;
+  /** Loading/async operation state */
+  isLoading: boolean;
+  /** Error state */
+  hasError: boolean;
+}
+```
+
+#### **Content Organization Patterns:**
+```typescript
+// Flexible card structure with composition slots
+interface CardComposition {
+  /** Optional header content */
+  header?: React.ReactNode;
+  /** Optional media/image content */
+  media?: React.ReactNode;
+  /** Main content area */
+  content: React.ReactNode;
+  /** Optional actions/footer */
+  actions?: React.ReactNode;
+  /** Optional overlay content */
+  overlay?: React.ReactNode;
+}
+
+// Pre-defined card layouts
+const cardLayouts = {
+  'vertical': 'flex flex-col',
+  'horizontal': 'flex flex-row',
+  'media-first': 'flex flex-col [&_.card-media]:order-first',
+  'actions-prominent': 'flex flex-col [&_.card-actions]:order-2',
+  'overlay': 'relative [&_.card-overlay]:absolute [&_.card-overlay]:inset-0'
+};
+```
+
+### **STEP 3: Component Implementation Requirements**
+
+#### **Card Component Interface:**
+```typescript
+interface CardComponentProps extends CardVariants {
+  /** Card content */
+  children: React.ReactNode;
+  /** Header content */
+  header?: React.ReactNode;
+  /** Media content (image, video, etc.) */
+  media?: React.ReactNode;
+  /** Footer/actions content */
+  footer?: React.ReactNode;
+  /** Click handler for interactive cards */
+  onClick?: (event: React.MouseEvent) => void;
+  /** Card layout pattern */
+  layout?: 'vertical' | 'horizontal' | 'media-first' | 'overlay';
+  /** Additional CSS classes */
+  className?: string;
+  /** Semantic HTML element */
+  as?: 'div' | 'article' | 'section' | 'li';
+  /** Test identifier */
+  'data-testid'?: string;
+  /** ARIA label for accessibility */
+  'aria-label'?: string;
+}
+
+// Card implementation with composition pattern
+export const CardComponent = ({
+  children,
+  header,
+  media,
+  footer,
+  variant = 'default',
+  size = 'md',
+  density = 'normal',
+  interactive = false,
+  layout = 'vertical',
+  onClick,
+  className,
+  as: Component = 'div',
+  ...props
+}: CardComponentProps) => {
+  const [cardState, setCardState] = useState<CardStates>({
+    isHovered: false,
+    isFocused: false,
+    isActive: false,
+    isLoading: false,
+    hasError: false
+  });
+
+  return (
+    <Component
+      className={cn(
+        cardVariants({ variant, size, density, interactive }),
+        cardLayouts[layout],
+        className
+      )}
+      onClick={interactive ? onClick : undefined}
+      onMouseEnter={() => setCardState(prev => ({ ...prev, isHovered: true }))}
+      onMouseLeave={() => setCardState(prev => ({ ...prev, isHovered: false }))}
+      onFocus={() => setCardState(prev => ({ ...prev, isFocused: true }))}
+      onBlur={() => setCardState(prev => ({ ...prev, isFocused: false }))}
+      role={interactive ? 'button' : undefined}
+      tabIndex={interactive ? 0 : undefined}
+      aria-label={props['aria-label']}
+      {...props}
+    >
+      {media && (
+        <div className="card-media">
+          {media}
+        </div>
+      )}
+      
+      {header && (
+        <div className="card-header">
+          {header}
+        </div>
+      )}
+      
+      <div className="card-content">
+        {children}
+      </div>
+      
+      {footer && (
+        <div className="card-footer">
+          {footer}
+        </div>
+      )}
+    </Component>
+  );
+};
+```
+
+#### **Data Display Patterns:**
+```typescript
+// User profile card example
+interface UserProfileCardProps {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    avatar: string;
+    role: string;
+    status: 'online' | 'offline' | 'away';
+  };
+  showActions?: boolean;
+  onEdit?: (userId: string) => void;
+  onMessage?: (userId: string) => void;
+}
+
+export const UserProfileCard = ({ 
+  user, 
+  showActions = true,
+  onEdit,
+  onMessage 
+}: UserProfileCardProps) => {
+  return (
+    <Card
+      variant="outlined"
+      size="md"
+      interactive={showActions}
+      header={
+        <div className="flex items-center justify-between">
+          <StatusBadge status={user.status} />
+          <DropdownMenu>
+            <DropdownMenuItem onClick={() => onEdit(user.id)}>
+              Edit Profile
+            </DropdownMenuItem>
+          </DropdownMenu>
+        </div>
+      }
+      media={
+        <Avatar
+          src={user.avatar}
+          alt={`${user.name} profile picture`}
+          size="lg"
+          className="mx-auto"
+        />
+      }
+      footer={
+        showActions && (
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => onEdit(user.id)}>
+              Edit
+            </Button>
+            <Button variant="primary" onClick={() => onMessage(user.id)}>
+              Message
+            </Button>
+          </div>
+        )
+      }
+    >
+      <div className="text-center">
+        <h3 className="font-semibold text-lg">{user.name}</h3>
+        <p className="text-gray-600">{user.email}</p>
+        <Badge variant="secondary">{user.role}</Badge>
+      </div>
+    </Card>
+  );
+};
+```
+
+### **STEP 4: Accessibility and Interaction Design**
+
+#### **Card Accessibility Requirements:**
+```typescript
+// Accessible interactive card implementation
+<article
+  role={interactive ? 'button' : 'article'}
+  tabIndex={interactive ? 0 : undefined}
+  aria-label={ariaLabel}
+  aria-describedby={`${cardId}-description`}
+  onKeyDown={(e) => {
+    if (interactive && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      onClick?.(e as any);
+    }
+  }}
+  className={cn(
+    'card-base',
+    interactive && 'focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
+    'focus-visible:outline-none'
+  )}
+>
+  <header className="card-header">
+    <h3 id={`${cardId}-title`}>{title}</h3>
+    {subtitle && (
+      <p id={`${cardId}-subtitle`} className="text-sm text-gray-600">
+        {subtitle}
+      </p>
+    )}
+  </header>
+  
+  <div id={`${cardId}-description`} className="card-content">
+    {children}
+  </div>
+  
+  {actions && (
+    <footer className="card-actions" role="group" aria-label="Card actions">
+      {actions}
+    </footer>
+  )}
+</article>
+```
+
+#### **Keyboard Navigation Patterns:**
+- **Tab navigation**: Focus moves through cards and their interactive elements
+- **Enter/Space activation**: Activates interactive cards or primary actions
+- **Arrow key navigation**: For card grids or lists (when implemented)
+- **Escape handling**: Closes any opened overlays or menus
+
+### **STEP 5: Loading States and Error Handling**
+
+#### **Loading State Implementation:**
+```typescript
+// Card skeleton/loading state
+export const CardSkeleton = ({ variant = 'default', size = 'md' }: SkeletonProps) => {
+  return (
+    <div className={cn(cardVariants({ variant, size }), 'animate-pulse')}>
+      <div className="card-header">
+        <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+      </div>
+      
+      <div className="card-media">
+        <div className="h-48 bg-gray-200 rounded"></div>
+      </div>
+      
+      <div className="card-content space-y-2">
+        <div className="h-4 bg-gray-200 rounded"></div>
+        <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+        <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+      </div>
+      
+      <div className="card-footer">
+        <div className="h-8 bg-gray-200 rounded w-24"></div>
+      </div>
+    </div>
+  );
+};
+
+// Error state component
+export const CardError = ({ 
+  error, 
+  onRetry, 
+  variant = 'default' 
+}: CardErrorProps) => {
+  return (
+    <Card variant={variant} className="border-red-200 bg-red-50">
+      <div className="text-center py-6">
+        <ExclamationTriangleIcon className="h-12 w-12 text-red-400 mx-auto mb-4" />
+        <h3 className="text-lg font-medium text-red-900 mb-2">
+          Failed to load content
+        </h3>
+        <p className="text-red-700 mb-4">{error}</p>
+        {onRetry && (
+          <Button variant="outline" onClick={onRetry}>
+            Try Again
+          </Button>
+        )}
+      </div>
+    </Card>
+  );
+};
+```
+
+#### **Async Data Integration:**
+```typescript
+// Card with async data loading
+export const AsyncDataCard = ({ 
+  dataLoader, 
+  fallback = <CardSkeleton />,
+  ...cardProps 
+}: AsyncCardProps) => {
+  const { data, error, isLoading, retry } = useAsync(dataLoader);
+
+  if (isLoading) return fallback;
+  if (error) return <CardError error={error.message} onRetry={retry} />;
+
+  return (
+    <Card {...cardProps}>
+      <DataDisplay data={data} />
+    </Card>
+  );
+};
+```
+
+## ✅ **CARD IMPLEMENTATION REQUIREMENTS:**
+
+### **File Structure:**
+```
+card-name/
+├── CardName.tsx                   # Main card component
+├── __tests__/
+│   ├── CardName.test.tsx          # Unit tests
+│   ├── CardName.a11y.test.tsx     # Accessibility tests
+│   └── CardName.interaction.test.tsx # Interaction tests
+├── components/
+│   ├── CardHeader.tsx             # Header component
+│   ├── CardContent.tsx            # Content component
+│   ├── CardFooter.tsx             # Footer component
+│   └── CardSkeleton.tsx           # Loading state component
+├── styles/
+│   └── card-variants.ts           # Card variant definitions
+└── README.md                      # Card documentation
+```
+
+### **Component Requirements:**
+- [ ] **TypeScript Interface**: Comprehensive props with content organization options
+- [ ] **Variant System**: Consistent visual variants and sizing options
+- [ ] **Content Composition**: Flexible header, content, footer, and media slots
+- [ ] **Accessibility Compliance**: WCAG 2.1 AA with proper semantic structure
+- [ ] **Interactive States**: Hover, focus, selection, and loading states
+- [ ] **Responsive Design**: Mobile-optimized layouts and content scaling
+- [ ] **Error Handling**: Loading states and error recovery patterns
+
+### **Testing Requirements:**
+- [ ] **Content Rendering**: Test all content slots and composition patterns
+- [ ] **Interaction Testing**: Click handlers, keyboard navigation, state changes
+- [ ] **Accessibility Testing**: Semantic structure and keyboard navigation
+- [ ] **Visual Testing**: All variants and states render correctly
+- [ ] **Responsive Testing**: Layout behavior across different screen sizes
+- [ ] **Loading States**: Skeleton and error state functionality
+
+## 🔍 **CARD QUALITY STANDARDS:**
+
+### **Content Organization Quality:**
+- **Visual Hierarchy**: Clear content priority with typography and spacing
+- **Information Architecture**: Logical content flow and grouping
+- **Scannable Design**: Easy to quickly understand key information
+- **Action Clarity**: Clear and prominent call-to-action elements
+
+### **Performance Standards:**
+- **Fast Rendering**: Optimized DOM structure and CSS
+- **Image Optimization**: Proper image loading and sizing
+- **Memory Efficiency**: Clean component lifecycle management
+- **Bundle Impact**: Minimal JavaScript for static content cards
+
+### **Accessibility Standards:**
+- **Semantic HTML**: Proper use of article, section, and heading elements
+- **Keyboard Navigation**: Full functionality without mouse interaction
+- **Screen Reader**: Clear content structure and relationship announcements
+- **Focus Management**: Visible focus indicators and logical tab order
+
+## 💡 **CARD COMPONENT EXAMPLES:**
+
+### **Product Card with Actions:**
+```typescript
+<ProductCard
+  product={{
+    id: '123',
+    name: 'Premium Headphones',
+    price: 299.99,
+    image: '/products/headphones.jpg',
+    rating: 4.8,
+    reviews: 124
+  }}
+  variant="elevated"
+  interactive
+  onAddToCart={handleAddToCart}
+  onViewDetails={handleViewDetails}
+/>
+```
+
+### **Article Card with Metadata:**
+```typescript
+<ArticleCard
+  article={{
+    title: 'Getting Started with React',
+    excerpt: 'Learn the fundamentals of React development...',
+    author: 'Jane Smith',
+    publishDate: '2024-01-15',
+    readTime: '5 min',
+    image: '/articles/react-basics.jpg'
+  }}
+  variant="outlined"
+  showReadTime
+  onRead={handleReadArticle}
+/>
+```
+
+### **Dashboard Metric Card:**
+```typescript
+<MetricCard
+  title="Total Users"
+  value="12,459"
+  change={+8.2}
+  trend="up"
+  period="vs last month"
+  variant="flat"
+  size="lg"
+  icon={<UsersIcon />}
+/>
+```
+
+## 🚨 **COMMON CARD PITFALLS:**
+
+### **Content Organization Pitfalls:**
+- **Information overload**: Keep content focused and scannable
+- **Poor hierarchy**: Use consistent typography and spacing patterns
+- **Missing context**: Provide sufficient information for user decisions
+- **Unclear actions**: Make primary and secondary actions obvious
+
+### **Accessibility Pitfalls:**
+- **Missing headings**: Use proper heading structure for card titles
+- **Inadequate alt text**: Provide descriptive alt text for card images
+- **Poor focus indicators**: Ensure interactive cards have clear focus states
+- **Missing labels**: Provide ARIA labels for interactive card elements
+
+### **Performance Pitfalls:**
+- **Large images**: Optimize images and implement lazy loading
+- **Heavy animations**: Use CSS transitions over JavaScript animations
+- **Excessive DOM**: Keep card structure simple and efficient
+- **Memory leaks**: Clean up event listeners and subscriptions
+
+## 🔧 **INTEGRATION WITH PROJECT STANDARDS:**
+
+### **Component Architecture Integration:**
+- Follows server/client component patterns based on interactivity
+- Uses proper composition patterns for flexible content organization
+- Integrates with design system and variant patterns
+- Implements co-located testing strategy
+
+### **Standards Compliance:**
+- **Coding Standards**: TypeScript interfaces, proper error handling
+- **Testing Standards**: Unit, accessibility, and interaction tests
+- **Architecture Standards**: Component composition and organization patterns
+- **Design Standards**: Consistent spacing, typography, and visual hierarchy
+
+### **Related Prompts:**
+- Use `component-create-guide.mdc` for general component patterns
+- Use `component-create-ui.mdc` for interactive card elements
+- Use `component-update-card.mdc` for enhancing existing cards
+
+## 📋 **CARD CREATION DELIVERABLES:**
+
+Please provide:
+
+- [ ] **Complete card component** with flexible composition and TypeScript interfaces
+- [ ] **Content organization** with proper header, content, media, and footer slots
+- [ ] **Interactive functionality** with click handlers and keyboard navigation
+- [ ] **Loading and error states** with skeleton components and error recovery
+- [ ] **Comprehensive test suite** including unit, accessibility, and interaction tests
+- [ ] **Documentation** with usage examples and composition patterns
+- [ ] **Implementation summary** with content strategy and accessibility decisions
+
+## 📖 **USAGE EXAMPLES:**
+
+```
+Create a user profile card with avatar, contact information, status indicators, and action buttons.
+Apply the card component creation prompt.
+```
+
+```
+Create a product showcase card with image gallery, pricing, reviews, and purchase actions for e-commerce.
+Apply the card component creation prompt.
+```
+
+```
+Create a dashboard analytics card with charts, metrics, trends, and drill-down capabilities.
+Apply the card component creation prompt.
+```

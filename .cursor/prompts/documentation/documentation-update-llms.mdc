@@ -1,0 +1,297 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# LLM Documentation Update Guide
+
+**This prompt guides the systematic update of existing llms.md files to ensure accuracy, completeness, and technical correctness while preserving the document's optimization for LLM developers and AI assistants.**
+
+## 🎯 **UPDATE OBJECTIVES:**
+
+1. **VERIFY current project state** and synchronize documentation
+2. **UPDATE technical information** to reflect current versions and capabilities
+3. **VALIDATE all examples** and integration patterns for functionality
+4. **MAINTAIN structural integrity** optimized for AI consumption
+5. **ENSURE comprehensive coverage** of all system capabilities
+
+## 📋 **LLM DOCUMENTATION UPDATE PROCESS:**
+
+### **STEP 1: Current State Analysis**
+
+#### **Project State Verification:**
+```bash
+echo "🔍 Current Project State Analysis"
+echo "================================"
+
+# Verify current structure and counts
+find .cursor/prompts -name "*.mdc" | wc -l
+find .cursor/rules -name "*.mdc" | wc -l
+
+# Analyze prompt categories
+echo "Prompt Categories:"
+ls .cursor/prompts/
+
+# Check rules available
+echo "Available Rules:"
+ls .cursor/rules/
+
+# Verify key files exist
+echo "Key Documentation Files:"
+ls docs/standards/
+```
+
+#### **Change Detection:**
+- **New prompts added** since last update
+- **Technology versions changed** in project dependencies
+- **Project structure modifications** affecting documentation
+- **Standards updates** in documentation files
+- **Integration patterns** that have evolved
+
+#### **Content Gap Analysis:**
+- **Missing categories** not yet documented
+- **Outdated examples** that no longer work
+- **Incorrect counts** of prompts/rules
+- **Broken references** to files or standards
+- **Incomplete workflows** missing steps
+
+### **STEP 2: Technical Accuracy Validation**
+
+#### **Technology Stack Verification:**
+```bash
+# Check current versions
+echo "🔧 Technology Stack Verification"
+echo "==============================="
+
+# Verify framework versions (if package.json exists)
+if [ -f "package.json" ]; then
+    echo "Package.json versions:"
+    cat package.json | grep -E "(next|typescript|react|vitest|tailwind)"
+fi
+
+# Check for version info in documentation
+echo "Documented versions in standards:"
+grep -r "version" docs/standards/ | head -10
+```
+
+#### **System Capability Validation:**
+- **Prompt system accuracy** - Verify prompt categories and specializations
+- **Rules system completeness** - Confirm all rules are documented
+- **Integration patterns** - Test documented workflow examples
+- **Meta-prompting features** - Verify thread management capabilities
+- **Quality standards** - Confirm testing and accessibility requirements
+
+### **STEP 3: Content Update Process**
+
+#### **Core Sections to Review:**
+
+##### **1. Overview and Philosophy:**
+```markdown
+## Updates Required:
+- [ ] Core philosophy still accurate
+- [ ] Key benefits reflect current capabilities
+- [ ] Scope coverage comprehensive
+- [ ] Purpose statement current
+```
+
+##### **2. Architecture Documentation:**
+```markdown
+## Architecture Updates:
+- [ ] Repository structure matches current organization
+- [ ] Technology stack versions current
+- [ ] Prompt counts accurate per category
+- [ ] Rules system reflects available constraints
+- [ ] Integration points documented correctly
+```
+
+##### **3. Prompt System Details:**
+```markdown
+## Prompt System Updates:
+- [ ] Category counts: component/([X] prompts), test/([X] prompts), etc.
+- [ ] Specialized prompts listed accurately
+- [ ] Intelligent routing examples work
+- [ ] Domain descriptions current
+- [ ] Integration patterns functional
+```
+
+##### **4. Usage Pattern Validation:**
+```markdown
+## Usage Pattern Updates:
+- [ ] Basic examples use existing prompts
+- [ ] Advanced workflows reference real files
+- [ ] Integration examples actually work
+- [ ] Best practices reflect current standards
+```
+
+### **STEP 4: Example and Integration Testing**
+
+#### **Code Example Validation:**
+```typescript
+// Test all TypeScript examples for accuracy
+interface ValidationCheck {
+  syntaxValid: boolean;
+  typesCorrect: boolean;
+  patternsMatch: boolean;
+  standardsCompliant: boolean;
+}
+
+// Verify workflow examples reference real files
+const workflowValidation = [
+  '.cursor/prompts/git/git-branch-create.mdc',
+  '.cursor/prompts/component/component-create-guide.mdc', 
+  '.cursor/prompts/test/test-create-comprehensive.mdc'
+].map(path => ({
+  path,
+  exists: /* verify file exists */
+}));
+```
+
+#### **Integration Pattern Testing:**
+- **Basic usage examples** - Verify prompts exist and work as documented
+- **Advanced workflows** - Test multi-step processes for completeness
+- **Rule applications** - Confirm rule combination examples are valid
+- **Thread management** - Verify thread continuation examples work
+
+### **STEP 5: Quality Assurance and Validation**
+
+#### **Comprehensive Validation Checklist:**
+
+##### **Technical Accuracy:**
+- [ ] **File paths valid** - All referenced files and directories exist
+- [ ] **Version numbers current** - Technology versions match project state
+- [ ] **Code examples functional** - All examples compile and work
+- [ ] **Prompt counts accurate** - Documented counts match actual counts
+- [ ] **Integration patterns tested** - All workflows verified to work
+
+##### **Content Completeness:**
+- [ ] **Full system coverage** - All major components documented
+- [ ] **Current capabilities** - Latest features included
+- [ ] **Evolution history** - Recent developments documented
+- [ ] **Working examples** - All examples tested and functional
+
+##### **LLM Optimization:**
+- [ ] **Structure maintained** - Document remains AI-optimized
+- [ ] **Navigation clear** - Information easy to find and parse
+- [ ] **Context preserved** - All necessary information for AI assistance
+- [ ] **Actionable guidance** - Instructions specific and implementable
+
+## ✅ **UPDATE REQUIREMENTS:**
+
+### **Essential Updates:**
+- **Version synchronization** - All technology versions current
+- **Count accuracy** - Prompt and rule counts reflect actual state
+- **Example validation** - All code and workflow examples work
+- **Reference verification** - All file paths and links valid
+- **Integration testing** - All documented patterns functional
+
+### **Structure Preservation:**
+- **LLM-optimized organization** - Maintain logical structure for AI consumption
+- **Comprehensive coverage** - Preserve complete system documentation
+- **Educational value** - Keep information valuable for LLM developers
+- **Quality standards** - Maintain clear success criteria throughout
+
+### **Content Standards:**
+- **Project-specific examples** - All examples tailored to actual project
+- **Current best practices** - Documentation reflects latest standards
+- **Accurate integration** - Patterns work with current codebase
+- **Complete workflows** - All processes documented end-to-end
+
+## 🔍 **VALIDATION METHODOLOGY:**
+
+### **Pre-Update Validation:**
+```bash
+# Verify current state before making changes
+echo "📋 Pre-Update Validation"
+echo "======================="
+
+# Check file structure
+echo "Current .cursor structure:"
+tree .cursor/ -I '__pycache__|*.pyc'
+
+# Verify prompt categories
+echo "Prompt categories and counts:"
+for dir in .cursor/prompts/*/; do
+    echo "$(basename $dir): $(find $dir -name '*.mdc' | wc -l) prompts"
+done
+
+# Check rules
+echo "Available rules:"
+ls .cursor/rules/*.mdc | wc -l
+```
+
+### **Post-Update Validation:**
+```bash
+# Verify updates are accurate
+echo "✅ Post-Update Validation"
+echo "========================"
+
+# Confirm all examples work
+echo "Testing documented examples..."
+# [Test integration examples]
+
+# Verify no broken references
+echo "Checking for broken references..."
+# [Validate all file paths]
+
+# Confirm version accuracy
+echo "Verifying version consistency..."
+# [Check version alignment]
+```
+
+## 💡 **INTEGRATION EXAMPLES:**
+
+### **After Adding New Prompts:**
+```
+Update llms.md to reflect new component prompts using .cursor/prompts/documentation/documentation-update-llms.mdc
+
+We added 3 new component prompts to the component/ directory - update the counts and descriptions.
+```
+
+### **After Technology Updates:**
+```
+Update llms.md after Next.js upgrade using documentation-update-llms.mdc
+
+Next.js upgraded from 15.0 to 15.1 - update all version references and verify examples still work.
+```
+
+### **With Quality Rules:**
+```
+Update llms.md documentation using documentation-update-llms.mdc
+
+Apply .cursor/rules/code-change-minimal.mdc - preserve existing structure while ensuring all technical details are current.
+```
+
+## 🚨 **CRITICAL UPDATE TRIGGERS:**
+
+### **Immediate Update Required:**
+- **New prompts or rules added** - Update counts and descriptions immediately
+- **Technology versions changed** - Synchronize all version references
+- **Project structure modified** - Update architecture documentation
+- **Standards documentation updated** - Ensure alignment with current standards
+- **Integration patterns changed** - Update workflow examples
+
+### **Quality Gates:**
+Before completing update:
+- [ ] All examples tested and functional
+- [ ] All counts verified against actual files
+- [ ] All file paths confirmed to exist
+- [ ] Version consistency validated
+- [ ] Integration patterns tested
+
+## 🔧 **MAINTENANCE INTEGRATION:**
+
+### **Update Schedule:**
+- **After prompt additions** - Immediate update when new prompts added
+- **After version changes** - Update when technology versions change
+- **Monthly reviews** - Regular verification of accuracy
+- **Pre-release validation** - Comprehensive review before releases
+
+### **Success Criteria:**
+- **Technical accuracy** - All information reflects current project state
+- **Functional examples** - All documented patterns work as described
+- **Complete coverage** - All system capabilities documented
+- **LLM optimization** - Structure remains optimal for AI consumption
+
+---
+
+**This prompt ensures llms.md files stay current, accurate, and valuable for LLM developers through systematic validation and update processes.**

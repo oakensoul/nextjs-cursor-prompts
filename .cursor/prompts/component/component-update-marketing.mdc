@@ -1,0 +1,740 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Marketing Component Update Request
+
+**Please enhance the existing marketing component with conversion optimization, performance improvements, advanced analytics integration, and A/B testing capabilities.**
+
+## 🎯 **MARKETING UPDATE OBJECTIVES:**
+
+1. **OPTIMIZE conversion rates** with improved messaging, CTA placement, and user journey optimization
+2. **ENHANCE performance** with Core Web Vitals improvements, image optimization, and loading speed
+3. **IMPLEMENT advanced analytics** with detailed tracking, user behavior analysis, and conversion funnel monitoring
+4. **ADD A/B testing capabilities** with variant management, statistical significance tracking, and result analysis
+5. **MAINTAIN brand consistency** while implementing data-driven improvements and personalization
+
+## 📋 **MARKETING ENHANCEMENT METHODOLOGY:**
+
+### **STEP 1: Current Marketing Component Assessment**
+
+#### **Conversion Analysis:**
+- **Current conversion rates**: Baseline metrics for CTAs, form submissions, and user actions
+- **User journey mapping**: Identify friction points and optimization opportunities
+- **Message effectiveness**: Analyze headline, copy, and value proposition performance
+- **CTA performance**: Review click-through rates and conversion attribution
+
+#### **Performance Audit:**
+- **Core Web Vitals**: Analyze LCP, FID, CLS scores for marketing pages
+- **Image optimization**: Review image sizes, formats, and loading strategies
+- **Bundle analysis**: Identify opportunities for code splitting and lazy loading
+- **Mobile performance**: Assess mobile-specific performance bottlenecks
+
+#### **Analytics Review:**
+- **Tracking completeness**: Verify all marketing interactions are tracked
+- **Data quality**: Ensure accurate attribution and event tracking
+- **Funnel analysis**: Identify conversion funnel drop-off points
+- **User behavior**: Review heatmaps, scroll depth, and engagement metrics
+
+### **STEP 2: Conversion Rate Optimization (CRO)**
+
+#### **Advanced CTA Optimization:**
+```typescript
+// Enhanced CTA with conversion tracking and optimization
+const OptimizedCTA = ({ 
+  config, 
+  position,
+  testVariant,
+  urgency = false,
+  personalizedText 
+}) => {
+  const { trackCTAClick, trackCTAView } = useConversionTracking()
+  const [isVisible, setIsVisible] = useState(false)
+  const ctaRef = useRef(null)
+
+  // Track CTA visibility for conversion analysis
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true)
+          trackCTAView({
+            position,
+            variant: testVariant,
+            urgency,
+            timestamp: new Date().toISOString()
+          })
+        }
+      },
+      { threshold: 0.5 }
+    )
+
+    if (ctaRef.current) {
+      observer.observe(ctaRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [isVisible, position, testVariant, urgency, trackCTAView])
+
+  const handleClick = () => {
+    trackCTAClick({
+      text: personalizedText || config.text,
+      position,
+      variant: testVariant,
+      urgency,
+      timeToClick: performance.now() - pageLoadTime,
+      scrollDepth: getScrollDepth()
+    })
+
+    if (config.onClick) {
+      config.onClick()
+    }
+  }
+
+  return (
+    <motion.button
+      ref={ctaRef}
+      className={cn(
+        "cta-button",
+        `cta-${config.variant}`,
+        `cta-${config.size}`,
+        urgency && "cta-urgent",
+        testVariant && `cta-variant-${testVariant}`
+      )}
+      onClick={handleClick}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      data-testid={`cta-${position}`}
+    >
+      {urgency && (
+        <span className="cta-urgency-indicator">
+          🔥
+        </span>
+      )}
+      {personalizedText || config.text}
+    </motion.button>
+  )
+}
+```
+
+#### **Personalization Engine:**
+```typescript
+// Marketing personalization based on user data
+const useMarketingPersonalization = (userId, userSegment) => {
+  const [personalizedContent, setPersonalizedContent] = useState(null)
+
+  useEffect(() => {
+    const loadPersonalization = async () => {
+      try {
+        const personalization = await getPersonalizationData(userId, userSegment)
+        setPersonalizedContent(personalization)
+      } catch (error) {
+        // Fallback to default content
+        console.warn('Personalization failed, using default content')
+      }
+    }
+
+    if (userId && userSegment) {
+      loadPersonalization()
+    }
+  }, [userId, userSegment])
+
+  const getPersonalizedHeadline = (defaultHeadline) => {
+    return personalizedContent?.headline || defaultHeadline
+  }
+
+  const getPersonalizedCTA = (defaultCTA) => {
+    return personalizedContent?.ctaText || defaultCTA
+  }
+
+  const getPersonalizedBenefits = (defaultBenefits) => {
+    return personalizedContent?.benefits || defaultBenefits
+  }
+
+  return {
+    personalizedContent,
+    getPersonalizedHeadline,
+    getPersonalizedCTA,
+    getPersonalizedBenefits
+  }
+}
+```
+
+#### **Social Proof Enhancement:**
+```typescript
+// Dynamic social proof with real-time updates
+const EnhancedSocialProof = ({ baseTestimonials, realTimeStats }) => {
+  const [currentStats, setCurrentStats] = useState(realTimeStats)
+  const [testimonials, setTestimonials] = useState(baseTestimonials)
+
+  // Real-time stats updates
+  useEffect(() => {
+    const statsInterval = setInterval(async () => {
+      try {
+        const latestStats = await fetchRealTimeStats()
+        setCurrentStats(latestStats)
+      } catch (error) {
+        console.warn('Failed to fetch real-time stats')
+      }
+    }, 30000) // Update every 30 seconds
+
+    return () => clearInterval(statsInterval)
+  }, [])
+
+  // Rotate testimonials based on user engagement
+  useEffect(() => {
+    const testimonialRotation = setInterval(() => {
+      setTestimonials(prev => {
+        const shuffled = [...prev]
+        // Move least engaging testimonial to end
+        const leastEngaging = shuffled.splice(
+          findLeastEngagingIndex(shuffled), 1
+        )[0]
+        shuffled.push(leastEngaging)
+        return shuffled
+      })
+    }, 60000) // Rotate every minute
+
+    return () => clearInterval(testimonialRotation)
+  }, [])
+
+  return (
+    <div className="enhanced-social-proof">
+      {/* Real-time stats */}
+      <div className="real-time-stats">
+        <motion.div
+          key={currentStats.activeUsers}
+          initial={{ scale: 1.2, color: '#10b981' }}
+          animate={{ scale: 1, color: '#374151' }}
+          className="stat-item"
+        >
+          <span className="stat-number">{currentStats.activeUsers}</span>
+          <span className="stat-label">users online now</span>
+        </motion.div>
+        <div className="stat-item">
+          <span className="stat-number">{currentStats.conversionsToday}</span>
+          <span className="stat-label">conversions today</span>
+        </div>
+      </div>
+
+      {/* Dynamic testimonials */}
+      <div className="testimonials-carousel">
+        {testimonials.slice(0, 3).map((testimonial, index) => (
+          <TestimonialCard
+            key={testimonial.id}
+            testimonial={testimonial}
+            priority={index === 0}
+            onEngagement={(engagementData) => 
+              trackTestimonialEngagement(testimonial.id, engagementData)
+            }
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+### **STEP 3: Advanced A/B Testing Integration**
+
+#### **Comprehensive A/B Testing Framework:**
+```typescript
+// Advanced A/B testing with statistical significance
+const useAdvancedABTesting = (testConfig) => {
+  const [currentVariant, setCurrentVariant] = useState('control')
+  const [testResults, setTestResults] = useState(null)
+  const [isStatisticallySignificant, setIsStatisticallySignificant] = useState(false)
+
+  useEffect(() => {
+    // Assign variant based on user attributes and test configuration
+    const variant = assignTestVariant(testConfig, {
+      userId: getUserId(),
+      segment: getUserSegment(),
+      previousTests: getPreviousTestParticipation()
+    })
+
+    setCurrentVariant(variant)
+
+    // Track variant assignment
+    analytics.track('A/B Test Assignment', {
+      testId: testConfig.testId,
+      testName: testConfig.testName,
+      variant: variant,
+      userId: getUserId(),
+      assignmentTime: new Date().toISOString()
+    })
+  }, [testConfig])
+
+  // Monitor test results and statistical significance
+  useEffect(() => {
+    const resultsInterval = setInterval(async () => {
+      try {
+        const results = await fetchTestResults(testConfig.testId)
+        setTestResults(results)
+        
+        // Calculate statistical significance
+        const significance = calculateStatisticalSignificance(results)
+        setIsStatisticallySignificant(significance.isSignificant)
+        
+        if (significance.isSignificant && significance.confidence > 0.95) {
+          // Auto-winner implementation (if configured)
+          if (testConfig.autoImplementWinner) {
+            implementWinningVariant(testConfig.testId, significance.winner)
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to fetch test results')
+      }
+    }, 300000) // Check every 5 minutes
+
+    return () => clearInterval(resultsInterval)
+  }, [testConfig])
+
+  const trackConversion = useCallback((conversionData) => {
+    analytics.track('A/B Test Conversion', {
+      testId: testConfig.testId,
+      variant: currentVariant,
+      conversionType: conversionData.type,
+      value: conversionData.value,
+      timestamp: new Date().toISOString()
+    })
+  }, [testConfig.testId, currentVariant])
+
+  return {
+    currentVariant,
+    testResults,
+    isStatisticallySignificant,
+    trackConversion
+  }
+}
+```
+
+#### **Multi-Variate Testing Support:**
+```typescript
+// Advanced multi-variate testing for complex optimizations
+const useMultiVariateTesting = (mvtConfig) => {
+  const [selectedVariations, setSelectedVariations] = useState({})
+
+  useEffect(() => {
+    // Select variations for each element
+    const variations = {}
+    
+    Object.keys(mvtConfig.elements).forEach(elementKey => {
+      const elementConfig = mvtConfig.elements[elementKey]
+      variations[elementKey] = selectVariation(elementConfig.variations)
+    })
+
+    setSelectedVariations(variations)
+
+    // Track MVT assignment
+    analytics.track('MVT Assignment', {
+      testId: mvtConfig.testId,
+      variations: variations,
+      userId: getUserId()
+    })
+  }, [mvtConfig])
+
+  const getElementVariation = (elementKey) => {
+    return selectedVariations[elementKey] || 'control'
+  }
+
+  const trackElementInteraction = (elementKey, interactionData) => {
+    analytics.track('MVT Element Interaction', {
+      testId: mvtConfig.testId,
+      element: elementKey,
+      variation: selectedVariations[elementKey],
+      ...interactionData
+    })
+  }
+
+  return { getElementVariation, trackElementInteraction }
+}
+```
+
+### **STEP 4: Performance Optimization Enhancements**
+
+#### **Advanced Image Optimization:**
+```typescript
+// Smart image optimization with WebP/AVIF support
+const SmartMarketingImage = ({ 
+  src, 
+  alt, 
+  priority = false,
+  lazy = true,
+  quality = 85 
+}) => {
+  const [imageFormat, setImageFormat] = useState('jpeg')
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    // Detect optimal image format support
+    const detectOptimalFormat = async () => {
+      if (await supportsAVIF()) {
+        setImageFormat('avif')
+      } else if (await supportsWebP()) {
+        setImageFormat('webp')
+      } else {
+        setImageFormat('jpeg')
+      }
+    }
+
+    detectOptimalFormat()
+  }, [])
+
+  const optimizedSrc = `${src}?format=${imageFormat}&quality=${quality}`
+
+  return (
+    <div className="smart-image-container">
+      <Image
+        src={optimizedSrc}
+        alt={alt}
+        priority={priority}
+        loading={lazy ? 'lazy' : 'eager'}
+        quality={quality}
+        onLoadingComplete={() => {
+          setIsLoaded(true)
+          // Track image load performance
+          analytics.track('Marketing Image Loaded', {
+            src: optimizedSrc,
+            format: imageFormat,
+            loadTime: performance.now()
+          })
+        }}
+        className={cn(
+          "marketing-image",
+          isLoaded && "image-loaded"
+        )}
+      />
+      {!isLoaded && (
+        <div className="image-skeleton" aria-hidden="true" />
+      )}
+    </div>
+  )
+}
+```
+
+#### **Progressive Loading Strategy:**
+```typescript
+// Progressive enhancement for marketing components
+const useProgressiveEnhancement = () => {
+  const [enhancements, setEnhancements] = useState({
+    animations: false,
+    interactivity: false,
+    advancedTracking: false
+  })
+
+  useEffect(() => {
+    // Progressive feature detection and enhancement
+    const enableEnhancements = async () => {
+      // Check device capabilities
+      const deviceCapabilities = await assessDeviceCapabilities()
+      
+      setEnhancements({
+        animations: deviceCapabilities.supportsAdvancedAnimations,
+        interactivity: deviceCapabilities.supportsComplexInteractions,
+        advancedTracking: deviceCapabilities.allowsDetailedTracking
+      })
+    }
+
+    enableEnhancements()
+  }, [])
+
+  return enhancements
+}
+
+const assessDeviceCapabilities = async () => {
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection
+  const deviceMemory = navigator.deviceMemory || 4
+  const hardwareConcurrency = navigator.hardwareConcurrency || 4
+
+  return {
+    supportsAdvancedAnimations: (
+      deviceMemory >= 4 && 
+      hardwareConcurrency >= 4 &&
+      (!connection || connection.effectiveType !== 'slow-2g')
+    ),
+    supportsComplexInteractions: deviceMemory >= 2,
+    allowsDetailedTracking: !navigator.doNotTrack
+  }
+}
+```
+
+### **STEP 5: Advanced Analytics and Insights**
+
+#### **Marketing Attribution Tracking:**
+```typescript
+// Comprehensive marketing attribution and funnel analysis
+const useMarketingAttribution = () => {
+  const [attributionData, setAttributionData] = useState(null)
+
+  const trackAttribution = useCallback((touchpoint, value = 0) => {
+    const attribution = {
+      touchpoint,
+      value,
+      timestamp: new Date().toISOString(),
+      sessionId: getSessionId(),
+      userId: getUserId(),
+      referrer: document.referrer,
+      utm: getUTMParameters(),
+      deviceType: getDeviceType()
+    }
+
+    // Store in session for journey tracking
+    updateAttributionJourney(attribution)
+
+    // Send to analytics
+    analytics.track('Marketing Touchpoint', attribution)
+  }, [])
+
+  const trackConversionAttribution = useCallback((conversionData) => {
+    const fullJourney = getAttributionJourney()
+    
+    analytics.track('Marketing Conversion', {
+      ...conversionData,
+      attributionJourney: fullJourney,
+      firstTouch: fullJourney[0],
+      lastTouch: fullJourney[fullJourney.length - 1],
+      touchpointCount: fullJourney.length,
+      journeyDuration: calculateJourneyDuration(fullJourney)
+    })
+  }, [])
+
+  return { trackAttribution, trackConversionAttribution }
+}
+```
+
+#### **Real-time Performance Monitoring:**
+```typescript
+// Real-time marketing performance dashboard data
+const useMarketingPerformanceMonitoring = () => {
+  const [performanceMetrics, setPerformanceMetrics] = useState({
+    conversionRate: 0,
+    averageTimeOnPage: 0,
+    bounceRate: 0,
+    scrollDepth: 0,
+    ctaClickRate: 0
+  })
+
+  useEffect(() => {
+    // Real-time performance monitoring
+    const metricsInterval = setInterval(async () => {
+      try {
+        const metrics = await fetchRealTimeMetrics()
+        setPerformanceMetrics(metrics)
+        
+        // Alert on performance degradation
+        if (metrics.conversionRate < expectedConversionRate * 0.8) {
+          triggerPerformanceAlert('Low conversion rate detected')
+        }
+        
+        if (metrics.bounceRate > expectedBounceRate * 1.2) {
+          triggerPerformanceAlert('High bounce rate detected')
+        }
+      } catch (error) {
+        console.warn('Failed to fetch performance metrics')
+      }
+    }, 60000) // Update every minute
+
+    return () => clearInterval(metricsInterval)
+  }, [])
+
+  return performanceMetrics
+}
+```
+
+## ✅ **MARKETING UPDATE REQUIREMENTS:**
+
+### **Conversion Optimization:**
+- [ ] **CTA Enhancement**: Improved click-through rates and conversion tracking
+- [ ] **Message Optimization**: A/B tested headlines and value propositions
+- [ ] **Personalization**: User-specific content and recommendations
+- [ ] **Social Proof**: Real-time stats and dynamic testimonials
+
+### **Performance Improvements:**
+- [ ] **Image Optimization**: WebP/AVIF support and smart loading
+- [ ] **Core Web Vitals**: LCP, FID, and CLS optimizations
+- [ ] **Progressive Enhancement**: Device-appropriate feature loading
+- [ ] **Bundle Optimization**: Code splitting and lazy loading
+
+### **Analytics Integration:**
+- [ ] **Attribution Tracking**: Complete customer journey mapping
+- [ ] **Conversion Funnel**: Detailed funnel analysis and optimization
+- [ ] **Performance Monitoring**: Real-time metrics and alerting
+- [ ] **A/B Testing**: Statistical significance and auto-optimization
+
+### **Advanced Features:**
+- [ ] **Multi-Variate Testing**: Complex optimization scenarios
+- [ ] **Real-time Personalization**: Dynamic content adaptation
+- [ ] **Advanced Segmentation**: Behavior-based user targeting
+- [ ] **Predictive Analytics**: ML-powered conversion optimization
+
+## 🔍 **MARKETING UPDATE PATTERNS:**
+
+### **Conversion Funnel Optimization:**
+```typescript
+// Comprehensive funnel tracking and optimization
+const ConversionFunnelTracker = ({ funnelSteps, optimizationConfig }) => {
+  const [currentStep, setCurrentStep] = useState(0)
+  const [funnelData, setFunnelData] = useState([])
+
+  const trackFunnelStep = useCallback((stepIndex, stepData) => {
+    const stepInfo = {
+      step: stepIndex,
+      stepName: funnelSteps[stepIndex].name,
+      timestamp: new Date().toISOString(),
+      timeSpent: stepData.timeSpent,
+      interactions: stepData.interactions,
+      errors: stepData.errors
+    }
+
+    setFunnelData(prev => [...prev, stepInfo])
+    
+    analytics.track('Funnel Step', stepInfo)
+
+    // Trigger optimization if conversion rate is low
+    if (stepData.conversionRate < optimizationConfig.thresholds[stepIndex]) {
+      triggerStepOptimization(stepIndex, stepData)
+    }
+  }, [funnelSteps, optimizationConfig])
+
+  return (
+    <FunnelProgressIndicator
+      steps={funnelSteps}
+      currentStep={currentStep}
+      onStepComplete={trackFunnelStep}
+    />
+  )
+}
+```
+
+### **Dynamic Content Optimization:**
+```typescript
+// AI-powered content optimization
+const useDynamicContentOptimization = (contentConfig) => {
+  const [optimizedContent, setOptimizedContent] = useState(contentConfig.default)
+  
+  useEffect(() => {
+    const optimizeContent = async () => {
+      try {
+        const userContext = {
+          segment: getUserSegment(),
+          behavior: getUserBehaviorData(),
+          preferences: getUserPreferences(),
+          device: getDeviceInfo()
+        }
+
+        const optimization = await getAIContentOptimization(
+          contentConfig, 
+          userContext
+        )
+
+        setOptimizedContent(optimization.content)
+        
+        // Track optimization impact
+        analytics.track('Content Optimization Applied', {
+          original: contentConfig.default,
+          optimized: optimization.content,
+          confidence: optimization.confidence,
+          userContext
+        })
+      } catch (error) {
+        console.warn('Content optimization failed, using default')
+      }
+    }
+
+    optimizeContent()
+  }, [contentConfig])
+
+  return optimizedContent
+}
+```
+
+## 💡 **MARKETING UPDATE EXAMPLES:**
+
+### **Example 1: CRO-Optimized Hero Section**
+```typescript
+const CROOptimizedHero = ({ baseContent, testConfig }) => {
+  const { currentVariant, trackConversion } = useAdvancedABTesting(testConfig)
+  const { getPersonalizedHeadline, getPersonalizedCTA } = useMarketingPersonalization()
+  
+  const optimizedContent = {
+    ...baseContent,
+    headline: getPersonalizedHeadline(baseContent.headline),
+    primaryCTA: {
+      ...baseContent.primaryCTA,
+      text: getPersonalizedCTA(baseContent.primaryCTA.text)
+    }
+  }
+
+  return (
+    <HeroSection
+      content={optimizedContent}
+      variant={currentVariant}
+      onConversion={trackConversion}
+      performanceOptimized={true}
+    />
+  )
+}
+```
+
+### **Example 2: Analytics-Enhanced Feature Block**
+```typescript
+const AnalyticsFeatureBlock = ({ features }) => {
+  const { trackAttribution } = useMarketingAttribution()
+  const performanceMetrics = useMarketingPerformanceMonitoring()
+  
+  const handleFeatureInteraction = (featureId, interactionType) => {
+    trackAttribution(`feature_${interactionType}`, {
+      featureId,
+      position: features.findIndex(f => f.id === featureId),
+      performanceContext: performanceMetrics
+    })
+  }
+
+  return (
+    <FeatureBlock
+      features={features}
+      onInteraction={handleFeatureInteraction}
+      realTimeMetrics={performanceMetrics}
+      optimizationEnabled={true}
+    />
+  )
+}
+```
+
+## 🚨 **COMMON UPDATE PITFALLS:**
+
+### **Over-Optimization:**
+- **Analysis paralysis** - Don't optimize everything; focus on high-impact changes
+- **Statistical significance rushing** - Ensure adequate sample sizes before conclusions
+- **Variant proliferation** - Limit A/B test variants to maintain statistical power
+- **Personalization complexity** - Balance personalization with maintainability
+
+### **Performance Regressions:**
+- **Analytics bloat** - Monitor tracking script impact on page performance
+- **Image optimization neglect** - Ensure new images maintain optimization standards
+- **JavaScript bundle growth** - Code split new features and lazy load when possible
+- **Memory leaks** - Clean up event listeners and real-time subscriptions
+
+### **Data Quality Issues:**
+- **Attribution accuracy** - Validate tracking implementation across all touchpoints
+- **Cross-device tracking** - Ensure user journey tracking works across devices
+- **Privacy compliance** - Respect user privacy preferences and regulations
+- **Data consistency** - Maintain consistent event schemas across marketing components
+
+## 🔧 **INTEGRATION WITH OTHER UPDATE PROMPTS:**
+
+### **Performance Integration:**
+- Coordinate with overall application performance optimization efforts
+- Ensure marketing enhancements don't negatively impact Core Web Vitals
+
+### **Analytics Integration:**
+- Align marketing tracking with broader analytics and data strategy
+- Maintain consistent event naming and data schema conventions
+
+### **UI Update Integration:**
+- Ensure marketing component updates align with design system changes
+- Coordinate CTA and button updates with UI component improvements
+
+**This marketing update prompt ensures systematic enhancement of marketing components with focus on conversion optimization, performance, and data-driven decision making while maintaining technical excellence.**

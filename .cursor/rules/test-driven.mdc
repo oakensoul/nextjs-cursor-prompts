@@ -1,0 +1,233 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Test-Driven Development Rule
+
+**This rule enforces a test-first development process for critical code that requires high confidence and clear specification.**
+
+## 🎯 **TDD PRINCIPLES:**
+
+1. **RED** - Write a failing test first
+2. **GREEN** - Write minimal code to make it pass
+3. **REFACTOR** - Improve code while keeping tests green
+4. **REPEAT** - Continue the cycle for each new feature
+
+## 🚫 **FORBIDDEN ACTIONS:**
+
+1. **DO NOT write implementation before tests** - tests define the specification
+2. **DO NOT skip failing test phase** - must see red before green
+3. **DO NOT write complex logic without tests** - break into testable units
+4. **DO NOT modify multiple features** in one TDD cycle
+5. **DO NOT ignore edge cases** - test error conditions and boundaries
+6. **DO NOT skip refactoring phase** - clean up code after each cycle
+7. **DO NOT commit failing tests** - complete the cycle before committing
+
+## ✅ **REQUIRED TDD PROCESS:**
+
+### **1. DEFINE the specification** through tests
+- Write test cases that describe expected behavior
+- Include happy path, edge cases, and error conditions
+- Use descriptive test names that explain the requirement
+- Start with the simplest test case
+
+### **2. IMPLEMENT minimally** to pass tests
+- Write only enough code to make tests pass
+- Avoid over-engineering or premature optimization
+- Keep implementation focused on test requirements
+- Don't add features not covered by tests
+
+### **3. REFACTOR safely** with test coverage
+- Improve code structure while tests remain green
+- Extract functions, improve naming, optimize performance
+- Run tests after each refactoring step
+- Maintain the external interface defined by tests
+
+### **4. EXTEND incrementally** with new test cycles
+- Add one new test for the next requirement
+- Follow the same RED-GREEN-REFACTOR cycle
+- Build complexity gradually through multiple iterations
+- Maintain test coverage as features grow
+
+## 🎯 **WHEN TO APPLY TDD:**
+
+### **High-Value Targets:**
+- **Business logic functions** - calculations, validations, algorithms
+- **API endpoints** - request/response handling, data transformation
+- **Data processing utilities** - parsing, formatting, conversion
+- **Authentication/authorization** - security-critical functionality
+- **Integration points** - external API clients, database operations
+
+### **Consider TDD For:**
+- **Complex algorithms** - sorting, searching, optimization
+- **Error handling** - recovery strategies, fallback mechanisms
+- **State management** - reducers, state transitions
+- **Validation logic** - form validation, data integrity
+
+### **TDD Not Required For:**
+- **Simple UI components** - basic display components
+- **Configuration** - environment setup, constants
+- **Styling** - CSS, design system components
+- **Boilerplate** - standard CRUD operations
+
+## 📋 **TDD IMPLEMENTATION STEPS:**
+
+### **Step 1: Write Failing Test**
+```typescript
+// Example: Testing a user validation function
+describe('validateUser', () => {
+  it('should return true for valid user data', () => {
+    const validUser = { name: 'John', email: 'john@example.com' };
+    expect(validateUser(validUser)).toBe(true);
+  });
+});
+```
+
+### **Step 2: Run Test (Should Fail)**
+```bash
+npm test -- --watch
+# Verify test fails because validateUser doesn't exist
+```
+
+### **Step 3: Write Minimal Implementation**
+```typescript
+function validateUser(user: any): boolean {
+  return true; // Simplest implementation to pass
+}
+```
+
+### **Step 4: Run Test (Should Pass)**
+```bash
+npm test
+# Verify test now passes
+```
+
+### **Step 5: Add More Specific Test**
+```typescript
+it('should return false for user without email', () => {
+  const invalidUser = { name: 'John' };
+  expect(validateUser(invalidUser)).toBe(false);
+});
+```
+
+### **Step 6: Update Implementation**
+```typescript
+function validateUser(user: any): boolean {
+  return user && user.email && user.email.length > 0;
+}
+```
+
+### **Step 7: Refactor Safely**
+```typescript
+interface User {
+  name: string;
+  email: string;
+}
+
+function validateUser(user: User): boolean {
+  return Boolean(user?.email?.trim());
+}
+```
+
+## 🔍 **TDD QUALITY CHECKPOINTS:**
+
+### **Before Starting:**
+- [ ] Test framework is set up and working
+- [ ] Clear understanding of requirements
+- [ ] Testable interface is defined
+- [ ] Edge cases are identified
+
+### **During Each Cycle:**
+- [ ] Test fails initially (RED phase)
+- [ ] Minimal code makes test pass (GREEN phase)
+- [ ] Code is refactored while tests stay green
+- [ ] New test is added for next requirement
+
+### **After Completion:**
+- [ ] All tests pass consistently
+- [ ] Code coverage is comprehensive
+- [ ] Tests are readable and maintainable
+- [ ] Implementation is clean and simple
+
+## 💡 **TDD APPLICATION EXAMPLES:**
+
+### **Example 1: API Endpoint Development**
+```
+Create user registration endpoint using TDD
+
+Apply .cursor/rules/test-driven.mdc - write tests for valid registration, duplicate email handling, validation errors, and success response before implementing endpoint.
+```
+
+### **Example 2: Business Logic Function**
+```
+Implement order total calculation with tax and discounts
+
+Apply .cursor/rules/test-driven.mdc - test basic calculation, tax application, discount rules, and edge cases before writing the calculation logic.
+```
+
+### **Example 3: Data Validation Utility**
+```
+Create form validation utility for user profiles
+
+Apply .cursor/rules/test-driven.mdc - test each validation rule, error messages, and success cases before implementing validation functions.
+```
+
+## 🚨 **TDD ESCALATION TRIGGERS:**
+
+Stop TDD process and ask for guidance if:
+- **Requirements are unclear** and tests can't be written confidently
+- **External dependencies** make testing complex or impossible
+- **Performance constraints** require optimization before correctness
+- **Legacy integration** requires understanding existing behavior first
+- **Time constraints** make full TDD cycle impractical
+
+## 🔧 **TDD BEST PRACTICES:**
+
+### **Test Organization:**
+- **Group related tests** in describe blocks
+- **Use clear, descriptive names** for test cases
+- **Follow AAA pattern** - Arrange, Act, Assert
+- **Keep tests independent** - no shared state between tests
+
+### **Test Quality:**
+- **Test behavior, not implementation** - focus on what, not how
+- **Cover edge cases** - null, empty, boundary values
+- **Test error conditions** - invalid input, network failures
+- **Keep tests simple** - one assertion per test when possible
+
+### **TDD Workflow:**
+- **Start with simplest test** - build complexity gradually
+- **Take small steps** - rapid feedback cycles
+- **Commit frequently** - save progress after each cycle
+- **Refactor regularly** - don't accumulate technical debt
+
+## 🔄 **TDD VS. OTHER TESTING APPROACHES:**
+
+### **TDD (Test-First):**
+- Tests drive the design
+- Ensures 100% test coverage
+- Prevents over-engineering
+- Higher confidence in correctness
+
+### **Test-After:**
+- Implementation drives the design
+- May miss edge cases
+- Risk of untestable code
+- Lower coverage guarantees
+
+### **When to Choose TDD:**
+- Requirements are clear and stable
+- Code quality is critical
+- Complex business logic
+- Team has TDD experience
+
+### **When Test-After May Be Better:**
+- Exploratory development
+- Rapid prototyping
+- Simple CRUD operations
+- External API integration
+
+---
+
+**This rule ensures critical code is thoroughly tested and correctly implemented through disciplined test-first development.**

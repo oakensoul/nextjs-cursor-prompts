@@ -1,0 +1,332 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Developer Documentation Update Guide
+
+**This prompt systematically updates developer-focused documentation to reflect current coding standards, development workflows, setup procedures, and technical implementation details.**
+
+## 🎯 **OBJECTIVES:**
+
+1. **UPDATE coding standards** to reflect current development practices
+2. **SYNCHRONIZE setup procedures** with current development environment
+3. **MAINTAIN workflow documentation** for current development processes
+4. **ENSURE technical accuracy** of implementation guides and examples
+5. **VALIDATE development tool** documentation and configurations
+
+## 📋 **DEVELOPER DOCUMENTATION UPDATE PROCESS:**
+
+### **STEP 1: Development Environment Assessment**
+
+#### **Current Development Stack Analysis:**
+```bash
+echo "💻 Development Environment Assessment"
+echo "===================================="
+
+# Check current technology versions
+echo "Technology Stack Versions:"
+node --version
+npm --version
+if [ -f "package.json" ]; then
+    echo "Package.json dependencies:"
+    cat package.json | grep -E "(next|react|typescript|vitest)" -A 1
+fi
+
+# Verify development tools
+echo "Development Tools:"
+ls -la .vscode/ .cursor/ 2>/dev/null || echo "No editor configs found"
+
+# Check build and development scripts
+echo "Available Scripts:"
+if [ -f "package.json" ]; then
+    grep -A 10 '"scripts"' package.json
+fi
+
+# Verify environment configuration
+echo "Environment Configuration:"
+ls -la .env* 2>/dev/null || echo "No environment files found"
+```
+
+#### **Development Workflow Changes:**
+- **New development tools** added to the development stack
+- **Updated dependencies** affecting development workflow
+- **Changed build processes** requiring documentation updates
+- **Modified testing strategies** affecting developer workflow
+- **Updated deployment processes** impacting development practices
+
+#### **Documentation Gap Analysis:**
+- **Missing setup steps** for new development tools
+- **Outdated configuration examples** not reflecting current setup
+- **Incomplete workflow documentation** missing recent processes
+- **Broken code examples** that no longer work with current stack
+- **Missing troubleshooting guides** for common development issues
+
+### **STEP 2: Coding Standards Updates**
+
+#### **Current Coding Standards Review:**
+```typescript
+// Verify current coding patterns
+interface CodingStandardsReview {
+  typescriptPatterns: boolean;
+  reactPatterns: boolean;
+  testingPatterns: boolean;
+  fileOrganization: boolean;
+  namingConventions: boolean;
+  codeQuality: boolean;
+}
+
+// Check for current coding standard examples
+const codeStandardsChecklist = [
+  'component-structure',
+  'typescript-interfaces',
+  'testing-patterns',
+  'file-naming',
+  'import-organization',
+  'error-handling'
+];
+```
+
+#### **Standards Documentation Updates:**
+```markdown
+## Coding Standards Updates Required:
+
+### TypeScript Standards:
+- [ ] **Interface definitions** - Update current interface patterns
+- [ ] **Type safety practices** - Reflect current type usage
+- [ ] **Generic patterns** - Update generic usage examples
+- [ ] **Utility types** - Document current utility type usage
+
+### React Standards:
+- [ ] **Component patterns** - Update current component structure
+- [ ] **Hook usage** - Reflect current custom hook patterns
+- [ ] **State management** - Update current state patterns
+- [ ] **Performance patterns** - Document current optimization practices
+
+### Testing Standards:
+- [ ] **Unit test patterns** - Update current testing approaches
+- [ ] **Integration test patterns** - Reflect current integration testing
+- [ ] **Accessibility testing** - Update a11y testing practices
+- [ ] **Test organization** - Document current test structure
+
+### Code Organization:
+- [ ] **File structure** - Update current project organization
+- [ ] **Import patterns** - Reflect current import organization
+- [ ] **Barrel exports** - Update current export strategies
+- [ ] **Module boundaries** - Document current modularization
+```
+
+### **STEP 3: Setup and Environment Documentation**
+
+#### **Development Setup Updates:**
+```bash
+echo "🔧 Development Setup Documentation Review"
+echo "========================================"
+
+# Document current setup requirements
+echo "Setup Requirements Documentation:"
+echo "1. Node.js version requirements"
+echo "2. Package manager preferences"
+echo "3. IDE/Editor setup and extensions"
+echo "4. Environment variable configuration"
+echo "5. Database setup (if applicable)"
+echo "6. External service configuration"
+
+# Verify setup scripts
+echo "Setup Scripts Review:"
+if [ -f "setup.sh" ] || [ -f "scripts/setup.sh" ]; then
+    echo "Setup scripts found - need validation"
+else
+    echo "No setup scripts found - may need creation"
+fi
+```
+
+#### **Environment Configuration Updates:**
+- **Development environment** - Update local development setup instructions
+- **Testing environment** - Update testing environment configuration
+- **Build environment** - Update build process and configuration
+- **Deployment environment** - Update deployment setup and processes
+- **IDE configuration** - Update editor setup and extension recommendations
+
+### **STEP 4: Workflow Documentation Updates**
+
+#### **Development Workflow Review:**
+```markdown
+## Development Workflow Updates:
+
+### Daily Development Workflow:
+- [ ] **Git workflow** - Update current branching and commit practices
+- [ ] **Code review process** - Reflect current review procedures
+- [ ] **Testing workflow** - Update current testing practices
+- [ ] **Build and deployment** - Document current CI/CD processes
+
+### Feature Development Workflow:
+- [ ] **Feature planning** - Update current feature development process
+- [ ] **Implementation approach** - Document current development practices
+- [ ] **Quality assurance** - Update current QA and testing processes
+- [ ] **Release procedures** - Document current release workflow
+
+### Collaboration Workflow:
+- [ ] **Team communication** - Update current communication practices
+- [ ] **Code sharing** - Document current code sharing procedures
+- [ ] **Knowledge sharing** - Update current documentation practices
+- [ ] **Issue tracking** - Document current issue management workflow
+```
+
+#### **Tool and Configuration Updates:**
+```json
+// Update development tool configurations
+{
+  "vscode": {
+    "extensions": ["current extension list"],
+    "settings": {"current workspace settings"}
+  },
+  "prettier": {"current formatting configuration"},
+  "eslint": {"current linting configuration"},
+  "typescript": {"current TypeScript configuration"},
+  "testing": {"current testing configuration"}
+}
+```
+
+### **STEP 5: Technical Implementation Updates**
+
+#### **Implementation Guide Updates:**
+```typescript
+// Verify current implementation patterns
+interface ImplementationPatterns {
+  componentPatterns: boolean;
+  hookPatterns: boolean;
+  apiPatterns: boolean;
+  statePatterns: boolean;
+  testingPatterns: boolean;
+  performancePatterns: boolean;
+}
+
+// Update implementation examples
+const implementationSections = [
+  'component-implementation',
+  'custom-hooks',
+  'api-integration',
+  'state-management',
+  'testing-implementation',
+  'performance-optimization'
+];
+```
+
+#### **Code Example Validation:**
+- **Component examples** - Verify current component implementation examples
+- **Hook examples** - Update custom hook implementation examples
+- **API examples** - Validate current API integration examples
+- **Testing examples** - Update current testing implementation examples
+- **Performance examples** - Document current optimization implementations
+
+## ✅ **UPDATE REQUIREMENTS:**
+
+### **Technical Accuracy:**
+- **Current stack reflection** - All documentation reflects current technology stack
+- **Working examples** - All code examples compile and work correctly
+- **Setup validity** - All setup instructions work with current environment
+- **Workflow accuracy** - All workflows reflect current development practices
+- **Tool configuration** - All tool configs work with current setup
+
+### **Developer Experience:**
+- **Clear instructions** - All setup and workflow instructions are clear
+- **Complete coverage** - All aspects of development process documented
+- **Troubleshooting support** - Common issues and solutions documented
+- **Best practices** - Current best practices clearly documented
+- **Efficiency optimization** - Documentation supports efficient development
+
+### **Maintenance Quality:**
+- **Update sustainability** - Documentation structure supports easy updates
+- **Version tracking** - All version information accurate and current
+- **Change management** - Process for updating documentation established
+- **Quality validation** - Process for verifying documentation accuracy
+- **Stakeholder alignment** - Documentation meets developer team needs
+
+## 🔍 **VALIDATION METHODOLOGY:**
+
+### **Technical Validation:**
+```bash
+echo "✅ Developer Documentation Validation"
+echo "==================================="
+
+# Test setup instructions
+echo "Testing setup procedures..."
+# [Run through setup steps on clean environment]
+
+# Validate code examples
+echo "Validating code examples..."
+# [Compile and test all code examples]
+
+# Check tool configurations
+echo "Testing tool configurations..."
+# [Verify all configuration files work]
+
+# Test workflow procedures
+echo "Testing documented workflows..."
+# [Walk through documented development workflows]
+```
+
+### **Developer Experience Testing:**
+- **New developer onboarding** - Test setup process with new team member
+- **Workflow walkthrough** - Test documented workflows with team
+- **Example validation** - Verify all examples work as documented
+- **Troubleshooting testing** - Validate troubleshooting guides solve issues
+
+## 💡 **INTEGRATION EXAMPLES:**
+
+### **After Technology Stack Updates:**
+```
+Update developer documentation after Next.js 15 upgrade using .cursor/prompts/documentation/documentation-update-developer.mdc
+
+Technology changes: Next.js 15, React 19, updated build process - need comprehensive developer documentation update.
+```
+
+### **New Development Tool Integration:**
+```
+Update developer docs for new testing framework using documentation-update-developer.mdc
+
+Apply .cursor/rules/code-change-minimal.mdc - preserve existing development workflows while integrating new testing tools.
+```
+
+### **Development Process Improvements:**
+```
+Update developer documentation for improved Git workflow using documentation-update-developer.mdc
+
+Focus on: New branching strategy, updated code review process, and enhanced CI/CD integration.
+```
+
+## 🚨 **CRITICAL UPDATE TRIGGERS:**
+
+### **Immediate Update Required:**
+- **Technology stack changes** - Major framework or tool updates
+- **Development tool changes** - New or updated development tools
+- **Workflow process changes** - Modified development or deployment processes
+- **Environment changes** - Updates to development environment setup
+- **Standards updates** - Changes to coding standards or best practices
+
+### **Quality Gates:**
+Before completing developer documentation update:
+- [ ] All setup instructions tested on clean environment
+- [ ] All code examples compile and work correctly
+- [ ] All tool configurations validated
+- [ ] All workflows tested by team members
+- [ ] All troubleshooting guides verified
+
+## 🔧 **MAINTENANCE INTEGRATION:**
+
+### **Regular Updates:**
+- **Technology update reviews** - Updates when tech stack changes
+- **Workflow improvement reviews** - Updates when processes improve
+- **Tool integration reviews** - Updates when new tools are adopted
+- **Standards evolution reviews** - Updates when coding standards evolve
+
+### **Success Criteria:**
+- **Developer productivity** - Documentation supports efficient development
+- **Onboarding effectiveness** - New developers can set up and contribute quickly
+- **Process clarity** - All development processes clearly documented
+- **Technical accuracy** - All technical information current and correct
+
+---
+
+**This prompt ensures developer documentation remains current, accurate, and valuable for supporting efficient development workflows and team productivity.**

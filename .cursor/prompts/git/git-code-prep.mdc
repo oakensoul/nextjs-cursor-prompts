@@ -1,0 +1,297 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Git Code Preparation Guide
+
+**This prompt handles the preparation phase of git workflow - analyzing changes, updating documentation, and planning commits before actual commit execution.**
+
+## 🎯 **PREPARATION OBJECTIVES:**
+
+1. **ANALYZE code changes** and determine commit strategy
+2. **UPDATE documentation** including changelogs and project docs
+3. **PLAN commit structure** and messaging strategy
+4. **RUN initial quality checks** and precommit hooks
+5. **STAGE appropriate files** for commit execution
+
+## 📋 **PREPARATION PROCESS:**
+
+### **STEP 1: Change Analysis & Assessment**
+
+#### **Comprehensive Change Review:**
+- **Analyze scope of changes** - Review all modified, added, and deleted files
+- **Categorize changes by type** - Features, bug fixes, refactoring, documentation, etc.
+- **Identify breaking changes** - API modifications, interface changes, deprecated features
+- **Assess user impact** - How changes affect functionality and user experience
+- **Determine version impact** - Major, minor, or patch version bump needed
+
+#### **Change Impact Assessment:**
+- **Files modified** - List all changed files with brief description of changes
+- **Dependencies affected** - External packages, internal modules, configuration files
+- **Database implications** - Schema changes, migration requirements, data impact
+- **API surface changes** - New endpoints, modified responses, deprecated routes
+- **Performance implications** - Bundle size impact, runtime performance changes
+
+### **STEP 2: Commit Strategy Planning**
+
+#### **Commit Structure Decision:**
+- **Single commit criteria** - Small, cohesive changes related to single concern
+- **Multiple commit criteria** - Mixed change types, large features, independent fixes
+- **Logical grouping** - Group related changes into coherent commit units
+- **Dependency ordering** - Plan commit sequence to maintain working state
+
+#### **Commit Planning Matrix:**
+```
+Commit 1: [Type] - [Brief description]
+  ├── Files: [list of files]
+  ├── Scope: [what this commit covers]
+  └── Message: [planned commit message]
+
+Commit 2: [Type] - [Brief description]  
+  ├── Files: [list of files]
+  ├── Scope: [what this commit covers]
+  └── Message: [planned commit message]
+```
+
+### **STEP 3: Documentation Updates**
+
+#### **Changelog Updates (MANDATORY):**
+Update `/src/data/changelog.ts` with new entries following this format:
+
+```typescript
+{
+    version: '1.0.0',
+    date: '2024-03-20', 
+    type: 'feature' | 'bugfix' | 'enhancement' | 'security' | 'breaking' | 'documentation',
+    title: 'Brief descriptive title',
+    description: 'Detailed description of changes and their impact'
+}
+```
+
+**Changelog Guidelines:**
+- **Version**: Follow semantic versioning (MAJOR.MINOR.PATCH)
+- **Date**: Use ISO format (YYYY-MM-DD) 
+- **Type**: Choose most appropriate category
+- **Title**: Clear, user-facing description
+- **Description**: Explain what changed and why it matters to users
+
+#### **LLMs.mdc Updates:**
+Update `llms.mdc` if changes affect:
+- **New components or patterns** that AI should know about
+- **Changed development standards** or coding practices
+- **New testing requirements** or testing procedures
+- **Updated project structure** or architectural patterns
+- **New dependencies or tools** introduced to the project
+
+#### **SEO and Structure Updates:**
+Update `sitemap.xml` if changes include:
+- **New pages or routes** added to the application
+- **Changed URL structures** or routing patterns
+- **New public content** or user-facing features
+- **Updated page priorities** or crawl frequencies
+- **Removed or deprecated** public pages
+
+### **STEP 4: Initial Quality Checks**
+
+#### **Pre-commit Hook Execution:**
+```bash
+# Run standard precommit checks
+npm run precommit         # Project-specific precommit hooks
+npm run lint              # Code linting and style checks
+npm run type-check        # TypeScript type validation
+npm run format-check      # Code formatting verification
+```
+
+#### **Basic Validation Checks:**
+- [ ] **Code compiles** - TypeScript compilation succeeds
+- [ ] **Linting passes** - ESLint rules are satisfied
+- [ ] **Formatting consistent** - Prettier formatting applied
+- [ ] **No obvious errors** - Console clear of critical errors
+- [ ] **Dependencies resolved** - No missing or conflicting packages
+
+### **STEP 5: File Staging Strategy**
+
+#### **Staging Decisions:**
+- **Files to include** - Determine which modified files belong in this commit set
+- **Files to exclude** - Identify files that should be in separate commits
+- **Partial staging** - Use `git add -p` for selective line staging when needed
+- **Documentation staging** - Include all related documentation updates
+
+#### **Staging Verification:**
+```bash
+# Review staging status
+git status                # Overall repository status
+git diff --staged         # Review staged changes
+git diff                  # Review unstaged changes
+```
+
+## 🔍 **QUALITY PREPARATION STANDARDS:**
+
+### **Documentation Completeness:**
+- [ ] **Changelog entries** created for all user-facing changes
+- [ ] **LLMs.mdc updated** for development practice changes
+- [ ] **Sitemap updated** for structural or SEO changes
+- [ ] **README updates** if setup or usage procedures changed
+- [ ] **API documentation** reflects any interface changes
+
+### **Commit Message Planning:**
+Follow conventional commit format:
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Types:**
+- `feat`: New feature for users
+- `fix`: Bug fix for users
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code refactoring without feature changes
+- `test`: Adding or updating tests
+- `chore`: Maintenance tasks
+- `perf`: Performance improvements
+- `ci`: CI/CD changes
+- `build`: Build system changes
+
+**Example Planned Messages:**
+```
+feat(auth): add password reset functionality
+
+- Implement forgot password flow with email verification
+- Add password strength validation with real-time feedback
+- Update auth service to handle reset tokens securely
+- Include comprehensive error handling and user feedback
+
+Closes #123
+```
+
+### **Change Categorization:**
+- **Breaking changes** - Major version bump, requires migration guide
+- **New features** - Minor version bump, enhanced functionality
+- **Bug fixes** - Patch version bump, issue resolution
+- **Documentation** - Patch version bump, improved clarity
+- **Refactoring** - Patch version bump, internal improvements
+
+## 📊 **PREPARATION DELIVERABLES:**
+
+### **REQUIRED OUTPUTS:**
+
+#### **1. Change Analysis Report:**
+```markdown
+## Change Summary
+- **Total files modified**: [number]
+- **Change types**: [feature/fix/docs/refactor]
+- **Version impact**: [major/minor/patch]
+- **Breaking changes**: [yes/no - list if yes]
+
+## File Changes
+- **[file path]**: [description of changes]
+- **[file path]**: [description of changes]
+
+## Impact Assessment
+- **User impact**: [description]
+- **Performance impact**: [description]
+- **Security implications**: [description]
+```
+
+#### **2. Commit Strategy Plan:**
+```markdown
+## Planned Commits
+1. **[type]: [description]**
+   - Files: [list]
+   - Scope: [what this covers]
+   - Message: [draft message]
+
+2. **[type]: [description]**
+   - Files: [list]
+   - Scope: [what this covers]
+   - Message: [draft message]
+```
+
+#### **3. Documentation Updates Confirmation:**
+- [ ] **Changelog.ts updated** - New entries added
+- [ ] **LLMs.mdc updated** - Development changes documented
+- [ ] **Sitemap.xml updated** - Structure changes reflected
+- [ ] **Additional docs updated** - Any other relevant documentation
+
+#### **4. Quality Check Results:**
+```bash
+# Precommit execution results
+✅ npm run precommit     - [PASS/FAIL]
+✅ npm run lint          - [PASS/FAIL]
+✅ npm run type-check    - [PASS/FAIL]
+✅ npm run format-check  - [PASS/FAIL]
+```
+
+#### **5. Staging Recommendation:**
+```markdown
+## Staging Plan
+**Files to stage for next commit:**
+- [file path] - [reason]
+- [file path] - [reason]
+
+**Files to stage separately:**
+- [file path] - [reason for separation]
+- [file path] - [reason for separation]
+
+**Files to exclude:**
+- [file path] - [reason for exclusion]
+```
+
+## 🚨 **PREPARATION RED FLAGS:**
+
+**Stop and address if:**
+- **Massive scope** - Changes affect >20 files across multiple concerns
+- **Mixed concerns** - Features, fixes, and refactoring all mixed together
+- **Missing documentation** - User-facing changes without changelog entries
+- **Broken build** - Code doesn't compile or precommit hooks fail
+- **Unclear impact** - Changes have unknown or untested side effects
+- **Security concerns** - Potential security implications not addressed
+
+## 💡 **PREPARATION EXAMPLES:**
+
+### **Example 1: Feature Addition**
+```
+I've added a new user dashboard component with data visualization.
+
+Following .cursor/prompts/git/git-code-prep.mdc:
+- Analyze: New feature, minor version bump
+- Document: Add changelog entry, update component docs
+- Plan: Single commit for cohesive feature
+```
+
+### **Example 2: Multiple Changes**
+```
+I've fixed a bug, refactored some utilities, and updated documentation.
+
+Following .cursor/prompts/git/git-code-prep.mdc:
+- Analyze: Mixed types, plan separate commits
+- Document: Changelog for bug fix, docs for refactor
+- Plan: 3 commits - fix, refactor, docs
+```
+
+### **Example 3: Breaking Change**
+```
+I've updated the API response format for user endpoints.
+
+Following .cursor/prompts/git/git-code-prep.mdc:
+- Analyze: Breaking change, major version bump
+- Document: Changelog with migration guide
+- Plan: Single commit with comprehensive documentation
+```
+
+## 🔄 **NEXT STEPS:**
+
+After successful preparation:
+1. **Review preparation outputs** - Ensure all documentation is complete
+2. **Verify staging plan** - Confirm file staging strategy makes sense
+3. **Proceed to commit phase** - Use `.cursor/prompts/git/git-code-commit.mdc`
+4. **Execute planned commits** - Follow the prepared commit strategy
+
+---
+
+**This preparation phase ensures commits are well-planned, documented, and ready for clean execution.**

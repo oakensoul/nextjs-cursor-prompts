@@ -1,0 +1,159 @@
+---
+description: Minimal Change Hook - Ensures focused, minimal changes that respect existing codebase and avoid unnecessary rewrites or assumptions
+globs: 
+alwaysApply: false
+---
+---
+title: Minimal Change Hook
+description: Ensures focused, minimal changes that respect existing codebase and avoid unnecessary rewrites or assumptions
+tags: [prompt, minimal-change, focused-updates, code-preservation, incremental-changes]
+version: 1.0.0
+lastUpdated: 2025-06-02
+usage: Use as a prefix when making small updates or targeted changes to existing code
+audience: [claude, ai-assistants]
+scope: [code-preservation, minimal-changes, incremental-updates, existing-codebase-respect]
+---
+
+# Minimal Code Change Rule
+
+**This rule applies to ANY development task. When referenced, you must follow these constraints regardless of the primary prompt.**
+
+## 🚫 **FORBIDDEN ACTIONS:**
+
+1. **DO NOT rewrite existing working code** unless explicitly required for the task
+2. **DO NOT assume files don't exist** - always analyze the current codebase first
+3. **DO NOT change file structure** or move files unless specifically requested
+4. **DO NOT modify unrelated code** or files outside the task scope
+5. **DO NOT add new dependencies** unless absolutely necessary for the task
+6. **DO NOT change existing patterns** or architecture without explicit need
+7. **DO NOT refactor for the sake of refactoring** - preserve working patterns
+8. **DO NOT over-engineer** simple requests into complex solutions
+
+## ✅ **REQUIRED ACTIONS:**
+
+1. **ANALYZE the existing codebase** thoroughly before any changes
+2. **PRESERVE existing patterns** and coding styles
+3. **MAKE MINIMAL changes** that accomplish the specific task
+4. **USE existing utilities** and helper functions where possible
+5. **MAINTAIN consistency** with current codebase architecture
+6. **ASK for clarification** if the task scope is ambiguous
+7. **VERIFY file locations** and existing implementations first
+
+## 🔒 **BUILT-IN SECURITY REQUIREMENTS:**
+
+- **Validate all inputs** - sanitize user data and API parameters
+- **Authenticate protected actions** - verify user permissions before execution
+- **Use secure defaults** - HTTPS, secure cookies, proper CORS settings
+- **Log security events** - track authentication failures and suspicious activity
+- **Escape output** - prevent XSS in rendered content
+
+## 📝 **BUILT-IN TYPE SAFETY REQUIREMENTS:**
+
+- **Define proper interfaces** - create TypeScript types for all data structures
+- **Use strict typing** - no `any`, prefer specific types and unions
+- **Validate runtime data** - use zod or similar for API responses and user input
+- **Type component props** - define clear interfaces for React component properties
+- **Handle null/undefined** - explicitly handle optional values and edge cases
+
+## ⚡ **BUILT-IN PERFORMANCE REQUIREMENTS:**
+
+- **Minimize re-renders** - use React.memo, useMemo, useCallback appropriately
+- **Optimize data fetching** - avoid waterfalls, prefetch when possible
+- **Code split appropriately** - dynamic imports for heavy features
+- **Measure before/after** - use performance tools to verify no regression
+- **Consider bundle size** - avoid heavy dependencies for simple tasks
+
+## ♿ **BUILT-IN ACCESSIBILITY REQUIREMENTS:**
+
+- **Use semantic HTML** - proper heading structure, lists, navigation
+- **Add ARIA labels** - for interactive elements and dynamic content
+- **Ensure keyboard navigation** - all interactive elements must be keyboard accessible
+- **Maintain color contrast** - meet WCAG AA contrast ratios
+- **Test with screen readers** - verify announcements make sense
+
+## 📋 **MANDATORY PROCESS:**
+
+### 1. **Scope Analysis**
+- Identify the exact minimal set of changes needed
+- Check for existing implementations of similar functionality
+- Understand what exists vs. what needs to be created
+
+### 2. **Impact Assessment**
+- Determine which files actually need modification
+- Identify existing code that can be reused
+- Verify what should be preserved unchanged
+
+### 3. **Conservative Implementation**
+- Make only necessary changes to achieve the task goal
+- Preserve all existing working functionality
+- Follow established patterns and conventions
+
+## 🎯 **SCOPE BOUNDARIES:**
+
+### **Modify Only:**
+- Files directly required for the task
+- Specific functions/components that need changes
+- Code that must change to achieve the goal
+
+### **Preserve Always:**
+- All existing working functionality
+- Current file organization and structure
+- Established patterns and architectural decisions
+- Working tests and validation
+- Current dependencies and imports
+
+## 🔍 **VERIFICATION REQUIREMENTS:**
+
+Before implementing, confirm:
+- [ ] Task scope is clearly understood and limited
+- [ ] Existing codebase has been analyzed
+- [ ] Changes are minimal and focused
+- [ ] No unnecessary rewrites are planned
+- [ ] Existing patterns will be followed
+- [ ] Unrelated functionality remains untouched
+
+## 🚨 **ESCALATION TRIGGERS:**
+
+If your analysis reveals any of these, **STOP** and ask for guidance:
+- Need to rewrite >20 lines of existing working code
+- Need to create new files when similar ones might exist
+- Need to modify >3 files for the task
+- Need to change unrelated functionality
+- Need to add new dependencies or architectural patterns
+- Task conflicts with existing codebase architecture
+
+## 💡 **Application Examples:**
+
+### **When Creating Tests** + Minimal Change Rule:
+```
+Create comprehensive tests for /src/components/auth/ using .cursor/prompts/test/test-create-comprehensive.mdc
+
+Apply .cursor/rules/code-change-minimal.mdc - preserve existing test structure, reuse existing test utilities, don't modify working components.
+```
+
+### **When Adding Components** + Minimal Change Rule:
+```
+Create a UserCard component using .cursor/prompts/component/component-create-guide.mdc
+
+Apply .cursor/rules/code-change-minimal.mdc - use existing design patterns, reuse existing utilities, don't modify existing components.
+```
+
+### **When Refactoring** + Minimal Change Rule:
+```
+Improve the authentication flow using .cursor/prompts/code/code-review-quality.mdc
+
+Apply .cursor/rules/code-change-minimal.mdc - make targeted improvements only, preserve working functionality, don't rewrite the entire auth system.
+```
+
+## 🔧 **Rule Override Protocol:**
+
+If the task genuinely requires broader changes than this rule allows:
+
+1. **EXPLAIN** why minimal changes won't achieve the task goal
+2. **PROPOSE** the most minimal approach possible
+3. **REQUEST** explicit permission for broader changes
+4. **WAIT** for approval before proceeding
+
+---
+
+**This rule ensures that development work is surgical, focused, and respectful of existing codebase investment.**

@@ -1,0 +1,520 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Hotfix Review and Validation Checklist
+
+**This prompt provides comprehensive validation of hotfix implementation ensuring all critical requirements are met before commit and deployment.**
+
+## 🎯 **HOTFIX REVIEW OBJECTIVES:**
+
+1. **VALIDATE fix implementation** meets hotfix standards and scope
+2. **VERIFY comprehensive testing** including edge cases and regression
+3. **CONFIRM documentation** is complete and accurate
+4. **ASSESS deployment readiness** with proper monitoring and rollback plans
+5. **ENSURE compliance** with security, performance, and business requirements
+
+## 🔍 **HOTFIX IMPLEMENTATION REVIEW:**
+
+### **STEP 1: Fix Scope and Implementation Validation**
+
+#### **Hotfix Scope Compliance:**
+```bash
+# Verify we're on the correct hotfix branch
+CURRENT_BRANCH=$(git branch --show-current)
+if [[ ! "$CURRENT_BRANCH" =~ ^hotfix/ ]]; then
+    echo "❌ ERROR: Not on a hotfix branch. Current: $CURRENT_BRANCH"
+    exit 1
+fi
+
+echo "✅ Validated hotfix branch: $CURRENT_BRANCH"
+
+# Check commit count since branch creation
+COMMIT_COUNT=$(git rev-list --count HEAD ^main)
+echo "📊 Commits in hotfix: $COMMIT_COUNT"
+
+if [ $COMMIT_COUNT -gt 5 ]; then
+    echo "⚠️  WARNING: High commit count ($COMMIT_COUNT) - ensure minimal scope"
+fi
+```
+
+#### **Code Change Analysis:**
+```bash
+# Analyze changed files
+echo "📁 Files changed in hotfix:"
+git diff --name-only main..HEAD
+
+# Show detailed changes
+echo "📝 Detailed changes:"
+git diff main..HEAD --stat
+
+# Check for large changes
+LINES_CHANGED=$(git diff main..HEAD --shortstat | grep -o '[0-9]\+ insertions\|[0-9]\+ deletions' | grep -o '[0-9]\+' | paste -sd+ | bc 2>/dev/null || echo "0")
+echo "📊 Total lines changed: $LINES_CHANGED"
+
+if [ $LINES_CHANGED -gt 100 ]; then
+    echo "⚠️  WARNING: Large change set ($LINES_CHANGED lines) - validate necessity"
+fi
+```
+
+#### **Hotfix Scope Validation Checklist:**
+- [ ] **Minimal changes only** - Fix addresses only the critical issue
+- [ ] **No feature additions** - No new functionality introduced
+- [ ] **No refactoring** - Code structure improvements avoided
+- [ ] **Focused scope** - Changes limited to affected components
+- [ ] **Existing patterns preserved** - Current code patterns maintained
+- [ ] **Configuration minimal** - Only essential config changes
+- [ ] **Documentation proportional** - Documentation matches change scope
+
+### **STEP 2: Technical Implementation Review**
+
+#### **Code Quality Assessment:**
+```typescript
+// Automated code quality checks
+// Check for hotfix-specific patterns
+
+// ✅ GOOD: Minimal, focused fix
+const processPayment = async (amount: number) => {
+  const user = getCurrentUser();
+  // HOTFIX: Add null check to prevent crashes (Issue: PAY-789)
+  if (!user?.id) {
+    throw new PaymentError('User authentication required');
+  }
+  return await stripe.charge(user.id, amount);
+};
+
+// ❌ BAD: Refactoring during hotfix
+const processPayment = async (amount: number) => {
+  // Don't refactor entire payment system during hotfix
+  const paymentProcessor = new PaymentProcessorService();
+  const userValidator = new UserValidationService();
+  // ... extensive refactoring
+};
+```
+
+#### **Security Review Checklist:**
+- [ ] **Input validation** - All user inputs properly validated
+- [ ] **Output sanitization** - Data properly sanitized before output
+- [ ] **Access control** - No privilege escalation introduced
+- [ ] **Error handling** - Errors don't leak sensitive information
+- [ ] **Dependencies** - No new security vulnerabilities introduced
+- [ ] **Authentication** - Auth mechanisms remain intact
+- [ ] **Authorization** - Permission checks maintained
+- [ ] **Data protection** - No sensitive data exposure risk
+
+#### **Performance Impact Assessment:**
+```bash
+# Run performance benchmarks
+echo "🚀 Running performance benchmarks..."
+
+# Check build time impact
+echo "⏱️  Build time check:"
+time npm run build
+
+# Check bundle size impact
+echo "📦 Bundle size analysis:"
+npm run build:analyze 2>/dev/null || echo "Bundle analysis not available"
+
+# Memory usage check (if tools available)
+echo "💾 Memory usage check:"
+if command -v node &> /dev/null; then
+    node -e "console.log('Node memory:', process.memoryUsage())"
+fi
+```
+
+#### **Performance Validation Checklist:**
+- [ ] **No performance degradation** - Response times maintained
+- [ ] **Memory usage stable** - No memory leaks introduced
+- [ ] **Database queries optimized** - No additional expensive queries
+- [ ] **Bundle size impact minimal** - Client bundle size not significantly increased
+- [ ] **Startup time maintained** - Application startup not slower
+- [ ] **Resource usage** - CPU and memory usage patterns unchanged
+
+## 🧪 **COMPREHENSIVE TESTING VALIDATION:**
+
+### **STEP 3: Automated Testing Verification**
+
+#### **Test Suite Execution:**
+```bash
+# Run complete test suite
+echo "🧪 Running comprehensive test suite..."
+
+# Unit tests
+echo "🔬 Unit tests:"
+npm run test:unit
+UNIT_EXIT_CODE=$?
+
+# Integration tests
+echo "🔗 Integration tests:"
+npm run test:integration 2>/dev/null || echo "Integration tests not configured"
+INTEGRATION_EXIT_CODE=$?
+
+# End-to-end tests
+echo "🎭 End-to-end tests:"
+npm run test:e2e 2>/dev/null || echo "E2E tests not configured"
+E2E_EXIT_CODE=$?
+
+# Security tests
+echo "🔒 Security tests:"
+npm audit --audit-level high
+SECURITY_EXIT_CODE=$?
+
+# Accessibility tests (if applicable)
+echo "♿ Accessibility tests:"
+npm run test:a11y 2>/dev/null || echo "A11y tests not configured"
+A11Y_EXIT_CODE=$?
+
+# Generate test report
+echo "📊 Test Summary:"
+echo "  Unit Tests: $([ $UNIT_EXIT_CODE -eq 0 ] && echo "✅ PASS" || echo "❌ FAIL")"
+echo "  Integration: $([ $INTEGRATION_EXIT_CODE -eq 0 ] && echo "✅ PASS" || echo "❌ FAIL")"
+echo "  E2E Tests: $([ $E2E_EXIT_CODE -eq 0 ] && echo "✅ PASS" || echo "❌ FAIL")"
+echo "  Security: $([ $SECURITY_EXIT_CODE -eq 0 ] && echo "✅ PASS" || echo "❌ FAIL")"
+```
+
+#### **Test Coverage Validation:**
+```bash
+# Generate coverage report
+echo "📈 Generating test coverage report..."
+npm run test:coverage
+
+# Check coverage thresholds
+COVERAGE_THRESHOLD=80
+echo "🎯 Coverage threshold: ${COVERAGE_THRESHOLD}%"
+
+# Extract coverage percentage (implementation varies by tool)
+if [ -f "coverage/lcov-report/index.html" ]; then
+    echo "📄 Coverage report available: coverage/lcov-report/index.html"
+fi
+```
+
+#### **Testing Validation Checklist:**
+- [ ] **All unit tests pass** - 100% of existing unit tests successful
+- [ ] **New tests added** - Tests written for hotfix changes
+- [ ] **Integration tests pass** - No regression in integration scenarios
+- [ ] **End-to-end tests pass** - Critical user workflows validated
+- [ ] **Coverage maintained** - Code coverage above project threshold
+- [ ] **Edge cases tested** - Boundary conditions and error scenarios tested
+- [ ] **Performance tests** - No performance regression detected
+- [ ] **Security tests** - No new vulnerabilities introduced
+
+### **STEP 4: Manual Testing and Validation**
+
+#### **Issue Resolution Verification:**
+```markdown
+## Issue Resolution Validation
+
+### Original Issue Reproduction:
+- [ ] **Issue reproduced** on hotfix branch before fix
+- [ ] **Exact reproduction steps** documented and verified
+- [ ] **Root cause identified** and documented
+- [ ] **Fix approach validated** against root cause
+
+### Fix Validation:
+- [ ] **Issue no longer occurs** with implemented fix
+- [ ] **Fix is minimal** and targeted to specific issue
+- [ ] **No workarounds removed** - existing workarounds still functional
+- [ ] **Error handling improved** - better error messages/handling
+
+### Regression Testing:
+- [ ] **Core functionality intact** - Primary features still work
+- [ ] **Related features tested** - Adjacent functionality validated
+- [ ] **User workflows complete** - End-to-end user journeys successful
+- [ ] **Admin functions tested** - Administrative features still work
+- [ ] **API endpoints validated** - All API responses correct
+```
+
+#### **Environment Testing Checklist:**
+```markdown
+## Environment Testing Matrix
+
+### Local Development:
+- [ ] Issue reproduction successful
+- [ ] Fix implementation validated
+- [ ] All tests passing locally
+- [ ] Build successful
+- [ ] Development server starts correctly
+
+### Staging Environment:
+- [ ] Hotfix deployed to staging
+- [ ] Issue reproduction on staging
+- [ ] Fix validation on staging
+- [ ] Integration tests on staging data
+- [ ] Performance monitoring on staging
+
+### Pre-Production (if available):
+- [ ] Production-like data testing
+- [ ] Load testing with fix
+- [ ] Monitoring and alerting verification
+- [ ] Rollback procedure tested
+- [ ] Database migration tested (if applicable)
+```
+
+## 📋 **DOCUMENTATION AND COMPLIANCE REVIEW:**
+
+### **STEP 5: Documentation Validation**
+
+#### **Hotfix Documentation Review:**
+```bash
+# Check for required documentation files
+echo "📚 Validating hotfix documentation..."
+
+ISSUE_ID=$(git branch --show-current | cut -d'-' -f2)
+HOTFIX_DOC=".hotfix_docs/HOTFIX_${ISSUE_ID}.md"
+
+if [ -f "$HOTFIX_DOC" ]; then
+    echo "✅ Hotfix tracking document found: $HOTFIX_DOC"
+    
+    # Check if document has been updated
+    if grep -q "To be determined\|To be identified\|To be updated" "$HOTFIX_DOC"; then
+        echo "⚠️  WARNING: Placeholder text found in documentation - update required"
+    fi
+else
+    echo "❌ ERROR: Hotfix tracking document missing: $HOTFIX_DOC"
+fi
+
+# Check for PR template
+PR_TEMPLATE=".hotfix_docs/PR_TEMPLATE.md"
+if [ -f "$PR_TEMPLATE" ]; then
+    echo "✅ PR template found: $PR_TEMPLATE"
+    
+    # Check if PR template has been updated
+    if grep -q "Change 1 - to be updated\|To be scheduled\|To be updated" "$PR_TEMPLATE"; then
+        echo "⚠️  WARNING: PR template contains placeholder text - update required"
+    fi
+else
+    echo "❌ ERROR: PR template missing: $PR_TEMPLATE"
+fi
+```
+
+#### **Documentation Completeness Checklist:**
+- [ ] **Root cause documented** - Technical explanation of issue cause
+- [ ] **Fix approach documented** - Implementation approach explained
+- [ ] **Testing completed** - All testing activities documented
+- [ ] **Risk assessment updated** - Deployment risks identified and mitigated
+- [ ] **Timeline documented** - Development and deployment timeline
+- [ ] **Stakeholder communication** - Team coordination documented
+- [ ] **Post-deployment plan** - Monitoring and validation plan
+- [ ] **Rollback procedure** - Step-by-step rollback process documented
+
+#### **Code Documentation Review:**
+```bash
+# Check for hotfix-specific code comments
+echo "💬 Validating code comments and documentation..."
+
+# Look for hotfix comments in changed files
+git diff main..HEAD | grep -i "hotfix\|HOTFIX" && echo "✅ Hotfix comments found" || echo "⚠️  Consider adding hotfix-specific comments"
+
+# Check for JSDoc updates (if applicable)
+CHANGED_FILES=$(git diff --name-only main..HEAD | grep -E '\.(ts|js|tsx|jsx)$')
+for file in $CHANGED_FILES; do
+    if [ -f "$file" ]; then
+        echo "📄 Checking documentation in: $file"
+        # Add specific checks for function documentation
+    fi
+done
+```
+
+### **STEP 6: Deployment Readiness Assessment**
+
+#### **Deployment Prerequisites Validation:**
+```bash
+# Validate deployment prerequisites
+echo "🚀 Validating deployment readiness..."
+
+# Check CI/CD pipeline status
+if command -v gh &> /dev/null; then
+    echo "⚙️  Checking CI/CD status..."
+    gh pr checks --watch 2>/dev/null || echo "⚠️  Cannot check CI/CD status automatically"
+fi
+
+# Validate environment variables and secrets
+echo "🔒 Environment validation:"
+echo "  - Review required environment variables"
+echo "  - Validate secrets and certificates"
+echo "  - Check database connectivity"
+echo "  - Verify third-party service integrations"
+
+# Check for database migrations
+if [ -d "migrations" ] || [ -d "prisma/migrations" ] || [ -d "db/migrate" ]; then
+    echo "🗃️  Database migrations detected - validate migration safety"
+fi
+```
+
+#### **Deployment Readiness Checklist:**
+- [ ] **All tests passing** - Complete test suite successful
+- [ ] **CI/CD pipeline green** - Automated builds and checks successful
+- [ ] **Code review completed** - Senior developer review approved
+- [ ] **Security review completed** - Security implications assessed
+- [ ] **Performance validated** - No performance degradation detected
+- [ ] **Documentation complete** - All required documentation updated
+- [ ] **Rollback plan ready** - Rollback procedure tested and documented
+- [ ] **Monitoring configured** - Post-deployment monitoring setup
+- [ ] **Stakeholder approval** - Business stakeholder approval received
+
+## 📊 **REVIEW COMPLETION REPORT:**
+
+### **STEP 7: Generate Comprehensive Review Report**
+
+#### **Automated Review Report Generation:**
+```bash
+# Generate comprehensive review report
+REVIEW_TIMESTAMP=$(date)
+CURRENT_BRANCH=$(git branch --show-current)
+ISSUE_ID=$(echo $CURRENT_BRANCH | cut -d'-' -f2)
+
+cat > ".hotfix_docs/REVIEW_REPORT.md" << EOF
+# Hotfix Review Report: $CURRENT_BRANCH
+
+**Review Completed**: $REVIEW_TIMESTAMP
+**Reviewer**: $(git config user.name) <$(git config user.email)>
+**Branch**: $CURRENT_BRANCH
+**Issue ID**: $ISSUE_ID
+
+## 📋 **Review Summary**
+
+### Overall Status: 🟡 UNDER_REVIEW
+### Recommendation: [APPROVE/APPROVE_WITH_CONDITIONS/REJECT]
+
+## ✅ **Review Checklist Results**
+
+### Implementation Review:
+- [ ] Minimal scope maintained
+- [ ] No unauthorized refactoring
+- [ ] Existing patterns preserved
+- [ ] Code quality standards met
+
+### Testing Validation:
+- [ ] All automated tests pass
+- [ ] Manual testing completed
+- [ ] Regression testing successful
+- [ ] Edge cases validated
+
+### Security Assessment:
+- [ ] Security implications reviewed
+- [ ] No new vulnerabilities introduced
+- [ ] Access controls maintained
+- [ ] Error handling secure
+
+### Performance Review:
+- [ ] No performance degradation
+- [ ] Resource usage acceptable
+- [ ] Build time not significantly increased
+- [ ] Bundle size impact minimal
+
+### Documentation Review:
+- [ ] Root cause documented
+- [ ] Fix approach explained
+- [ ] Testing documented
+- [ ] Deployment plan complete
+
+### Deployment Readiness:
+- [ ] CI/CD pipeline green
+- [ ] Code review approved
+- [ ] Stakeholder approval received
+- [ ] Rollback plan ready
+
+## 🎯 **Review Findings**
+
+### Strengths:
+- [List positive findings]
+
+### Areas of Concern:
+- [List any concerns or risks]
+
+### Required Actions Before Approval:
+- [ ] [Action 1 if any]
+- [ ] [Action 2 if any]
+
+### Recommendations:
+- [Any recommendations for deployment or monitoring]
+
+## 📈 **Metrics and Statistics**
+
+### Code Changes:
+- **Files Changed**: $(git diff --name-only main..HEAD | wc -l)
+- **Lines Added**: $(git diff main..HEAD --shortstat | grep -o '[0-9]\+ insertions' | grep -o '[0-9]\+' || echo "0")
+- **Lines Removed**: $(git diff main..HEAD --shortstat | grep -o '[0-9]\+ deletions' | grep -o '[0-9]\+' || echo "0")
+- **Commits**: $(git rev-list --count HEAD ^main)
+
+### Test Results:
+- **Unit Tests**: [PASS/FAIL]
+- **Integration Tests**: [PASS/FAIL/N/A]
+- **E2E Tests**: [PASS/FAIL/N/A]
+- **Security Tests**: [PASS/FAIL]
+
+### Timeline:
+- **Hotfix Created**: [From git log]
+- **Development Duration**: [Calculate from branch creation]
+- **Review Duration**: [Time spent on review]
+
+## 🚀 **Next Steps**
+
+### If Approved:
+1. Use \`.cursor/prompts/git/git-commit-hotfix.mdc\` for final commit
+2. Deploy according to documented deployment plan
+3. Monitor post-deployment metrics
+4. Schedule post-incident review
+
+### If Changes Required:
+1. Address identified concerns
+2. Re-run validation after changes
+3. Update documentation as needed
+4. Request additional review if needed
+
+---
+**Review completed by**: $(git config user.name)
+**Timestamp**: $REVIEW_TIMESTAMP
+**Status**: REVIEW_COMPLETE
+EOF
+
+echo "📄 Review report generated: .hotfix_docs/REVIEW_REPORT.md"
+echo ""
+echo "🎉 HOTFIX REVIEW COMPLETE!"
+echo ""
+echo "📋 Next Steps:"
+echo "   - Review the generated report"
+echo "   - Address any identified concerns"
+echo "   - Use git-commit-hotfix.mdc when ready to commit"
+echo ""
+```
+
+## 💡 **REVIEW EXAMPLES:**
+
+### **Example 1: Payment Gateway Hotfix Review**
+```
+Review payment timeout hotfix implementation
+
+Following .cursor/prompts/git/git-review-hotfix.mdc:
+- Validate minimal scope for payment gateway timeout fix
+- Verify comprehensive testing of payment workflows  
+- Ensure no regression in existing payment processing
+- Confirm security implications of timeout handling
+```
+
+### **Example 2: Security Hotfix Review**
+```
+Review XSS vulnerability hotfix
+
+Following .cursor/prompts/git/git-review-hotfix.mdc:
+- Prioritize security validation and penetration testing
+- Verify input sanitization implementation
+- Ensure no new security vulnerabilities introduced
+- Validate deployment can proceed immediately
+```
+
+### **Example 3: Database Performance Hotfix Review**
+```
+Review database connection pool hotfix
+
+Following .cursor/prompts/git/git-review-hotfix.mdc:
+- Validate performance impact and monitoring
+- Ensure database configuration changes are minimal
+- Test connection pool behavior under load
+- Verify rollback procedures for database changes
+```
+
+---
+
+**This hotfix review ensures comprehensive validation of implementation, testing, documentation, and deployment readiness before committing critical production fixes.**

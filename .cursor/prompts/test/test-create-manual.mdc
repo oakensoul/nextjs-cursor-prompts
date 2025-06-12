@@ -1,0 +1,215 @@
+---
+description: Manual Testing Guide Creation - Generate comprehensive manual testing guides for features, user flows, or releases that can be executed by non-technical testers
+globs: 
+alwaysApply: false
+---
+---
+title: Manual Testing Guide Creation
+description: Generate comprehensive manual testing guides for features, user flows, or releases that can be executed by non-technical testers
+tags: [prompt, manual-testing, qa, user-testing, testing-guide, documentation]
+version: 1.0.0
+lastUpdated: 2025-06-02
+usage: Use when you need to create testing documentation for manual QA or user testing
+audience: [claude, ai-assistants]
+scope: [manual-testing, qa-documentation, user-flows, bug-reporting, test-cases]
+---
+
+# Manual Testing Guide Creation Request
+
+Please create a comprehensive manual testing guide that can be executed by manual testers, QA team members, or stakeholders. The guide should be clear, step-by-step, and suitable for non-technical users.
+
+## Guide Planning
+
+### 1. Determine Testing Scope
+- **Feature Testing**: Specific component or functionality
+- **User Flow Testing**: Complete user journey (registration, checkout, etc.)
+- **Release Testing**: Full regression testing for deployment
+- **Accessibility Testing**: Manual accessibility verification
+- **Cross-Browser Testing**: Browser compatibility verification
+- **Mobile Testing**: Mobile device and responsive testing
+
+### 2. Identify Target Audience
+- **QA Team**: Technical testers with testing experience
+- **Stakeholders**: Product managers, designers, business users
+- **Beta Users**: External users providing feedback
+- **Accessibility Experts**: Specialized accessibility testing
+- **General Users**: Non-technical manual testing
+
+## Testing Guide Structure
+
+### 3. Executive Summary
+- What is being tested and why
+- Expected time commitment
+- Required devices/browsers/tools
+- Who should perform the testing
+- Timeline and deadlines
+
+### 4. Prerequisites & Setup
+- Required accounts or access levels
+- Test data or sample content needed
+- Browser/device requirements
+- Any special tools or extensions needed
+- Environment URLs (staging, testing, etc.)
+
+### 5. Test Case Organization
+```markdown
+## Test Case [Number]: [Descriptive Title]
+
+**Objective**: What this test verifies
+**Priority**: High/Medium/Low
+**Estimated Time**: X minutes
+**Prerequisites**: What must be set up first
+
+### Steps
+1. Clear, numbered steps
+2. Include expected results for each step
+3. Specify exact text to enter or buttons to click
+4. Include screenshots or references where helpful
+
+### Expected Results
+- What should happen if everything works correctly
+- Specific text, behaviors, or states to verify
+
+### Pass/Fail Criteria
+- [ ] Clear checkbox criteria for success
+- [ ] Specific measurable outcomes
+
+### Bug Reporting
+- How to report issues if found
+- What information to include
+- Screenshots/video requirements
+```
+
+## Content Requirements
+
+### 6. Test Cases (Step-by-Step Instructions)
+- Clear, numbered sequential steps
+- Specific button names, link text, and form fields
+- Expected results after each major step
+- Pass/fail criteria with checkboxes
+- Error scenarios and edge cases
+- Recovery instructions if something goes wrong
+
+### 7. Cross-Browser/Device Testing Matrix
+- Specific browsers and versions to test
+- Mobile devices and screen sizes
+- Operating system combinations
+- Accessibility tools to verify with
+
+### 8. Bug Reporting Instructions
+- Bug severity classification (Critical, High, Medium, Low)
+- Required information for bug reports
+- Screenshot and video capture guidelines
+- Where and how to submit bug reports
+- Bug report template
+
+## Testing Categories
+
+### 9. Functional Testing
+- Core feature functionality
+- User input validation
+- Error handling and messages
+- Data persistence and accuracy
+- Integration points and APIs
+
+### 10. User Experience Testing
+- Navigation flow and intuitiveness
+- Loading times and performance perception
+- Mobile responsiveness and touch interactions
+- Visual design and layout consistency
+- Accessibility and keyboard navigation
+
+### 11. Edge Case Testing
+- Boundary value testing
+- Invalid input scenarios
+- Network connectivity issues
+- Browser back/forward button behavior
+- Session timeout and authentication
+
+### 12. Regression Testing
+- Previously working functionality
+- Integration with existing features
+- Data migration and compatibility
+- Performance impact on existing features
+
+## Documentation Standards
+
+### 13. Clear Instructions
+- Use simple, non-technical language
+- Include actual text/labels from the interface
+- Provide context for why each step matters
+- Include troubleshooting for common issues
+
+### 14. Visual Aids
+- Screenshots of key interfaces
+- Annotated images showing where to click
+- Video recordings for complex flows
+- Diagrams for user journey understanding
+
+### 15. Standardized Format
+- Consistent numbering and organization
+- Clear headers and sections
+- Checkboxes for tracking completion
+- Summary section for overall results
+
+## Quality Assurance
+
+### 16. Review Checklist
+- [ ] All steps are clearly written and actionable
+- [ ] Expected results are specific and measurable
+- [ ] Bug reporting process is clear
+- [ ] Time estimates are realistic
+- [ ] Prerequisites are complete
+- [ ] Test coverage is comprehensive
+### 17. Validation Requirements
+- Test the guide yourself before distributing
+- Have another person walk through it
+- Verify all links and references work
+- Ensure test data is available and accurate
+
+## Deliverables
+
+Please provide:
+
+- [ ] **Complete Testing Guide** in Markdown format
+- [ ] **Executive Summary** with scope and timeline
+- [ ] **Prerequisites Checklist** for testers
+- [ ] **Detailed Test Cases** with step-by-step instructions
+- [ ] **Bug Reporting Template** and guidelines
+- [ ] **Testing Matrix** for browsers/devices (if applicable)
+- [ ] **Appendix** with troubleshooting and FAQs
+- [ ] **Summary** including:
+  - Total estimated testing time
+  - Number of test cases created
+  - Recommended tester profiles
+  - Key risk areas identified
+
+## Output Format
+
+The guide should be formatted as a standalone Markdown document that can be:
+- Shared via email or collaboration tools
+- Printed as a PDF for offline use
+- Converted to other formats if needed
+- Updated and versioned over time
+
+## Usage Examples
+
+```
+Create a manual testing guide for the new user registration flow including email verification.
+Apply the manual testing guide creation prompt.
+```
+
+```
+Generate a comprehensive manual testing guide for the e-commerce checkout process across mobile and desktop.
+Apply the manual testing guide creation prompt.
+```
+
+```
+Create a manual testing guide for accessibility compliance testing of the dashboard interface.
+Apply the manual testing guide creation prompt.
+```
+
+```
+Generate a regression testing guide for the upcoming v2.0 release covering all major user flows.
+Apply the manual testing guide creation prompt.
+```

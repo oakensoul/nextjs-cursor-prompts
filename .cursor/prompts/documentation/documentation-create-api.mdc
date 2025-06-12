@@ -1,0 +1,1049 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# API Documentation Creation and Generation
+
+**This prompt generates comprehensive API documentation including endpoint specifications, authentication flows, integration examples, and developer guides with proper OpenAPI standards.**
+
+## 🎯 **API DOCUMENTATION OBJECTIVES:**
+
+1. **ANALYZE existing API structure** and extract complete endpoint specifications
+2. **GENERATE OpenAPI 3.0 specification** with comprehensive schemas and examples
+3. **CREATE integration guides** with practical code examples in multiple languages
+4. **DOCUMENT authentication flows** with security considerations and examples
+5. **ESTABLISH maintenance processes** for keeping documentation current with code changes
+
+## 🔍 **API DISCOVERY AND ANALYSIS:**
+
+### **STEP 1: API Endpoint Discovery**
+
+#### **Automated Endpoint Detection:**
+```bash
+# Discover API endpoints across the codebase
+echo "🔍 Discovering API endpoints..."
+
+# Next.js API routes discovery
+if [ -d "src/app/api" ] || [ -d "app/api" ] || [ -d "pages/api" ]; then
+    echo "## Next.js API Routes:"
+    find . -path "*/api/*" -name "*.ts" -o -name "*.js" | grep -E "(route|api)" | sort
+fi
+
+# Express.js routes discovery
+echo -e "\n## Express/Node.js Routes:"
+grep -r "app\.\(get\|post\|put\|delete\|patch\)" --include="*.ts" --include="*.js" src/ 2>/dev/null | head -20
+
+# FastAPI/Python routes (if applicable)
+echo -e "\n## Python API Routes:"
+grep -r "@app\.\(get\|post\|put\|delete\|patch\)" --include="*.py" . 2>/dev/null | head -10
+
+# GraphQL schema discovery
+echo -e "\n## GraphQL Schema:"
+find . -name "*.graphql" -o -name "schema.ts" -o -name "typeDefs.ts" | head -10
+
+# API middleware and authentication
+echo -e "\n## Authentication Middleware:"
+grep -r "auth\|jwt\|token" --include="*.ts" --include="*.js" src/ | grep -E "(middleware|auth)" | head -10
+```
+
+#### **API Structure Analysis:**
+```bash
+# Analyze API structure and patterns
+echo "📊 Analyzing API structure..."
+
+# Check for OpenAPI/Swagger existing docs
+echo "## Existing API Documentation:"
+find . -name "swagger*" -o -name "openapi*" -o -name "api-docs*" | head -10
+
+# Analyze request/response patterns
+echo -e "\n## Request/Response Patterns:"
+grep -r "Request\|Response" --include="*.ts" src/ | grep -E "(interface|type)" | head -10
+
+# Database models (for API data structures)
+echo -e "\n## Data Models:"
+find . -name "*.model.ts" -o -name "*.schema.ts" -o -name "prisma.schema" | head -10
+
+# API versioning strategy
+echo -e "\n## API Versioning:"
+grep -r "v1\|v2\|version" --include="*.ts" --include="*.js" src/ | grep -i api | head -5
+```
+
+### **STEP 2: Authentication and Security Analysis**
+
+#### **Authentication Flow Documentation:**
+```markdown
+## Authentication Methods Analysis
+
+### Authentication Strategies Identified:
+- [ ] **JWT (JSON Web Tokens)** - Stateless token-based authentication
+- [ ] **OAuth 2.0** - Third-party authentication provider integration
+- [ ] **API Keys** - Simple key-based authentication
+- [ ] **Basic Auth** - Username/password authentication
+- [ ] **Session-based** - Server-side session management
+- [ ] **Custom Auth** - Application-specific authentication mechanism
+
+### Security Headers and Middleware:
+- [ ] **CORS Configuration** - Cross-origin resource sharing settings
+- [ ] **Rate Limiting** - Request throttling and abuse prevention
+- [ ] **Input Validation** - Request data validation and sanitization
+- [ ] **HTTPS Enforcement** - Secure transport layer requirements
+- [ ] **Authorization** - Role-based access control (RBAC)
+
+### Authentication Endpoints:
+- [ ] **POST /auth/login** - User authentication endpoint
+- [ ] **POST /auth/register** - User registration endpoint
+- [ ] **POST /auth/refresh** - Token refresh endpoint
+- [ ] **POST /auth/logout** - User logout endpoint
+- [ ] **GET /auth/profile** - Current user profile retrieval
+```
+
+## 📝 **OPENAPI SPECIFICATION GENERATION:**
+
+### **STEP 3: OpenAPI 3.0 Schema Creation**
+
+#### **Base OpenAPI Document Structure:**
+```yaml
+# Generate comprehensive OpenAPI 3.0 specification
+cat > "api-documentation.yaml" << 'EOF'
+openapi: 3.0.3
+info:
+  title: "[PROJECT_NAME] API"
+  description: |
+    Comprehensive API documentation for [PROJECT_NAME] application.
+    
+    ## Authentication
+    This API uses [AUTH_METHOD] for authentication. Include the authentication token in the Authorization header:
+    ```
+    Authorization: Bearer YOUR_TOKEN_HERE
+    ```
+    
+    ## Rate Limiting
+    API requests are limited to [RATE_LIMIT] requests per [TIME_PERIOD] per authenticated user.
+    
+    ## Response Formats
+    All responses are returned in JSON format with consistent error handling.
+    
+  version: "1.0.0"
+  contact:
+    name: API Support
+    email: support@[domain].com
+    url: https://[domain].com/support
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.[domain].com/v1
+    description: Production server
+  - url: https://staging-api.[domain].com/v1
+    description: Staging server
+  - url: http://localhost:3000/api
+    description: Development server
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from the authentication endpoint
+    
+  schemas:
+    Error:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
+        timestamp:
+          type: string
+          format: date-time
+          description: Error occurrence timestamp
+      example:
+        error: "validation_error"
+        message: "Invalid input data"
+        details: 
+          field: "email"
+          issue: "Invalid email format"
+        timestamp: "2023-12-07T10:30:00Z"
+    
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User email address
+        name:
+          type: string
+          description: User display name
+        role:
+          type: string
+          enum: [user, admin, moderator]
+          description: User role for authorization
+        createdAt:
+          type: string
+          format: date-time
+          description: Account creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last profile update timestamp
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        email: "user@example.com"
+        name: "John Doe"
+        role: "user"
+        createdAt: "2023-12-01T10:30:00Z"
+        updatedAt: "2023-12-07T10:30:00Z"
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate user
+      description: |
+        Authenticate a user with email and password credentials.
+        Returns a JWT token for subsequent API requests.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: User email address
+                password:
+                  type: string
+                  format: password
+                  description: User password
+                  minLength: 8
+            example:
+              email: "user@example.com"
+              password: "securepassword123"
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT authentication token
+                  user:
+                    $ref: '#/components/schemas/User'
+                  expiresIn:
+                    type: integer
+                    description: Token expiration time in seconds
+              example:
+                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                user:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  email: "user@example.com"
+                  name: "John Doe"
+                  role: "user"
+                expiresIn: 3600
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Too many authentication attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security: []
+
+  /users/profile:
+    get:
+      tags:
+        - Users
+      summary: Get current user profile
+      description: Retrieve the profile information for the currently authenticated user.
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+
+tags:
+  - name: Authentication
+    description: User authentication and session management
+  - name: Users
+    description: User profile and account management
+  - name: [Additional Tags]
+    description: [Additional API categories]
+EOF
+
+echo "📄 OpenAPI specification generated: api-documentation.yaml"
+```
+
+#### **Dynamic Schema Generation from Code:**
+```bash
+# Extract TypeScript interfaces and generate schemas
+echo "🔧 Generating schemas from TypeScript interfaces..."
+
+# Find TypeScript interface definitions
+find . -name "*.ts" -not -path "./node_modules/*" -exec grep -l "interface\|type.*=" {} \; | head -10
+
+# Extract and document API types
+cat > "extracted-types.md" << 'EOF'
+# API Type Definitions
+
+## Request/Response Types
+
+### User Types
+```typescript
+// Extract actual interfaces from codebase
+// Example:
+interface User {
+  id: string;
+  email: string;
+  name?: string;
+  role: 'user' | 'admin' | 'moderator';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface CreateUserRequest {
+  email: string;
+  password: string;
+  name?: string;
+}
+
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+interface AuthResponse {
+  token: string;
+  user: User;
+  expiresIn: number;
+}
+```
+
+### Error Types
+```typescript
+interface ApiError {
+  error: string;
+  message: string;
+  details?: Record<string, any>;
+  timestamp: string;
+}
+```
+EOF
+```
+
+### **STEP 4: Integration Examples and Code Samples**
+
+#### **Multi-Language Integration Examples:**
+```bash
+# Generate comprehensive integration examples
+echo "💻 Creating integration examples..."
+
+mkdir -p "docs/api-examples"
+
+# JavaScript/TypeScript example
+cat > "docs/api-examples/javascript-example.md" << 'EOF'
+# JavaScript/TypeScript Integration
+
+## Installation
+```bash
+npm install axios
+# or
+yarn add axios
+```
+
+## Basic Setup
+```typescript
+import axios from 'axios';
+
+const API_BASE_URL = 'https://api.yourdomain.com/v1';
+
+// Create axios instance with default config
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Add request interceptor for authentication
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Add response interceptor for error handling
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Handle authentication error
+      localStorage.removeItem('authToken');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+```
+
+## Authentication
+```typescript
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+interface AuthResponse {
+  token: string;
+  user: User;
+  expiresIn: number;
+}
+
+async function login(credentials: LoginCredentials): Promise<AuthResponse> {
+  try {
+    const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
+    
+    // Store token for future requests
+    localStorage.setItem('authToken', response.data.token);
+    
+    return response.data;
+  } catch (error) {
+    console.error('Login failed:', error);
+    throw error;
+  }
+}
+
+// Usage example
+const loginUser = async () => {
+  try {
+    const authData = await login({
+      email: 'user@example.com',
+      password: 'securepassword123'
+    });
+    
+    console.log('Login successful:', authData.user);
+  } catch (error) {
+    console.error('Login error:', error);
+  }
+};
+```
+
+## User Profile Management
+```typescript
+interface User {
+  id: string;
+  email: string;
+  name?: string;
+  role: 'user' | 'admin' | 'moderator';
+  createdAt: string;
+  updatedAt: string;
+}
+
+async function getCurrentUser(): Promise<User> {
+  const response = await apiClient.get<User>('/users/profile');
+  return response.data;
+}
+
+async function updateUserProfile(updates: Partial<User>): Promise<User> {
+  const response = await apiClient.patch<User>('/users/profile', updates);
+  return response.data;
+}
+
+// Usage examples
+const loadUserProfile = async () => {
+  try {
+    const user = await getCurrentUser();
+    console.log('Current user:', user);
+  } catch (error) {
+    console.error('Failed to load user profile:', error);
+  }
+};
+```
+
+## Error Handling
+```typescript
+interface ApiError {
+  error: string;
+  message: string;
+  details?: Record<string, any>;
+  timestamp: string;
+}
+
+function handleApiError(error: any): string {
+  if (error.response?.data) {
+    const apiError = error.response.data as ApiError;
+    return apiError.message || 'An error occurred';
+  }
+  
+  if (error.request) {
+    return 'Network error - please check your connection';
+  }
+  
+  return error.message || 'Unknown error occurred';
+}
+
+// Usage in components
+try {
+  await someApiCall();
+} catch (error) {
+  const errorMessage = handleApiError(error);
+  // Display error to user
+  alert(errorMessage);
+}
+```
+EOF
+
+# Python example
+cat > "docs/api-examples/python-example.md" << 'EOF'
+# Python Integration
+
+## Installation
+```bash
+pip install requests
+```
+
+## Basic Setup
+```python
+import requests
+import json
+from typing import Dict, Any, Optional
+
+class APIClient:
+    def __init__(self, base_url: str = "https://api.yourdomain.com/v1"):
+        self.base_url = base_url
+        self.session = requests.Session()
+        self.session.headers.update({
+            'Content-Type': 'application/json'
+        })
+    
+    def set_auth_token(self, token: str):
+        """Set authentication token for all requests"""
+        self.session.headers.update({
+            'Authorization': f'Bearer {token}'
+        })
+    
+    def request(self, method: str, endpoint: str, **kwargs) -> Dict[str, Any]:
+        """Make API request with error handling"""
+        url = f"{self.base_url}/{endpoint.lstrip('/')}"
+        
+        try:
+            response = self.session.request(method, url, **kwargs)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.HTTPError as e:
+            error_data = e.response.json() if e.response.content else {}
+            raise APIError(
+                status_code=e.response.status_code,
+                error_type=error_data.get('error', 'http_error'),
+                message=error_data.get('message', str(e))
+            )
+        except requests.exceptions.RequestException as e:
+            raise APIError(status_code=0, error_type='network_error', message=str(e))
+
+class APIError(Exception):
+    def __init__(self, status_code: int, error_type: str, message: str):
+        self.status_code = status_code
+        self.error_type = error_type
+        self.message = message
+        super().__init__(message)
+
+# Initialize client
+api = APIClient()
+```
+
+## Authentication
+```python
+def login(email: str, password: str) -> Dict[str, Any]:
+    """Authenticate user and return auth data"""
+    data = {
+        'email': email,
+        'password': password
+    }
+    
+    auth_data = api.request('POST', '/auth/login', json=data)
+    
+    # Set token for future requests
+    api.set_auth_token(auth_data['token'])
+    
+    return auth_data
+
+# Usage example
+try:
+    auth_result = login('user@example.com', 'securepassword123')
+    print(f"Login successful: {auth_result['user']['name']}")
+except APIError as e:
+    print(f"Login failed: {e.message}")
+```
+
+## User Operations
+```python
+def get_current_user() -> Dict[str, Any]:
+    """Get current user profile"""
+    return api.request('GET', '/users/profile')
+
+def update_user_profile(updates: Dict[str, Any]) -> Dict[str, Any]:
+    """Update user profile"""
+    return api.request('PATCH', '/users/profile', json=updates)
+
+# Usage examples
+try:
+    user = get_current_user()
+    print(f"Current user: {user['email']}")
+    
+    # Update user name
+    updated_user = update_user_profile({'name': 'Updated Name'})
+    print(f"Updated user: {updated_user['name']}")
+    
+except APIError as e:
+    print(f"Error: {e.message}")
+```
+EOF
+
+echo "📚 Integration examples created in docs/api-examples/"
+```
+
+## 📋 **DEVELOPER GUIDES AND TUTORIALS:**
+
+### **STEP 5: Comprehensive Developer Guide Creation**
+
+#### **Getting Started Guide:**
+```bash
+# Create comprehensive getting started guide
+cat > "docs/api-getting-started.md" << 'EOF'
+# API Getting Started Guide
+
+## Quick Start
+
+### 1. Get API Access
+1. Sign up for an account at [https://yourdomain.com/signup]
+2. Verify your email address
+3. Log in to your dashboard
+4. Navigate to API settings to get your credentials
+
+### 2. Authentication
+All API requests require authentication using a JWT token obtained through the login endpoint.
+
+```bash
+# Get authentication token
+curl -X POST https://api.yourdomain.com/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "your@email.com",
+    "password": "yourpassword"
+  }'
+```
+
+### 3. Make Your First API Call
+```bash
+# Get your user profile
+curl -X GET https://api.yourdomain.com/v1/users/profile \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json"
+```
+
+## Base URL
+```
+Production: https://api.yourdomain.com/v1
+Staging: https://staging-api.yourdomain.com/v1
+Development: http://localhost:3000/api
+```
+
+## Rate Limits
+- **Authenticated users**: 1000 requests per hour
+- **Anonymous users**: 100 requests per hour
+- **Rate limit headers** are included in all responses
+
+## Response Format
+All API responses use JSON format with consistent structure:
+
+```json
+{
+  "data": {},
+  "meta": {
+    "timestamp": "2023-12-07T10:30:00Z",
+    "version": "1.0.0"
+  }
+}
+```
+
+Error responses follow this format:
+```json
+{
+  "error": "error_type",
+  "message": "Human readable error message",
+  "details": {},
+  "timestamp": "2023-12-07T10:30:00Z"
+}
+```
+
+## Common Use Cases
+
+### 1. User Authentication Flow
+1. POST `/auth/login` with credentials
+2. Store returned JWT token
+3. Include token in Authorization header for subsequent requests
+4. Use POST `/auth/refresh` to refresh expired tokens
+
+### 2. CRUD Operations
+Most resources follow standard REST patterns:
+- GET `/resource` - List resources
+- GET `/resource/{id}` - Get specific resource
+- POST `/resource` - Create new resource
+- PUT `/resource/{id}` - Update entire resource
+- PATCH `/resource/{id}` - Partial resource update
+- DELETE `/resource/{id}` - Delete resource
+
+### 3. Pagination
+List endpoints support pagination:
+```bash
+GET /users?page=1&limit=20&sort=createdAt&order=desc
+```
+
+Response includes pagination metadata:
+```json
+{
+  "data": [...],
+  "meta": {
+    "page": 1,
+    "limit": 20,
+    "total": 150,
+    "pages": 8
+  }
+}
+```
+
+## Error Handling Best Practices
+
+### HTTP Status Codes
+- `200` - Success
+- `201` - Created
+- `400` - Bad Request (validation errors)
+- `401` - Unauthorized (authentication required)
+- `403` - Forbidden (insufficient permissions)
+- `404` - Not Found
+- `429` - Rate Limit Exceeded
+- `500` - Internal Server Error
+
+### Retry Logic
+Implement exponential backoff for retries:
+```javascript
+async function apiRequestWithRetry(apiCall, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await apiCall();
+    } catch (error) {
+      if (attempt === maxRetries || error.status < 500) {
+        throw error;
+      }
+      
+      const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+}
+```
+
+## SDK and Libraries
+- **JavaScript/TypeScript**: Official SDK available via npm
+- **Python**: Official Python client library
+- **Go**: Community-maintained Go client
+- **PHP**: Community-maintained PHP client
+
+## Support and Resources
+- **Documentation**: [https://docs.yourdomain.com]
+- **API Reference**: [https://api-docs.yourdomain.com]
+- **Status Page**: [https://status.yourdomain.com]
+- **Support**: support@yourdomain.com
+- **Community**: [Discord/Slack link]
+EOF
+```
+
+### **STEP 6: API Reference Documentation**
+
+#### **Interactive API Reference:**
+```bash
+# Create detailed API reference
+cat > "docs/api-reference.md" << 'EOF'
+# API Reference
+
+## Authentication Endpoints
+
+### POST /auth/login
+Authenticate a user and receive a JWT token.
+
+**Request:**
+```http
+POST /auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "securepassword123"
+}
+```
+
+**Response:**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "role": "user",
+    "createdAt": "2023-12-01T10:30:00Z",
+    "updatedAt": "2023-12-07T10:30:00Z"
+  },
+  "expiresIn": 3600
+}
+```
+
+**Error Responses:**
+```http
+HTTP/1.1 400 Bad Request
+{
+  "error": "validation_error",
+  "message": "Invalid email format",
+  "timestamp": "2023-12-07T10:30:00Z"
+}
+
+HTTP/1.1 401 Unauthorized
+{
+  "error": "invalid_credentials",
+  "message": "Email or password is incorrect",
+  "timestamp": "2023-12-07T10:30:00Z"
+}
+```
+
+### POST /auth/refresh
+Refresh an expired JWT token.
+
+**Request:**
+```http
+POST /auth/refresh
+Authorization: Bearer EXPIRED_TOKEN
+Content-Type: application/json
+```
+
+**Response:**
+```http
+HTTP/1.1 200 OK
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expiresIn": 3600
+}
+```
+
+## User Management Endpoints
+
+### GET /users/profile
+Get the current user's profile information.
+
+**Request:**
+```http
+GET /users/profile
+Authorization: Bearer YOUR_TOKEN
+```
+
+**Response:**
+```http
+HTTP/1.1 200 OK
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "email": "user@example.com",
+  "name": "John Doe",
+  "role": "user",
+  "createdAt": "2023-12-01T10:30:00Z",
+  "updatedAt": "2023-12-07T10:30:00Z"
+}
+```
+
+### PATCH /users/profile
+Update the current user's profile.
+
+**Request:**
+```http
+PATCH /users/profile
+Authorization: Bearer YOUR_TOKEN
+Content-Type: application/json
+
+{
+  "name": "Updated Name"
+}
+```
+
+**Response:**
+```http
+HTTP/1.1 200 OK
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "email": "user@example.com",
+  "name": "Updated Name",
+  "role": "user",
+  "createdAt": "2023-12-01T10:30:00Z",
+  "updatedAt": "2023-12-07T15:45:00Z"
+}
+```
+
+## Webhooks
+
+### Webhook Events
+The API can send webhook notifications for the following events:
+
+- `user.created` - New user registration
+- `user.updated` - User profile changes
+- `user.deleted` - User account deletion
+
+### Webhook Format
+```json
+{
+  "event": "user.created",
+  "data": {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "email": "newuser@example.com",
+    "createdAt": "2023-12-07T10:30:00Z"
+  },
+  "timestamp": "2023-12-07T10:30:00Z",
+  "signature": "sha256=..."
+}
+```
+
+### Webhook Security
+Verify webhook signatures using your webhook secret:
+
+```javascript
+const crypto = require('crypto');
+
+function verifyWebhookSignature(payload, signature, secret) {
+  const expectedSignature = 'sha256=' + 
+    crypto.createHmac('sha256', secret)
+          .update(payload)
+          .digest('hex');
+  
+  return crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(expectedSignature)
+  );
+}
+```
+EOF
+
+echo "📖 API reference documentation created: docs/api-reference.md"
+echo ""
+echo "🎉 API DOCUMENTATION CREATION COMPLETE!"
+echo ""
+echo "📁 Generated Documentation:"
+echo "   📄 OpenAPI Spec: api-documentation.yaml"
+echo "   📚 Getting Started: docs/api-getting-started.md"
+echo "   📖 API Reference: docs/api-reference.md"
+echo "   💻 JS Examples: docs/api-examples/javascript-example.md"
+echo "   🐍 Python Examples: docs/api-examples/python-example.md"
+echo ""
+echo "🚀 Next Steps:"
+echo "   1. Review and customize generated documentation"
+echo "   2. Update examples with actual API endpoints"
+echo "   3. Set up documentation hosting (e.g., Swagger UI)"
+echo "   4. Integrate with CI/CD for automatic updates"
+echo ""
+```
+
+## 💡 **API DOCUMENTATION EXAMPLES:**
+
+### **Example 1: REST API Documentation**
+```
+Generate comprehensive REST API documentation
+
+Following .cursor/prompts/documentation/documentation-create-api.mdc:
+- Focus on user authentication and profile management endpoints
+- Include rate limiting and security considerations
+- Generate integration examples for JavaScript and Python
+- Create OpenAPI 3.0 specification for interactive documentation
+```
+
+### **Example 2: GraphQL API Documentation**
+```
+Create GraphQL API documentation with schema and examples
+
+Following .cursor/prompts/documentation/documentation-create-api.mdc:
+- Document GraphQL schema and available queries/mutations
+- Include authentication and authorization patterns
+- Create client integration examples with Apollo Client
+- Generate comprehensive query examples and best practices
+```
+
+### **Example 3: Microservices API Documentation**
+```
+Document microservices API architecture
+
+Following .cursor/prompts/documentation/documentation-create-api.mdc:
+- Document inter-service communication patterns
+- Include service discovery and load balancing
+- Create comprehensive error handling documentation
+- Generate deployment and configuration guides
+```
+
+---
+
+**This API documentation creation prompt ensures comprehensive, developer-friendly documentation with practical examples, proper standards compliance, and maintainable structure.**

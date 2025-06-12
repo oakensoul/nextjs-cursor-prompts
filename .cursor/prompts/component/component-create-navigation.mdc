@@ -1,0 +1,480 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Navigation Component Creation Request
+
+**Please create a new navigation component following our specialized navigation patterns, routing integration, and accessibility standards.**
+
+## 🎯 **NAVIGATION CREATION OBJECTIVES:**
+
+1. **IMPLEMENT accessible navigation** with proper ARIA landmarks, keyboard navigation, and screen reader support
+2. **INTEGRATE with NextJS App Router** for proper routing, active states, and navigation patterns
+3. **ENSURE responsive design** with mobile-first approach and progressive enhancement
+4. **PROVIDE intuitive UX** with clear hierarchy, focus management, and interaction feedback
+5. **FOLLOW project standards** for TypeScript, testing, and component architecture
+
+## 📋 **NAVIGATION DEVELOPMENT METHODOLOGY:**
+
+### **STEP 1: Navigation Planning and Architecture**
+
+#### **Determine Navigation Type and Location:**
+- **Client Component**: `src/components/client/navigation/` - Interactive navigation with state management
+- **Server Component**: `src/components/server/layout/` - Static navigation for headers and footers
+- **Navigation Categories**:
+  - **Main Navigation**: Primary site navigation (`main-nav/`)
+  - **User Navigation**: User-specific menus and dropdowns (`user-menu/`)
+  - **Page Navigation**: Breadcrumbs, pagination, step indicators (`page-nav/`)
+  - **Mobile Navigation**: Responsive navigation patterns (`mobile-nav/`)
+
+#### **Navigation Pattern Assessment:**
+- **Header Navigation**: Top-level navigation with dropdown menus
+- **Sidebar Navigation**: Side-mounted navigation with nested items
+- **Breadcrumb Navigation**: Hierarchical path navigation
+- **Mobile Navigation**: Hamburger menus, drawer navigation, bottom navigation
+- **Dropdown Menus**: Single-level and multi-level dropdown patterns
+- **Mega Menus**: Complex dropdown navigation with rich content
+
+### **STEP 2: Routing and State Design**
+
+#### **NextJS App Router Integration:**
+```typescript
+'use client'
+
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
+
+interface NavigationItem {
+  href: string
+  label: string
+  description?: string
+  children?: NavigationItem[]
+  external?: boolean
+  disabled?: boolean
+}
+
+const navigationItems: NavigationItem[] = [
+  {
+    href: '/dashboard',
+    label: 'Dashboard',
+    description: 'Overview and quick actions'
+  },
+  {
+    href: '/characters',
+    label: 'Characters',
+    children: [
+      { href: '/characters', label: 'All Characters' },
+      { href: '/characters/create', label: 'Create Character' },
+      { href: '/characters/favorites', label: 'Favorites' }
+    ]
+  }
+]
+```
+
+#### **Active State Management:**
+- **Current page detection**: Use `usePathname()` for active state
+- **Hierarchical activation**: Parent items active when children are active
+- **Visual indicators**: Clear styling for active and hover states
+- **Keyboard navigation**: Focus indicators and skip links
+
+### **STEP 3: Component Implementation Requirements**
+
+#### **Navigation Component Structure:**
+```typescript
+interface NavigationProps {
+  /** Navigation items structure */
+  items: NavigationItem[]
+  /** Navigation orientation */
+  orientation?: 'horizontal' | 'vertical'
+  /** Show labels or icons only */
+  variant?: 'full' | 'compact' | 'icon-only'
+  /** Current pathname for active state */
+  currentPath?: string
+  /** Mobile responsive behavior */
+  responsive?: boolean
+  /** ARIA label for navigation landmark */
+  ariaLabel: string
+  /** Additional CSS classes */
+  className?: string
+  /** Test identifier */
+  'data-testid'?: string
+}
+```
+
+#### **Required Navigation Features:**
+- **Hierarchical structure** with nested navigation support
+- **Active state management** with visual indicators for current page
+- **Keyboard navigation** with proper tab order and arrow key support
+- **Mobile responsiveness** with collapsible navigation patterns
+- **Skip links** for accessibility and keyboard users
+- **Loading states** for dynamic navigation updates
+- **External link handling** with appropriate indicators and security
+
+#### **Accessibility Implementation:**
+```typescript
+<nav 
+  aria-label={ariaLabel}
+  role="navigation"
+  className="navigation-container"
+>
+  {/* Skip link for keyboard users */}
+  <a 
+    href="#main-content"
+    className="skip-link"
+    onFocus={(e) => e.target.scrollIntoView()}
+  >
+    Skip to main content
+  </a>
+  
+  <ul role="menubar" className="navigation-list">
+    {items.map((item, index) => (
+      <li key={item.href} role="none">
+        {item.children ? (
+          <details 
+            className="dropdown-container"
+            onToggle={handleDropdownToggle}
+          >
+            <summary
+              role="menuitem"
+              aria-expanded={isExpanded}
+              aria-haspopup="true"
+              className={cn(
+                "navigation-trigger",
+                isActive && "navigation-active"
+              )}
+            >
+              {item.label}
+              <ChevronDownIcon aria-hidden="true" />
+            </summary>
+            <ul role="menu" className="dropdown-menu">
+              {item.children.map((child) => (
+                <li key={child.href} role="none">
+                  <Link
+                    href={child.href}
+                    role="menuitem"
+                    className="dropdown-item"
+                  >
+                    {child.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ) : (
+          <Link
+            href={item.href}
+            role="menuitem"
+            className={cn(
+              "navigation-link",
+              isActive && "navigation-active"
+            )}
+            aria-current={isActive ? 'page' : undefined}
+          >
+            {item.label}
+          </Link>
+        )}
+      </li>
+    ))}
+  </ul>
+</nav>
+```
+
+### **STEP 4: Responsive Design Implementation**
+
+#### **Mobile Navigation Patterns:**
+- **Hamburger Menu**: Collapsible menu with smooth animations
+- **Drawer Navigation**: Side-mounted navigation with backdrop
+- **Bottom Navigation**: Tab-based navigation for mobile apps
+- **Progressive Disclosure**: Show/hide sections based on screen size
+
+#### **Responsive Breakpoint Strategy:**
+```typescript
+const NavigationComponent = ({ items, responsive = true }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  if (responsive && isMobile) {
+    return <MobileNavigation items={items} />
+  }
+
+  return <DesktopNavigation items={items} />
+}
+```
+
+#### **Animation and Interaction:**
+- **Smooth transitions** for dropdown menus and mobile toggles
+- **Focus management** when opening/closing navigation
+- **Scroll behavior** for sticky navigation and active item indication
+- **Touch gestures** for mobile navigation interactions
+
+### **STEP 5: Performance and SEO Optimization**
+
+#### **Performance Considerations:**
+- **Lazy loading** for large navigation structures
+- **Code splitting** for complex navigation components
+- **Memoization** for navigation items and active state calculations
+- **Efficient re-renders** using React optimization patterns
+
+#### **SEO and Semantic Structure:**
+```typescript
+// Semantic navigation structure
+<nav aria-label="Primary navigation">
+  <ol className="breadcrumb-list" typeof="BreadcrumbList">
+    {breadcrumbItems.map((item, index) => (
+      <li 
+        key={item.href}
+        property="itemListElement"
+        typeof="ListItem"
+      >
+        <Link
+          href={item.href}
+          property="item"
+          typeof="WebPage"
+          className="breadcrumb-link"
+        >
+          <span property="name">{item.name}</span>
+        </Link>
+        <meta property="position" content={String(index + 1)} />
+      </li>
+    ))}
+  </ol>
+</nav>
+```
+
+## ✅ **NAVIGATION IMPLEMENTATION REQUIREMENTS:**
+
+### **File Structure:**
+```
+navigation-name/
+├── NavigationName.tsx             # Main navigation component
+├── components/
+│   ├── MobileNavigation.tsx       # Mobile-specific navigation
+│   ├── DropdownMenu.tsx          # Dropdown menu component
+│   └── BreadcrumbNav.tsx         # Breadcrumb navigation
+├── __tests__/
+│   ├── NavigationName.test.tsx   # Unit tests
+│   ├── NavigationName.a11y.test.tsx # Accessibility tests
+│   └── NavigationName.mobile.test.tsx # Mobile interaction tests
+├── hooks/
+│   ├── useActiveNavigation.ts    # Active state management
+│   └── useKeyboardNavigation.ts  # Keyboard navigation logic
+└── types/
+    └── navigation.types.ts       # Navigation type definitions
+```
+
+### **Component Requirements:**
+- [ ] **TypeScript Props Interface**: Comprehensive navigation prop typing with JSDoc
+- [ ] **NextJS Router Integration**: Proper Link components and active state detection
+- [ ] **Accessibility Compliance**: WCAG 2.1 AA compliance with keyboard navigation
+- [ ] **Responsive Design**: Mobile-first design with progressive enhancement
+- [ ] **Performance Optimization**: Efficient rendering and state management
+- [ ] **SEO Optimization**: Semantic HTML and structured data where applicable
+
+### **Testing Requirements:**
+- [ ] **Unit Testing**: Component behavior and state management
+- [ ] **Accessibility Testing**: Keyboard navigation, screen reader compatibility
+- [ ] **Mobile Testing**: Touch interactions and responsive behavior
+- [ ] **Integration Testing**: Router integration and navigation flow
+
+### **Quality Standards:**
+- [ ] **Semantic HTML**: Proper use of nav, ul, li, and ARIA roles
+- [ ] **Keyboard Navigation**: Full keyboard accessibility with logical tab order
+- [ ] **Screen Reader Support**: Descriptive labels and state announcements
+- [ ] **Visual Feedback**: Clear active states and interaction feedback
+- [ ] **Performance**: Efficient rendering without unnecessary re-renders
+
+## 🔍 **NAVIGATION-SPECIFIC PATTERNS:**
+
+### **Menu System Patterns:**
+```typescript
+// Dropdown menu with keyboard support
+const DropdownMenu = ({ trigger, items, onSelect }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLUListElement>(null)
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault()
+        focusNextItem()
+        break
+      case 'ArrowUp':
+        event.preventDefault()
+        focusPreviousItem()
+        break
+      case 'Escape':
+        setIsOpen(false)
+        triggerRef.current?.focus()
+        break
+    }
+  }
+
+  return (
+    <div className="dropdown-container">
+      <button
+        ref={triggerRef}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+        onClick={() => setIsOpen(!isOpen)}
+        className="dropdown-trigger"
+      >
+        {trigger}
+      </button>
+      {isOpen && (
+        <ul
+          ref={menuRef}
+          role="menu"
+          onKeyDown={handleKeyDown}
+          className="dropdown-menu"
+        >
+          {items.map((item) => (
+            <li key={item.id} role="none">
+              <button
+                role="menuitem"
+                onClick={() => handleSelect(item)}
+                className="dropdown-item"
+              >
+                {item.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+```
+
+### **Breadcrumb Navigation Pattern:**
+```typescript
+interface BreadcrumbItem {
+  href?: string
+  label: string
+  current?: boolean
+}
+
+const BreadcrumbNavigation = ({ items }: { items: BreadcrumbItem[] }) => {
+  return (
+    <nav aria-label="Breadcrumb" className="breadcrumb-nav">
+      <ol className="breadcrumb-list">
+        {items.map((item, index) => (
+          <li key={index} className="breadcrumb-item">
+            {item.current ? (
+              <span 
+                aria-current="page"
+                className="breadcrumb-current"
+              >
+                {item.label}
+              </span>
+            ) : (
+              <Link 
+                href={item.href!}
+                className="breadcrumb-link"
+              >
+                {item.label}
+              </Link>
+            )}
+            {index < items.length - 1 && (
+              <ChevronRightIcon 
+                aria-hidden="true"
+                className="breadcrumb-separator"
+              />
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+```
+
+## 💡 **NAVIGATION EXAMPLES:**
+
+### **Example 1: Main Header Navigation**
+```typescript
+const MainNavigation = () => {
+  const pathname = usePathname()
+  
+  const navigationItems = [
+    { href: '/', label: 'Home' },
+    { 
+      href: '/products', 
+      label: 'Products',
+      children: [
+        { href: '/products/characters', label: 'Characters' },
+        { href: '/products/events', label: 'Events' }
+      ]
+    },
+    { href: '/about', label: 'About' },
+    { href: '/contact', label: 'Contact' }
+  ]
+
+  return (
+    <Navigation
+      items={navigationItems}
+      currentPath={pathname}
+      ariaLabel="Primary navigation"
+      responsive={true}
+      variant="full"
+    />
+  )
+}
+```
+
+### **Example 2: Sidebar Navigation**
+```typescript
+const SidebarNavigation = () => {
+  return (
+    <Navigation
+      items={dashboardItems}
+      orientation="vertical"
+      variant="full"
+      ariaLabel="Dashboard navigation"
+      className="sidebar-nav"
+    />
+  )
+}
+```
+
+## 🚨 **COMMON NAVIGATION PITFALLS:**
+
+### **Accessibility Issues:**
+- **Missing skip links** - Always provide keyboard users a way to skip navigation
+- **Poor focus management** - Ensure logical tab order and visible focus indicators
+- **Inadequate ARIA labels** - Provide descriptive labels for navigation landmarks
+- **Broken keyboard navigation** - Test all interactions with keyboard only
+
+### **Performance Problems:**
+- **Excessive re-renders** - Memoize navigation items and active state calculations
+- **Large navigation structures** - Consider lazy loading for complex menus
+- **Inefficient active state** - Use efficient pathname matching algorithms
+
+### **Mobile UX Issues:**
+- **Poor touch targets** - Ensure minimum 44px touch target size
+- **Missing mobile patterns** - Provide appropriate mobile navigation patterns
+- **Inconsistent behavior** - Maintain consistent navigation behavior across devices
+
+## 🔧 **INTEGRATION WITH OTHER PROMPTS:**
+
+### **Layout Integration:**
+- Use with `component-create-layout.mdc` for header and page structure integration
+- Combine with responsive layout patterns for complete page navigation
+
+### **UI Component Integration:**
+- Leverage `component-create-ui.mdc` for navigation button and link components
+- Use established design system patterns for consistent styling
+
+### **Form Integration:**
+- Consider navigation state during form submission workflows
+- Integrate with `component-create-form.mdc` for search and filter navigation
+
+**This navigation creation prompt ensures accessible, performant, and user-friendly navigation components that integrate seamlessly with NextJS App Router and project standards.**

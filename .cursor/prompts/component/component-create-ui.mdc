@@ -1,0 +1,425 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# UI Component Creation Request
+
+Please create a new UI component following our design system patterns and accessibility standards:
+
+## 🎯 **UI COMPONENT CREATION OBJECTIVES:**
+
+1. **INTEGRATE with design system** using Catalyst base components and TailwindCSS patterns
+2. **IMPLEMENT comprehensive accessibility** with ARIA attributes and keyboard navigation
+3. **PROVIDE flexible variants** with consistent visual design and interaction patterns
+4. **ENSURE optimal performance** with proper state management and optimization
+5. **FOLLOW project standards** for TypeScript, testing, and component architecture
+
+## 📋 **UI COMPONENT DEVELOPMENT METHODOLOGY:**
+
+### **STEP 1: Component Planning and Design System Integration**
+
+#### **Determine Component Type and Location:**
+- **Client Component**: `src/components/client/ui/` - Interactive UI components
+- **Base Component Extension**: Extend Catalyst components when available
+- **Component Categories**:
+  - **Input Components**: Buttons, inputs, selects, checkboxes (`input/`)
+  - **Display Components**: Cards, badges, avatars, progress (`display/`)
+  - **Navigation Components**: Tabs, pagination, breadcrumbs (`navigation/`)
+  - **Feedback Components**: Alerts, toasts, modals, tooltips (`feedback/`)
+  - **Layout Components**: Dividers, spacers, containers (`layout/`)
+
+#### **Design System Assessment:**
+- **Catalyst Integration**: Check if base component exists in `components/catalyst/`
+- **Design Tokens**: Use established color, spacing, and typography scales
+- **Variant System**: Plan consistent size, color, and state variants
+- **Accessibility Requirements**: Plan ARIA attributes and keyboard interactions
+
+### **STEP 2: Component Variants and States Design**
+
+#### **Variant System Pattern:**
+```typescript
+// Define comprehensive variant types
+interface ComponentVariants {
+  /** Visual style variant */
+  variant: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
+  /** Size variant */
+  size: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  /** Color scheme */
+  color?: 'blue' | 'green' | 'red' | 'gray' | 'yellow';
+  /** State variants */
+  disabled?: boolean;
+  loading?: boolean;
+}
+
+// Implement with class-variance-authority or similar
+const componentVariants = cva(
+  "base-component-classes",
+  {
+    variants: {
+      variant: {
+        primary: "bg-blue-600 text-white hover:bg-blue-700",
+        secondary: "bg-gray-200 text-gray-900 hover:bg-gray-300",
+        outline: "border border-gray-300 hover:bg-gray-50",
+        ghost: "hover:bg-gray-100",
+        destructive: "bg-red-600 text-white hover:bg-red-700"
+      },
+      size: {
+        xs: "px-2 py-1 text-xs",
+        sm: "px-3 py-1.5 text-sm",
+        md: "px-4 py-2 text-base",
+        lg: "px-6 py-3 text-lg",
+        xl: "px-8 py-4 text-xl"
+      }
+    },
+    defaultVariants: {
+      variant: "primary",
+      size: "md"
+    }
+  }
+);
+```
+
+#### **State Management Strategy:**
+- **Visual states**: Default, hover, focus, active, disabled, loading
+- **Interaction states**: Pressed, selected, expanded, collapsed
+- **Validation states**: Valid, invalid, warning (for form-related components)
+- **Async states**: Loading, success, error for action components
+
+### **STEP 3: Component Implementation Requirements**
+
+#### **UI Component Interface:**
+```typescript
+interface UIComponentProps extends VariantProps<typeof componentVariants> {
+  /** Component content */
+  children?: React.ReactNode;
+  /** Additional CSS classes */
+  className?: string;
+  /** Disabled state */
+  disabled?: boolean;
+  /** Loading state */
+  loading?: boolean;
+  /** Icon to display */
+  icon?: React.ComponentType<{ className?: string }> | React.ReactNode;
+  /** Click handler */
+  onClick?: (event: React.MouseEvent) => void;
+  /** Test identifier */
+  'data-testid'?: string;
+  /** ARIA label for accessibility */
+  'aria-label'?: string;
+  /** Additional ARIA attributes */
+  [key: `aria-${string}`]: string | boolean | undefined;
+}
+
+// Forward ref for proper DOM access
+const UIComponent = React.forwardRef<HTMLButtonElement, UIComponentProps>(
+  ({ variant, size, className, children, disabled, loading, ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={cn(componentVariants({ variant, size }), className)}
+        disabled={disabled || loading}
+        {...props}
+      >
+        {loading && <LoadingSpinner />}
+        {children}
+      </button>
+    );
+  }
+);
+```
+
+#### **Required Component Features:**
+- **Variant system** with consistent design tokens
+- **State management** for interactive behaviors
+- **Accessibility support** with proper ARIA attributes
+- **Performance optimization** with React.memo where appropriate
+- **Animation support** with smooth transitions and micro-interactions
+- **Responsive design** with mobile-first approach
+
+#### **Catalyst Component Extension Pattern:**
+```typescript
+// Extend existing Catalyst component
+import { Button as CatalystButton } from '@/components/catalyst/ui/button';
+
+interface CustomButtonProps extends ComponentProps<typeof CatalystButton> {
+  customVariant?: 'special' | 'branded';
+  showIcon?: boolean;
+}
+
+export const CustomButton = ({ 
+  customVariant, 
+  showIcon, 
+  children, 
+  className,
+  ...props 
+}: CustomButtonProps) => {
+  return (
+    <CatalystButton
+      className={cn(
+        // Custom styles that extend Catalyst
+        customVariant === 'special' && 'bg-gradient-to-r from-purple-500 to-pink-500',
+        showIcon && 'flex items-center gap-2',
+        className
+      )}
+      {...props}
+    >
+      {showIcon && <IconComponent />}
+      {children}
+    </CatalystButton>
+  );
+};
+```
+
+### **STEP 4: Accessibility Implementation**
+
+#### **UI Accessibility Requirements:**
+- **Semantic HTML**: Use appropriate HTML elements (button, input, div with roles)
+- **ARIA Attributes**: Proper roles, states, and properties
+- **Keyboard Navigation**: Tab order, Enter/Space activation, arrow key navigation
+- **Focus Management**: Visible focus indicators and logical focus flow
+- **Screen Reader Support**: Descriptive labels and state announcements
+- **Color Contrast**: WCAG AA compliance for all color combinations
+
+#### **Interactive Accessibility Pattern:**
+```typescript
+<button
+  type="button"
+  role="button"
+  aria-label={ariaLabel || children?.toString()}
+  aria-pressed={pressed}
+  aria-expanded={expanded}
+  aria-disabled={disabled}
+  aria-describedby={description ? `${id}-description` : undefined}
+  onKeyDown={handleKeyDown}
+  onFocus={handleFocus}
+  onBlur={handleBlur}
+  className={cn(
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+    componentVariants({ variant, size }),
+    className
+  )}
+>
+  {loading ? (
+    <>
+      <LoadingSpinner aria-hidden="true" />
+      <span className="sr-only">Loading...</span>
+    </>
+  ) : (
+    children
+  )}
+</button>
+```
+
+#### **Keyboard Interaction Patterns:**
+- **Button components**: Enter and Space for activation
+- **Navigation components**: Arrow keys for movement, Home/End for first/last
+- **Modal components**: Escape for closing, Tab trapping
+- **Form components**: Tab for navigation, Enter for submission
+
+### **STEP 5: Animation and Interaction Patterns**
+
+#### **Animation Implementation:**
+```typescript
+// Use Framer Motion for complex animations
+import { motion, AnimatePresence } from 'framer-motion';
+
+const AnimatedComponent = motion.div.attrs(({ 
+  initial, 
+  animate, 
+  exit,
+  transition 
+}) => ({
+  initial: { opacity: 0, scale: 0.95 },
+  animate: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.95 },
+  transition: { duration: 0.2, ease: 'easeOut' }
+}));
+
+// CSS transitions for simple interactions
+const buttonTransitions = 'transition-all duration-200 ease-in-out';
+```
+
+#### **Micro-interaction Patterns:**
+- **Hover effects**: Subtle color and shadow changes
+- **Active states**: Slight scale or color transformations
+- **Loading states**: Spinner or skeleton animations
+- **Success/error feedback**: Color changes and icons
+- **Focus indicators**: Ring or outline animations
+
+#### **Performance Considerations:**
+- **Animation optimization**: Use transform and opacity for smooth animations
+- **Reduced motion**: Respect `prefers-reduced-motion` user setting
+- **Memory management**: Clean up animation listeners and timers
+- **Bundle size**: Code split heavy animation libraries
+
+## ✅ **UI COMPONENT IMPLEMENTATION REQUIREMENTS:**
+
+### **File Structure:**
+```
+ui-component-name/
+├── ComponentName.tsx              # Main component
+├── __tests__/
+│   ├── ComponentName.test.tsx     # Unit tests
+│   ├── ComponentName.a11y.test.tsx # Accessibility tests
+│   └── ComponentName.visual.test.tsx # Visual regression tests
+├── styles/
+│   └── component-variants.ts      # Variant definitions
+├── hooks/
+│   └── useComponentState.ts       # Component-specific hooks
+└── README.md                      # Component documentation
+```
+
+### **Component Requirements:**
+- [ ] **TypeScript Interface**: Comprehensive props with JSDoc documentation
+- [ ] **Variant System**: Consistent size, color, and state variants
+- [ ] **Catalyst Integration**: Proper extension of base components where applicable
+- [ ] **Accessibility Compliance**: WCAG 2.1 AA with keyboard navigation
+- [ ] **Animation Support**: Smooth transitions and micro-interactions
+- [ ] **Performance Optimization**: React.memo and proper state management
+- [ ] **Responsive Design**: Mobile-first responsive patterns
+
+### **Testing Requirements:**
+- [ ] **Rendering Tests**: All variants and states render correctly
+- [ ] **Interaction Tests**: Click, keyboard, and focus interactions
+- [ ] **Accessibility Tests**: ARIA attributes and keyboard navigation
+- [ ] **Visual Tests**: Screenshots for visual regression testing
+- [ ] **Performance Tests**: No unnecessary re-renders or memory leaks
+- [ ] **Animation Tests**: Transition states and timing
+
+## 🔍 **UI COMPONENT QUALITY STANDARDS:**
+
+### **Design System Consistency:**
+- **Token Usage**: Use design tokens for colors, spacing, typography
+- **Variant Consistency**: Consistent naming and behavior across components
+- **Visual Harmony**: Components work together visually
+- **Brand Alignment**: Components reflect brand guidelines and personality
+
+### **Performance Standards:**
+- **Bundle Size**: Minimal impact on application bundle
+- **Render Performance**: Optimized re-rendering and state updates
+- **Animation Performance**: 60fps animations with proper optimization
+- **Memory Usage**: No memory leaks or excessive DOM manipulation
+
+### **Accessibility Standards:**
+- **WCAG 2.1 AA**: Full compliance with accessibility guidelines
+- **Keyboard Only**: Complete functionality without mouse
+- **Screen Reader**: Proper announcement and navigation
+- **Color Contrast**: Minimum 4.5:1 contrast ratio for text
+
+## 💡 **UI COMPONENT EXAMPLES:**
+
+### **Interactive Button with Loading State:**
+```typescript
+<Button
+  variant="primary"
+  size="md"
+  loading={isSubmitting}
+  onClick={handleSubmit}
+  icon={<PlusIcon />}
+>
+  Create Account
+</Button>
+```
+
+### **Modal with Animation and Focus Management:**
+```typescript
+<Modal
+  isOpen={isOpen}
+  onClose={handleClose}
+  title="Confirm Action"
+  size="md"
+  closeOnOverlayClick={true}
+  trapFocus={true}
+>
+  <ModalContent>
+    <p>Are you sure you want to continue?</p>
+    <ModalActions>
+      <Button variant="outline" onClick={handleClose}>Cancel</Button>
+      <Button variant="destructive" onClick={handleConfirm}>Confirm</Button>
+    </ModalActions>
+  </ModalContent>
+</Modal>
+```
+
+### **Form Input with Validation States:**
+```typescript
+<Input
+  label="Email Address"
+  type="email"
+  placeholder="Enter your email"
+  value={email}
+  onChange={setEmail}
+  error={validationError}
+  required
+  helpText="We'll never share your email"
+/>
+```
+
+## 🚨 **COMMON UI COMPONENT PITFALLS:**
+
+### **Design System Pitfalls:**
+- **Inconsistent variants**: Ensure all components follow same variant patterns
+- **Token deviation**: Don't hardcode values that should use design tokens
+- **Style conflicts**: Avoid CSS specificity wars with clear class hierarchies
+- **Responsive breaks**: Test all breakpoints and ensure consistent behavior
+
+### **Accessibility Pitfalls:**
+- **Missing focus indicators**: Always provide visible focus styles
+- **Improper ARIA usage**: Use ARIA attributes correctly, not excessively
+- **Keyboard traps**: Ensure users can navigate out of all components
+- **Color-only information**: Don't rely solely on color to convey meaning
+
+### **Performance Pitfalls:**
+- **Excessive re-renders**: Use React.memo and useMemo appropriately
+- **Heavy animations**: Optimize animations for performance
+- **Large bundle impact**: Tree-shake unused variant styles
+- **Memory leaks**: Clean up event listeners and timers
+
+## 🔧 **INTEGRATION WITH PROJECT STANDARDS:**
+
+### **Component Architecture Integration:**
+- Follows client component patterns for interactive UI
+- Integrates with Catalyst design system foundation
+- Uses proper TypeScript interfaces and component composition
+- Implements co-located testing strategy
+
+### **Standards Compliance:**
+- **Coding Standards**: TypeScript, proper error handling, performance
+- **Testing Standards**: Unit, accessibility, and visual regression tests
+- **Architecture Standards**: Client component organization and patterns
+- **Design Standards**: Consistent with design system and brand guidelines
+
+### **Related Prompts:**
+- Use `component-create-guide.mdc` for general component patterns
+- Use `component-update-ui.mdc` for enhancing existing UI components
+- Reference form component patterns for form-related UI elements
+
+## 📋 **UI COMPONENT CREATION DELIVERABLES:**
+
+Please provide:
+
+- [ ] **Complete UI component** with TypeScript interfaces and variant system
+- [ ] **Design system integration** with proper Catalyst extension patterns
+- [ ] **Accessibility implementation** with comprehensive ARIA support
+- [ ] **Animation and interaction** patterns with performance optimization
+- [ ] **Comprehensive test suite** including unit, accessibility, and visual tests
+- [ ] **Documentation** with usage examples and variant demonstrations
+- [ ] **Implementation summary** with design decisions and integration notes
+
+## 📖 **USAGE EXAMPLES:**
+
+```
+Create a versatile Button component with loading states, icons, and multiple variants that extends Catalyst.
+Apply the UI component creation prompt.
+```
+
+```
+Create a Modal component with animation, focus trapping, and accessibility features for user confirmations.
+Apply the UI component creation prompt.
+```
+
+```
+Create a multi-select dropdown component with search functionality and keyboard navigation.
+Apply the UI component creation prompt.
+```

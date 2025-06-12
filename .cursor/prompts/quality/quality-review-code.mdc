@@ -1,0 +1,153 @@
+---
+description: Code Quality & Testing Review - Comprehensive prompt for ensuring code meets project standards with appropriate documentation and testing
+globs: 
+alwaysApply: false
+---
+---
+title: Code Quality & Testing Review
+description: Comprehensive prompt for ensuring code meets project standards with appropriate documentation and testing
+tags: [prompt, code-quality, testing, documentation, standards]
+version: 2.0.0
+lastUpdated: 2025-06-02
+usage: Reference this prompt for any file or directory that needs quality review
+audience: [claude, ai-assistants]
+scope: [documentation, unit-testing, accessibility-testing, integration-testing]
+---
+
+# Code Quality & Testing Request
+
+**IMPORTANT: This prompt requires completing ALL applicable tasks listed below. Do not skip any sections without explicitly explaining why.**
+
+**FOLLOW MINIMAL CHANGE PRINCIPLES: When creating tests and documentation, preserve existing code patterns and architecture. Do not rewrite working code unnecessarily.**
+
+Please review the code I'm working on and ensure it meets our project standards. Based on the file types and functionality, determine which tasks are applicable:
+
+## Documentation Tasks
+
+### 1. Update inline code documentation
+- Add/update JSDoc comments for all functions, components, and interfaces
+- Ensure parameters and return types are documented with descriptions
+- Document any complex logic or business rules
+- Add usage examples where helpful
+
+### 2. Developer README.md
+- Evaluate if this code warrants its own README.md documentation
+- Create or update if it's a significant component, feature, or standalone module
+- Include: purpose, API/props, usage examples, and any special considerations
+
+## Testing Tasks
+
+### 3. Unit Tests (evaluate applicability)
+- **For Components**: Test rendering, props, user interactions, error/loading states
+- **For Server Actions**: Test success cases, error handling, input validation
+- **For API Routes**: Test endpoints, request/response handling, authentication
+- **For Utilities/Hooks**: Test function behavior, edge cases, error conditions
+- Create appropriate test files following our vitest standards
+- Ensure 80%+ coverage
+
+### 4. Accessibility Tests (evaluate applicability)
+- **MANDATORY for ALL UI components** that render visual elements to the DOM
+- **Required for**: Buttons, forms, navigation, modals, cards, layouts, any interactive elements
+- **Skip for**: Server actions, API routes, utilities, hooks, non-visual components, data services
+- Use vitest-axe to test for violations and keyboard navigation
+- Create separate `.a11y.test.tsx` files (NOT combined with unit tests)
+- Test all component variants and states for accessibility compliance
+
+### 5. Integration Tests (evaluate need)
+- **Consider for**: Authentication flows, form submissions, multi-component workflows, API integrations
+- **Skip for**: Simple utilities, basic display components, isolated functions
+- Create if the code involves complex user journeys or external system interactions
+- Explain your decision either way
+
+## Standards to Follow
+
+- Use vitest (NOT Jest) for all testing
+- Co-locate tests in `__tests__/` subdirectories
+- Follow our file naming conventions (kebab-case directories, PascalCase files)
+- Use `expectNoA11yViolations()` for accessibility tests
+- Import directly from specific files (no barrel imports)
+- Add data-testid attributes where needed for testing
+- **Preserve existing code patterns** - do not rewrite working code when adding tests
+- **Follow existing architecture** - maintain current project structure and conventions
+- **Use existing test utilities** - leverage current testing setup and helpers
+
+## Testing & Validation Process
+
+### Test Creation Guidelines
+- **Analyze existing code** before writing tests - understand current patterns
+- **Follow existing test structure** - look at current test files for patterns
+- **Use existing test utilities** - leverage current helpers and setup
+- **Preserve working code** - do not modify functional code when adding tests
+- **Match existing styles** - follow current testing conventions and organization
+
+### Test Execution Requirement
+After creating all tests, you must:
+- [ ] **Run the test suite**: Execute `npm run test` or appropriate test commands
+- [ ] **Verify all tests pass**: Ensure no failures or errors
+- [ ] **Report results**: Include test execution output in your response
+- [ ] **Fix any issues**: If tests fail, debug and resolve before completing
+- [ ] **Confirm coverage**: Verify that coverage targets are met
+
+### Test Execution Commands
+Use these commands to validate your tests:
+```bash
+# Run all tests
+npm run test
+
+# Run specific test types
+npm run test:unit
+npm run test:a11y
+
+# Run with coverage
+npm run test:coverage
+
+# Run tests for specific files
+npm run test -- ComponentName.test.tsx
+```
+
+## Analysis & Decision Making
+
+Before implementing, please:
+
+1. **Identify ALL files** in the specified scope (if given a directory, analyze EVERY file within it)
+2. **Categorize each file type** (components, actions, API routes, utilities, etc.)
+3. **Determine which testing categories apply** to each individual file
+4. **Explain your reasoning** for including or skipping each type of test for each file
+5. **Prioritize based on impact** and our project standards
+6. **Create comprehensive test coverage** for the entire scope provided
+7. **Preserve existing code** - do not modify working code when adding tests
+8. **Run all tests** to ensure they pass before completing the task
+
+## Deliverables
+
+**YOU MUST PROVIDE ALL APPLICABLE ITEMS FOR EVERY FILE IN THE SPECIFIED SCOPE:**
+
+- [ ] Updated code with improved inline documentation (for all files)
+- [ ] README.md (if warranted - explain decision)
+- [ ] Unit test files for ALL files in scope (with comprehensive coverage)
+- [ ] Accessibility test files for ALL UI components in scope (separate .a11y.test.tsx files)
+- [ ] Integration test files (where applicable - explain decisions)
+- [ ] **Test execution results** - Run all new tests and confirm they pass
+- [ ] Brief summary explaining:
+  - Complete inventory of files analyzed
+  - What types of tests were created for each file and why
+  - What was skipped for each file and the reasoning
+  - Test execution results and any issues found
+  - Coverage achieved across the entire scope
+  - Any notable considerations or dependencies
+
+**Note: When given a directory, you must analyze and provide testing for EVERY applicable file within that directory. If any deliverable is not applicable to a specific file, explicitly explain why it's being skipped for that file.**
+
+## Usage Examples
+
+```
+For this file, please follow the complete guidelines in .cursor/prompts/code-quality-review.mdc
+```
+
+```
+For all files in /src/components/client/ui/, please follow the complete guidelines in .cursor/prompts/code-quality-review.mdc
+```
+
+```
+For the entire authentication system in /src/actions/auth/ and /src/components/client/auth/, please follow the complete guidelines in .cursor/prompts/code-quality-review.mdc
+```

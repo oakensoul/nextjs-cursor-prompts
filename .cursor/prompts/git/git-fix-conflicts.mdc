@@ -1,0 +1,372 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Git Conflict Resolution and Merge Fix Guide
+
+**This prompt provides systematic conflict resolution strategies with safety checks, validation, and team collaboration best practices.**
+
+## 🎯 **CONFLICT RESOLUTION OBJECTIVES:**
+
+1. **ANALYZE conflicts** thoroughly before making any changes
+2. **PRESERVE intent** from both branches being merged
+3. **VALIDATE resolution** through testing and review
+4. **COMMUNICATE changes** to team members effectively
+5. **MAINTAIN code quality** throughout the resolution process
+
+## 🔍 **CONFLICT ANALYSIS AND ASSESSMENT:**
+
+### **STEP 1: Conflict Discovery and Documentation**
+
+#### **Initial Assessment:**
+```bash
+# Check conflict status
+git status --porcelain | grep "^UU"
+
+# View all conflicted files
+git diff --name-only --diff-filter=U
+
+# Get detailed conflict information
+git log --merge --oneline --left-right HEAD...MERGE_HEAD
+```
+
+#### **Conflict Documentation:**
+- [ ] **Identify all conflicted files** and their types (code, config, documentation)
+- [ ] **Understand the merge context** - what branches are being merged and why
+- [ ] **Review commit history** for both branches to understand intent
+- [ ] **Assess conflict complexity** - simple overlaps vs. major architectural differences
+- [ ] **Identify stakeholders** who should be consulted for complex conflicts
+
+#### **Branch Context Analysis:**
+```markdown
+## Conflict Analysis Report
+
+### Merge Context:
+- **Source Branch**: [branch-name]
+- **Target Branch**: [branch-name]  
+- **Merge Type**: [feature/hotfix/release/main]
+- **Conflicted Files**: [list all files]
+
+### Conflict Categories:
+- **Simple Text Conflicts**: [files with straightforward text overlaps]
+- **Logic Conflicts**: [files with conflicting business logic]
+- **Structural Conflicts**: [files with architectural differences]
+- **Configuration Conflicts**: [config files, package.json, etc.]
+
+### Stakeholder Consultation Needed:
+- **Product Owner**: [for business logic conflicts]
+- **Tech Lead**: [for architectural decisions]
+- **Original Authors**: [for complex logic conflicts]
+```
+
+### **STEP 2: Pre-Resolution Safety Measures**
+
+#### **Backup and Safety:**
+```bash
+# Create backup branch before resolving
+git branch backup-before-conflict-resolution
+
+# Stash any uncommitted work
+git stash push -m "Work in progress before conflict resolution"
+
+# Verify we have clean working directory for conflicts only
+git status
+```
+
+#### **Team Communication:**
+- [ ] **Notify team** about conflict resolution in progress
+- [ ] **Block parallel work** on affected files/features during resolution
+- [ ] **Set timeline expectations** for resolution completion
+- [ ] **Identify review requirements** for the final resolution
+
+## 🛠️ **SYSTEMATIC CONFLICT RESOLUTION:**
+
+### **STEP 3: File-by-File Resolution Strategy**
+
+#### **Resolution Approach Selection:**
+For each conflicted file, choose the appropriate strategy:
+
+**A. Accept Incoming Changes (theirs)**
+```bash
+# When the incoming branch is clearly correct
+git checkout --theirs <file>
+git add <file>
+```
+
+**B. Accept Current Changes (ours)**
+```bash
+# When current branch should take precedence
+git checkout --ours <file>
+git add <file>
+```
+
+**C. Manual Integration (merge both)**
+```bash
+# For complex conflicts requiring both changes
+# Edit file manually to integrate both sides
+git add <file>
+```
+
+**D. Complete Rewrite**
+```bash
+# When conflicts are too complex, start fresh
+# Remove conflict markers and rewrite section
+git add <file>
+```
+
+#### **Conflict Resolution Checklist:**
+For each file:
+- [ ] **Read conflict markers** carefully (`<<<<<<<`, `=======`, `>>>>>>>`)
+- [ ] **Understand both versions** and their intent
+- [ ] **Test individual changes** if possible before integrating
+- [ ] **Preserve functionality** from both sides where applicable
+- [ ] **Maintain code style** and consistency
+- [ ] **Remove all conflict markers** completely
+- [ ] **Add file to staging** after resolution
+
+### **STEP 4: Specific File Type Strategies**
+
+#### **Code Files (.ts, .tsx, .js, etc.)**
+```markdown
+## Code Conflict Resolution Process:
+
+1. **Analyze Function/Component Changes:**
+   - What new functionality was added in each branch?
+   - Are there conflicting business logic changes?
+   - Can both changes coexist?
+
+2. **Integration Strategy:**
+   - Combine imports from both sides
+   - Merge interface/type definitions
+   - Integrate function implementations
+   - Preserve error handling from both sides
+
+3. **Testing Requirements:**
+   - Unit tests must pass for resolved functions
+   - Integration tests for combined functionality
+   - Type checking must pass without errors
+```
+
+#### **Configuration Files (package.json, tsconfig.json, etc.)**
+```markdown
+## Configuration Conflict Resolution:
+
+1. **Package.json Conflicts:**
+   - Merge dependencies alphabetically
+   - Combine scripts, keeping both unless duplicated
+   - Merge devDependencies and preserve versions
+   - Update version number appropriately
+
+2. **Config File Conflicts:**
+   - Preserve all configuration options
+   - Merge arrays (plugins, rules, etc.)
+   - Combine object properties
+   - Validate final configuration syntax
+```
+
+#### **Documentation Files (.md, README, etc.)**
+```markdown
+## Documentation Conflict Resolution:
+
+1. **Content Integration:**
+   - Combine all new information from both sides
+   - Maintain logical flow and structure
+   - Update version numbers and dates
+   - Preserve formatting and style
+
+2. **Validation:**
+   - Check all links still work
+   - Verify code examples are correct
+   - Ensure table of contents is updated
+```
+
+### **STEP 5: Resolution Validation and Testing**
+
+#### **Automated Validation:**
+```bash
+# Verify no conflict markers remain
+grep -r "<<<<<<< \|>>>>>>> \|=======" .
+
+# Check syntax and build
+npm run type-check
+npm run build
+
+# Run test suite
+npm run test
+
+# Run linting
+npm run lint
+```
+
+#### **Manual Validation Checklist:**
+- [ ] **All conflict markers removed** from all files
+- [ ] **Code compiles successfully** without errors
+- [ ] **Tests pass** for affected functionality
+- [ ] **Linting passes** with no new violations
+- [ ] **Manual testing** of affected features works
+- [ ] **No functionality lost** from either branch
+
+#### **Integration Testing:**
+```bash
+# Test the specific features from both branches
+npm run test -- --testPathPattern="affected-feature"
+
+# Run smoke tests for critical paths
+npm run test:e2e -- --testPathPattern="smoke"
+
+# Verify database migrations if applicable
+npm run db:migrate && npm run db:seed
+```
+
+## 📝 **RESOLUTION DOCUMENTATION AND COMMIT:**
+
+### **STEP 6: Commit Resolution with Clear Documentation**
+
+#### **Commit Message Template:**
+```
+resolve: merge conflicts between [source-branch] and [target-branch]
+
+## Conflicts Resolved:
+- [file1]: [brief description of resolution strategy]
+- [file2]: [brief description of resolution strategy]
+- [file3]: [brief description of resolution strategy]
+
+## Resolution Strategy:
+- [Overall approach taken]
+- [Key decisions made]
+- [Functionality preserved/combined]
+
+## Testing Completed:
+- [x] All tests pass
+- [x] Build successful
+- [x] Manual testing of affected features
+- [x] No conflict markers remain
+
+## Stakeholders Consulted:
+- [Name]: [for which decisions]
+- [Name]: [for which decisions]
+
+Co-authored-by: [Original Author 1] <email@domain.com>
+Co-authored-by: [Original Author 2] <email@domain.com>
+```
+
+#### **Final Commit Process:**
+```bash
+# Stage all resolved files
+git add .
+
+# Verify staging is correct
+git status
+
+# Commit with detailed message
+git commit -m "resolve: merge conflicts between feature/auth and main
+
+## Conflicts Resolved:
+- src/auth/login.ts: integrated new validation with existing error handling
+- package.json: merged dependencies and scripts from both branches
+- README.md: combined documentation updates
+
+## Resolution Strategy:
+- Preserved authentication improvements from feature branch
+- Maintained backward compatibility from main branch
+- Combined error handling approaches for better UX
+
+## Testing Completed:
+- [x] All tests pass
+- [x] Authentication flow works end-to-end
+- [x] No regression in existing functionality
+
+Co-authored-by: Alice Developer <alice@company.com>
+Co-authored-by: Bob Developer <bob@company.com>"
+```
+
+## 🚨 **CONFLICT RESOLUTION RED FLAGS:**
+
+### **STOP - Get Help If:**
+- **Security-related conflicts** involving authentication, authorization, or data handling
+- **Database schema conflicts** that could affect data integrity
+- **API contract changes** that might break client applications
+- **Build system conflicts** that prevent successful compilation
+- **Major architectural differences** between branches
+- **Conflicts in critical production code** without clear understanding
+
+### **Escalation Process:**
+```markdown
+## When to Escalate:
+
+### Immediate Escalation (Stop Work):
+- Data loss risk in database migrations
+- Security vulnerability introduction possible
+- Production system impact unclear
+- Breaking changes to public APIs
+
+### Team Consultation Required:
+- Business logic conflicts requiring product decisions
+- Performance implications unclear
+- Multiple valid architectural approaches
+- Conflicts affecting multiple team members' work
+
+### Senior Review Needed:
+- Complex algorithm conflicts
+- Infrastructure or deployment changes
+- Backward compatibility concerns
+- Third-party integration conflicts
+```
+
+## 💡 **CONFLICT RESOLUTION EXAMPLES:**
+
+### **Example 1: Simple Feature Merge Conflict**
+```
+Resolve conflicts in user profile component between main and feature/profile-update
+
+Following .cursor/prompts/git/git-fix-conflicts.mdc:
+- Focus on preserving both new profile fields and existing validation
+- Ensure responsive design changes from both branches are maintained
+- Test profile update flow end-to-end after resolution
+```
+
+### **Example 2: Complex API Conflict**
+```
+Resolve conflicts in authentication API between main and hotfix/security-patch
+
+Following .cursor/prompts/git/git-fix-conflicts.mdc:
+- Prioritize security fixes while preserving new features
+- Validate that both JWT improvements and rate limiting work together
+- Consult security team before finalizing resolution
+```
+
+### **Example 3: Configuration and Build Conflicts**
+```
+Resolve package.json and build configuration conflicts from release branch merge
+
+Following .cursor/prompts/git/git-fix-conflicts.mdc:
+- Merge all new dependencies while preserving version compatibility
+- Combine build optimizations from both branches
+- Verify CI/CD pipeline works with final configuration
+```
+
+## 🔧 **CONFLICT PREVENTION STRATEGIES:**
+
+### **Team Workflow Improvements:**
+- **Frequent rebasing** to reduce conflict likelihood
+- **Feature branch planning** to minimize overlapping changes
+- **Communication protocols** for large refactoring
+- **Code ownership** clarity for conflict resolution decisions
+
+### **Technical Measures:**
+```bash
+# Set up conflict resolution tools
+git config merge.tool vimdiff
+git config merge.conflictstyle diff3
+
+# Enable rerere for conflict reuse
+git config rerere.enabled true
+
+# Set up better diff algorithms
+git config diff.algorithm patience
+```
+
+---
+
+**This conflict resolution guide ensures systematic, safe resolution of git conflicts while maintaining code quality and team collaboration.**

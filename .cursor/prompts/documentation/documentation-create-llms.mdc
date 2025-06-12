@@ -1,0 +1,294 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# LLM Developer Guide Creation
+
+**This prompt creates comprehensive llms.md documentation that serves as a technical overview and integration guide for LLM developers working with AI-assisted development frameworks.**
+
+## 🎯 **OBJECTIVES:**
+
+1. **CREATE comprehensive project overview** tailored for LLM developers and AI assistants
+2. **DOCUMENT AI assistance architecture** including prompts, rules, and standards
+3. **PROVIDE technical integration patterns** and usage examples
+4. **ESTABLISH quality standards** for AI-assisted development
+5. **ENABLE effective LLM collaboration** through clear documentation
+
+## 📋 **LLM GUIDE CREATION PROCESS:**
+
+### **STEP 1: Project Architecture Analysis**
+
+#### **Repository Structure Assessment:**
+```bash
+# Analyze the complete project structure
+echo "🔍 Repository Structure Analysis"
+echo "================================"
+
+# Core directories to document
+- .cursor/                 # AI assistance infrastructure
+  - prompts/              # Task-specific prompts
+  - rules/                # Cross-cutting constraints
+- docs/standards/         # Development standards
+- examples/               # Usage examples
+- templates/              # Code templates
+- scripts/                # Automation tools
+
+# Count and categorize prompts
+find .cursor/prompts -name "*.mdc" | wc -l
+find .cursor/rules -name "*.mdc" | wc -l
+
+# Identify prompt categories and specializations
+ls .cursor/prompts/*/
+```
+
+#### **Technology Stack Documentation:**
+- **Framework and versions** - Core technologies and their versions
+- **Testing infrastructure** - Testing frameworks and strategies
+- **Development tools** - Build tools, linters, formatters
+- **Integration patterns** - How different technologies work together
+- **Deployment targets** - Production environment specifications
+
+#### **Standards Integration:**
+- **Coding standards** integration and enforcement
+- **Testing standards** and coverage requirements
+- **Architecture patterns** and design principles
+- **Quality gates** and validation processes
+- **Security requirements** and compliance standards
+
+### **STEP 2: AI Assistance Framework Documentation**
+
+#### **Prompt System Architecture:**
+```markdown
+## Prompt System Architecture
+
+### Intelligent Routing System
+[Document how prompts automatically route to specialized domains]
+
+### Category Analysis:
+- **[Category Name]** ([X] prompts): [Purpose and scope]
+  - Key prompts: [List major prompts with descriptions]
+  - Integration patterns: [How they work together]
+  - Quality standards: [Built-in quality requirements]
+
+### Specialized Domain Prompts:
+[Document domain-specific prompt collections with routing logic]
+```
+
+#### **Rules System Documentation:**
+```markdown
+## Rules System
+
+### Core Rules ([X] rules):
+1. **[rule-name].mdc** - [Purpose and application]
+2. **[rule-name].mdc** - [Purpose and application]
+
+### Rule Application Patterns:
+- **Safety constraints** - Rules that prevent breaking changes
+- **Quality enforcement** - Rules that ensure code quality
+- **Architecture compliance** - Rules that maintain consistency
+- **Cross-cutting concerns** - Rules that apply across domains
+```
+
+#### **Meta-Prompting Capabilities:**
+- **Thread management** - Context preservation and transfer
+- **Complexity assessment** - Conversation complexity evaluation
+- **Task extraction** - Automated todo organization
+- **Self-improvement** - Prompt optimization and evolution
+
+### **STEP 3: Usage Patterns and Integration**
+
+#### **Basic Usage Examples:**
+```bash
+# Simple prompt usage
+"[Example user request]"
+# → Automatically routes to [specific-prompt.mdc]
+
+# Combined with rules for safety
+"Please follow .cursor/prompts/[category]/[prompt].mdc
+Apply .cursor/rules/[rule].mdc - [specific application context]"
+```
+
+#### **Advanced Workflow Documentation:**
+```bash
+# Complete feature development workflow
+1. [Phase]: .cursor/prompts/[category]/[prompt].mdc
+2. [Phase]: .cursor/prompts/[category]/[prompt].mdc
+3. [Phase]: .cursor/prompts/[category]/[prompt].mdc
+[Continue with complete workflow]
+```
+
+#### **Integration Patterns:**
+- **Cross-category workflows** - How prompts work together
+- **Rule combinations** - Safe rule stacking patterns
+- **Thread management** - Complex conversation handling
+- **Quality assurance** - Built-in validation processes
+
+### **STEP 4: Development Standards Documentation**
+
+#### **Code Quality Standards:**
+```typescript
+// Document established patterns
+interface ComponentProps {
+  // Standard prop patterns
+}
+
+// Testing standards
+describe('Component Tests', () => {
+  // Standard testing patterns
+});
+```
+
+#### **Architecture Patterns:**
+- **File organization** standards and conventions
+- **Component structure** with comprehensive testing
+- **API design** patterns and security
+- **State management** approaches and best practices
+
+#### **Quality Assurance Integration:**
+- **Testing requirements** (unit, integration, a11y, e2e)
+- **Security standards** and vulnerability assessment
+- **Accessibility compliance** (WCAG 2.1 AA)
+- **Performance optimization** and monitoring
+
+### **STEP 5: Evolution and Maintenance**
+
+#### **Version History:**
+- **Recent developments** and feature additions
+- **Continuous improvement** processes
+- **Community contributions** and enhancement patterns
+- **Quality evolution** metrics and improvements
+
+#### **Self-Improving System:**
+- **Meta-prompting capabilities** for system enhancement
+- **Quality review processes** for prompt optimization
+- **Real-world validation** across project types
+- **Feedback integration** and iterative improvement
+
+## ✅ **CONTENT REQUIREMENTS:**
+
+### **Essential Sections:**
+
+#### **1. Executive Overview:**
+- **Purpose statement** - What this framework accomplishes
+- **Core philosophy** - Guiding principles and values
+- **Key benefits** - Why this approach is valuable
+- **Scope coverage** - What aspects of development are addressed
+
+#### **2. Architecture Documentation:**
+- **Repository structure** with clear explanations
+- **Technology stack** with versions and rationale
+- **Integration points** between different components
+- **Quality standards** built into the system
+
+#### **3. Prompt System Details:**
+- **Intelligent routing** explanation and examples
+- **Domain specialization** with prompt categorization
+- **Quality standards** embedded in prompts
+- **Integration patterns** for combining prompts
+
+#### **4. Rules System:**
+- **Cross-cutting constraints** and their applications
+- **Safety mechanisms** for protecting existing code
+- **Quality enforcement** through rule application
+- **Combination strategies** for rule stacking
+
+#### **5. Usage Patterns:**
+- **Basic examples** showing simple prompt usage
+- **Advanced workflows** demonstrating complex integrations
+- **Best practices** for effective LLM collaboration
+- **Common pitfalls** and how to avoid them
+
+#### **6. Standards Integration:**
+- **Development standards** referenced and enforced
+- **Testing methodology** with coverage requirements
+- **Security practices** built into the framework
+- **Accessibility compliance** standards and validation
+
+### **Quality Standards:**
+
+#### **Technical Accuracy:**
+- [ ] **Current technology versions** - All versions are up-to-date
+- [ ] **Accurate code examples** - Examples work and follow standards
+- [ ] **Correct file paths** - All references point to actual files
+- [ ] **Working integrations** - Integration examples are functional
+
+#### **Completeness:**
+- [ ] **Full system coverage** - All major components documented
+- [ ] **Integration patterns** - How components work together
+- [ ] **Usage examples** - Practical applications provided
+- [ ] **Evolution story** - How the system has developed
+
+#### **LLM Optimization:**
+- [ ] **Clear structure** - Easy for AI to parse and understand
+- [ ] **Actionable guidance** - Specific instructions for implementation
+- [ ] **Context preservation** - Information needed for effective assistance
+- [ ] **Quality standards** - Clear success criteria throughout
+
+## 🔍 **VALIDATION CHECKLIST:**
+
+### **Content Validation:**
+- [ ] **Accurate prompt counts** - Correct number of prompts per category
+- [ ] **Current technology stack** - Up-to-date versions and tools
+- [ ] **Working examples** - All code examples are functional
+- [ ] **Complete workflows** - Full end-to-end process documentation
+
+### **LLM Usability:**
+- [ ] **Clear navigation** - Easy to find relevant information
+- [ ] **Actionable content** - Specific steps and examples
+- [ ] **Integration guidance** - How to combine different elements
+- [ ] **Quality standards** - Clear success criteria
+
+### **Technical Accuracy:**
+- [ ] **File structure matches** - Documentation reflects actual structure
+- [ ] **Standards alignment** - Consistent with project standards
+- [ ] **Version accuracy** - Correct version numbers and dates
+- [ ] **Link validity** - All references point to existing files
+
+## 💡 **INTEGRATION EXAMPLES:**
+
+### **With Development Prompts:**
+```
+Create comprehensive llms.md documentation using .cursor/prompts/documentation/documentation-create-llms.mdc
+
+The project uses Next.js 15 with TypeScript 5+ and has 45+ specialized prompts across 6 categories with intelligent domain routing.
+```
+
+### **With Quality Rules:**
+```
+Create llms.md documentation using documentation-create-llms.mdc
+
+Apply .cursor/rules/code-change-minimal.mdc - preserve existing documentation structure and integrate with current standards.
+```
+
+## 🚨 **COMMON PITFALLS:**
+
+### **Technical Issues:**
+- **Outdated information** - Ensure all versions and examples are current
+- **Incomplete coverage** - Don't skip complex integration patterns
+- **Generic examples** - Make examples specific to the actual project
+- **Missing context** - Include all information LLMs need for effective assistance
+
+### **Structure Issues:**
+- **Poor organization** - Structure information logically for AI consumption
+- **Missing connections** - Document how different components integrate
+- **Unclear scope** - Be specific about what the framework covers
+- **Version inconsistency** - Ensure version numbers are accurate throughout
+
+## 🔧 **MAINTENANCE INTEGRATION:**
+
+### **Regular Updates:**
+- **Technology versions** - Keep stack information current
+- **Prompt additions** - Update counts and examples when prompts are added
+- **Standards evolution** - Reflect changes in development standards
+- **Usage patterns** - Document new integration patterns as they emerge
+
+### **Quality Assurance:**
+- **Link validation** - Ensure all references remain valid
+- **Example testing** - Verify code examples still work
+- **Structure review** - Maintain logical organization as content grows
+- **LLM feedback** - Incorporate feedback from AI assistant usage
+
+---
+
+**This prompt creates comprehensive LLM developer documentation that enables effective AI-assisted development through clear technical guidance and integration patterns.**

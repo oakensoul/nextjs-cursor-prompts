@@ -1,0 +1,486 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Hotfix Environment Setup and Branch Creation
+
+**This prompt automates hotfix environment setup from a specific commit hash, creates proper branching, PR, and documentation for critical production issues.**
+
+## 🎯 **HOTFIX SETUP OBJECTIVES:**
+
+1. **STAGE current environment** safely and preserve work-in-progress
+2. **CREATE hotfix branch** from specified commit hash
+3. **GENERATE documentation** and issue tracking automatically
+4. **CREATE pull request** with proper templates and requirements
+5. **CONFIGURE environment** for hotfix development workflow
+
+## 📋 **REQUIRED INPUTS:**
+
+### **Commit Hash Input:**
+```markdown
+**REQUIRED**: Provide the specific commit hash to create the hotfix from:
+
+**Target Commit Hash**: [COMMIT_HASH]
+**Commit Message**: [Brief description of the target commit]
+**Commit Date**: [When this commit was made]
+**Reason for Selection**: [Why this specific commit for the hotfix]
+```
+
+### **Hotfix Details:**
+```markdown
+**Issue ID**: [PROD-123, SEC-456, etc.]
+**Severity**: [CRITICAL/HIGH/MEDIUM]
+**Brief Description**: [payment-timeout, auth-bypass, etc.]
+**Estimated Complexity**: [SIMPLE/MEDIUM/COMPLEX]
+**Business Impact**: [Revenue/Security/User Experience]
+```
+
+## 🛠️ **AUTOMATED ENVIRONMENT SETUP:**
+
+### **STEP 1: Environment Staging and Preservation**
+
+#### **Current Work Preservation:**
+```bash
+# Check current git status and stage everything safely
+echo "🔍 Checking current git status..."
+git status --porcelain
+
+# Stash any uncommitted work with descriptive message
+echo "💾 Preserving current work..."
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+git stash push -m "PRE_HOTFIX_WORK_${TIMESTAMP}_$(git rev-parse --short HEAD)"
+
+# Record stash information for later restoration
+STASH_REF=$(git stash list | head -n 1 | cut -d: -f1)
+echo "📝 Work stashed as: $STASH_REF"
+
+# Create restoration script
+cat > .hotfix_restoration.sh << EOF
+#!/bin/bash
+# Hotfix restoration script - generated $(date)
+echo "Restoring pre-hotfix work..."
+git stash pop $STASH_REF
+rm .hotfix_restoration.sh
+echo "✅ Pre-hotfix work restored"
+EOF
+chmod +x .hotfix_restoration.sh
+```
+
+#### **Environment Validation:**
+```bash
+# Verify we have the target commit
+echo "🔍 Validating target commit hash..."
+TARGET_COMMIT="[COMMIT_HASH]"
+if ! git cat-file -e "$TARGET_COMMIT^{commit}"; then
+    echo "❌ ERROR: Commit hash $TARGET_COMMIT not found"
+    echo "Fetching latest from origin..."
+    git fetch origin
+    if ! git cat-file -e "$TARGET_COMMIT^{commit}"; then
+        echo "❌ FATAL: Target commit not available. Aborting hotfix setup."
+        exit 1
+    fi
+fi
+
+echo "✅ Target commit validated: $TARGET_COMMIT"
+git show --oneline --no-patch "$TARGET_COMMIT"
+```
+
+### **STEP 2: Hotfix Branch Creation**
+
+#### **Automated Branch Setup:**
+```bash
+# Generate hotfix branch name
+ISSUE_ID="[ISSUE_ID]"
+DESCRIPTION="[BRIEF_DESCRIPTION]"
+HOTFIX_BRANCH="hotfix/${ISSUE_ID}-${DESCRIPTION}"
+
+echo "🌿 Creating hotfix branch: $HOTFIX_BRANCH"
+
+# Create and checkout hotfix branch from specific commit
+git checkout -b "$HOTFIX_BRANCH" "$TARGET_COMMIT"
+
+# Verify we're on the correct commit
+CURRENT_COMMIT=$(git rev-parse HEAD)
+if [ "$CURRENT_COMMIT" != "$TARGET_COMMIT" ]; then
+    echo "❌ ERROR: Branch creation failed. Expected $TARGET_COMMIT, got $CURRENT_COMMIT"
+    exit 1
+fi
+
+echo "✅ Hotfix branch created successfully"
+echo "📍 Branch: $HOTFIX_BRANCH"
+echo "📍 Commit: $CURRENT_COMMIT"
+
+# Push branch to origin
+git push -u origin "$HOTFIX_BRANCH"
+echo "🚀 Branch pushed to origin"
+```
+
+### **STEP 3: Issue Documentation Generation**
+
+#### **Automated Documentation Creation:**
+```bash
+# Create hotfix documentation directory
+mkdir -p .hotfix_docs
+
+# Generate hotfix tracking document
+cat > ".hotfix_docs/HOTFIX_${ISSUE_ID}.md" << 'EOF'
+# Hotfix Tracking: [ISSUE_ID] - [BRIEF_DESCRIPTION]
+
+## 🚨 **Hotfix Overview**
+
+**Created**: $(date)
+**Severity**: [SEVERITY]
+**Issue ID**: [ISSUE_ID]
+**Branch**: [HOTFIX_BRANCH]
+**Target Commit**: [COMMIT_HASH]
+**Created By**: $(git config user.name) <$(git config user.email)>
+
+## 📋 **Issue Details**
+
+### Problem Description:
+[Detailed description of the issue requiring hotfix]
+
+### Business Impact:
+- **Severity**: [CRITICAL/HIGH/MEDIUM]
+- **Affected Users**: [Estimate]
+- **Revenue Impact**: [If applicable]
+- **System Impact**: [Components affected]
+
+### Root Cause Analysis:
+- **Primary Cause**: [To be determined during investigation]
+- **Contributing Factors**: [To be identified]
+- **Timeline**: [When issue started, when detected]
+
+## 🎯 **Hotfix Objectives**
+
+### Primary Goal:
+[Main objective of this hotfix]
+
+### Success Criteria:
+- [ ] Issue reproduction confirmed
+- [ ] Root cause identified
+- [ ] Minimal fix implemented
+- [ ] All tests passing
+- [ ] No regression introduced
+- [ ] Documentation updated
+
+### Constraints:
+- **Scope**: Minimal changes only
+- **Timeline**: [Target completion]
+- **Dependencies**: [Any blockers or dependencies]
+
+## 🧪 **Testing Requirements**
+
+### Required Tests:
+- [ ] Unit tests for affected components
+- [ ] Integration tests for affected workflows
+- [ ] Regression tests for critical paths
+- [ ] Manual testing of fix scenario
+- [ ] Performance impact assessment
+
+### Test Environments:
+- [ ] Local development
+- [ ] Staging environment
+- [ ] Pre-production validation
+
+## 📝 **Implementation Notes**
+
+### Approach:
+[High-level implementation approach]
+
+### Files to Modify:
+[List of files that will likely need changes]
+
+### Risk Assessment:
+- **Implementation Risk**: [LOW/MEDIUM/HIGH]
+- **Deployment Risk**: [LOW/MEDIUM/HIGH]
+- **Rollback Plan**: [How to revert if needed]
+
+## 🔄 **Progress Tracking**
+
+### Status: 🟡 IN_PROGRESS
+- [x] Environment setup completed
+- [x] Branch created from target commit
+- [x] Documentation generated
+- [ ] Issue reproduction
+- [ ] Root cause analysis
+- [ ] Fix implementation
+- [ ] Testing completion
+- [ ] Code review
+- [ ] Deployment preparation
+
+### Timeline:
+- **Setup Completed**: $(date)
+- **Investigation Start**: [When investigation begins]
+- **Fix Target**: [Target completion time]
+- **Deployment Window**: [Planned deployment time]
+
+## 👥 **Team Coordination**
+
+### Roles:
+- **Hotfix Lead**: $(git config user.name)
+- **Code Reviewer**: [To be assigned]
+- **QA Validator**: [To be assigned]
+- **DevOps Coordinator**: [To be assigned]
+- **Business Stakeholder**: [To be assigned]
+
+### Communication:
+- **Status Channel**: [Slack/Teams channel]
+- **Update Frequency**: [Every X hours]
+- **Escalation Contact**: [For critical decisions]
+
+## 📚 **Resources and References**
+
+### Related Issues:
+- **Original Issue**: [Link to issue tracker]
+- **Related PRs**: [Any related pull requests]
+- **Documentation**: [Relevant docs]
+
+### Monitoring:
+- **Error Logs**: [Links to relevant logs]
+- **Metrics Dashboard**: [Monitoring links]
+- **Alert History**: [Related alert information]
+
+---
+**Generated by**: git-create-hotfix.mdc
+**Last Updated**: $(date)
+EOF
+
+echo "📄 Hotfix documentation created: .hotfix_docs/HOTFIX_${ISSUE_ID}.md"
+```
+
+### **STEP 4: Pull Request Creation**
+
+#### **Automated PR Setup:**
+```bash
+# Generate PR title and description
+PR_TITLE="hotfix: [ISSUE_ID] - [BRIEF_DESCRIPTION]"
+
+# Create PR body template
+cat > ".hotfix_docs/PR_TEMPLATE.md" << 'EOF'
+## 🚨 Hotfix: [ISSUE_ID] - [BRIEF_DESCRIPTION]
+
+### Issue Summary
+**Severity**: [SEVERITY]
+**Impact**: [Business impact description]
+**Root Cause**: [To be updated after investigation]
+
+### Changes Made
+- [ ] [Change 1 - to be updated]
+- [ ] [Change 2 - to be updated]
+- [ ] [Change 3 - to be updated]
+
+### Testing Completed
+- [ ] Unit tests pass
+- [ ] Integration tests pass
+- [ ] Manual regression testing
+- [ ] Performance impact assessed
+- [ ] Security implications reviewed
+
+### Deployment Plan
+- **Target Environment**: Production
+- **Deployment Window**: [To be scheduled]
+- **Rollback Strategy**: [Revert commit + redeploy]
+- **Monitoring Plan**: [Post-deployment monitoring]
+
+### Review Requirements
+- [ ] Code review by senior developer
+- [ ] Security review (if applicable)
+- [ ] Performance review (if applicable)
+- [ ] Business stakeholder approval
+
+### Documentation Updates
+- [ ] Code comments added for hotfix
+- [ ] Incident documentation updated
+- [ ] Runbook updated (if needed)
+- [ ] Post-incident review scheduled
+
+---
+**Hotfix Branch**: [HOTFIX_BRANCH]
+**Target Commit**: [COMMIT_HASH]
+**Created By**: $(git config user.name)
+**Created On**: $(date)
+EOF
+
+# Create pull request using GitHub CLI (if available)
+if command -v gh &> /dev/null; then
+    echo "🔀 Creating pull request with GitHub CLI..."
+    gh pr create \
+        --title "$PR_TITLE" \
+        --body-file ".hotfix_docs/PR_TEMPLATE.md" \
+        --draft \
+        --label "hotfix,priority:high,status:in-progress" \
+        --base main
+    
+    echo "✅ Draft PR created successfully"
+    PR_URL=$(gh pr view --json url --jq .url)
+    echo "🔗 PR URL: $PR_URL"
+else
+    echo "⚠️  GitHub CLI not available. Manual PR creation required."
+    echo "📋 PR template available at: .hotfix_docs/PR_TEMPLATE.md"
+    echo "🔗 Create PR manually: https://github.com/[OWNER]/[REPO]/compare/main...$HOTFIX_BRANCH"
+fi
+```
+
+### **STEP 5: Development Environment Configuration**
+
+#### **Hotfix Development Setup:**
+```bash
+# Install dependencies and verify environment
+echo "📦 Setting up development environment..."
+npm install
+
+# Verify build works from target commit
+echo "🔨 Verifying build from target commit..."
+npm run build
+if [ $? -ne 0 ]; then
+    echo "⚠️  Build failed from target commit. This may indicate environment issues."
+    echo "📝 Build error logged for investigation."
+fi
+
+# Run test suite to establish baseline
+echo "🧪 Running test suite to establish baseline..."
+npm run test > ".hotfix_docs/baseline_test_results.log" 2>&1
+BASELINE_EXIT_CODE=$?
+
+if [ $BASELINE_EXIT_CODE -eq 0 ]; then
+    echo "✅ All tests passing at target commit"
+else
+    echo "⚠️  Some tests failing at target commit (exit code: $BASELINE_EXIT_CODE)"
+    echo "📝 Test results logged: .hotfix_docs/baseline_test_results.log"
+fi
+
+# Set up hotfix-specific git hooks (if directory exists)
+if [ -d ".git/hooks" ]; then
+    echo "🪝 Setting up hotfix git hooks..."
+    
+    # Create pre-commit hook for hotfix validation
+    cat > ".git/hooks/pre-commit" << 'EOF'
+#!/bin/bash
+# Hotfix pre-commit hook
+echo "🔍 Hotfix pre-commit validation..."
+
+# Ensure we're on a hotfix branch
+CURRENT_BRANCH=$(git branch --show-current)
+if [[ ! "$CURRENT_BRANCH" =~ ^hotfix/ ]]; then
+    echo "❌ ERROR: Not on a hotfix branch. Current: $CURRENT_BRANCH"
+    exit 1
+fi
+
+# Run tests
+npm run test
+if [ $? -ne 0 ]; then
+    echo "❌ ERROR: Tests failing. Fix tests before committing."
+    exit 1
+fi
+
+echo "✅ Hotfix pre-commit validation passed"
+EOF
+    chmod +x ".git/hooks/pre-commit"
+fi
+```
+
+## 📊 **SETUP COMPLETION REPORT:**
+
+### **Environment Status Validation:**
+```bash
+# Generate setup completion report
+cat > ".hotfix_docs/SETUP_REPORT.md" << EOF
+# Hotfix Setup Completion Report
+
+## 📋 **Setup Summary**
+- **Timestamp**: $(date)
+- **Target Commit**: [COMMIT_HASH] 
+- **Hotfix Branch**: $HOTFIX_BRANCH
+- **Issue ID**: [ISSUE_ID]
+- **Severity**: [SEVERITY]
+
+## ✅ **Completed Tasks**
+- [x] Current work preserved in stash
+- [x] Hotfix branch created from target commit
+- [x] Branch pushed to origin
+- [x] Documentation generated
+- [x] PR template created
+- [x] Development environment configured
+- [x] Git hooks configured (if applicable)
+
+## 📁 **Generated Files**
+- \`.hotfix_docs/HOTFIX_[ISSUE_ID].md\` - Main tracking document
+- \`.hotfix_docs/PR_TEMPLATE.md\` - Pull request template
+- \`.hotfix_docs/baseline_test_results.log\` - Initial test results
+- \`.hotfix_restoration.sh\` - Script to restore pre-hotfix work
+
+## 🚀 **Next Steps**
+1. **Investigate Issue**: Reproduce the issue and identify root cause
+2. **Implement Fix**: Make minimal changes to resolve the issue
+3. **Test Thoroughly**: Run comprehensive tests
+4. **Review Process**: Use \`.cursor/prompts/git/git-review-hotfix.mdc\`
+5. **Commit Changes**: Use \`.cursor/prompts/git/git-commit-hotfix.mdc\`
+
+## 📞 **Support Information**
+- **Restoration Command**: \`./hotfix_restoration.sh\`
+- **Branch Switch**: \`git checkout main && ./hotfix_restoration.sh\`
+- **Emergency Rollback**: \`git checkout main && git branch -D $HOTFIX_BRANCH\`
+
+---
+**Environment ready for hotfix development** 🚀
+EOF
+
+echo ""
+echo "🎉 HOTFIX ENVIRONMENT SETUP COMPLETE!"
+echo ""
+echo "📋 Summary:"
+echo "   Branch: $HOTFIX_BRANCH"
+echo "   Target: [COMMIT_HASH]"
+echo "   Issue:  [ISSUE_ID]"
+echo ""
+echo "📄 Documentation: .hotfix_docs/"
+echo "🔄 Next Step: Use .cursor/prompts/git/git-review-hotfix.mdc"
+echo ""
+```
+
+## 💡 **USAGE EXAMPLES:**
+
+### **Example 1: Critical Payment Issue**
+```
+Create hotfix environment for payment gateway timeout
+
+Commit Hash: abc123def456
+Issue ID: PAY-789
+Severity: CRITICAL
+Description: stripe-webhook-timeout
+Business Impact: Revenue - payment processing failing
+
+Following .cursor/prompts/git/git-create-hotfix.mdc
+```
+
+### **Example 2: Security Vulnerability**
+```
+Create hotfix environment for XSS vulnerability
+
+Commit Hash: def456abc789  
+Issue ID: SEC-456
+Severity: CRITICAL
+Description: xss-user-profile
+Business Impact: Security - user data exposure risk
+
+Following .cursor/prompts/git/git-create-hotfix.mdc
+```
+
+### **Example 3: Database Performance Issue**
+```
+Create hotfix environment for database connection pool issue
+
+Commit Hash: 789abc123def
+Issue ID: DB-123  
+Severity: HIGH
+Description: connection-pool-exhaustion
+Business Impact: Performance - significant user impact
+
+Following .cursor/prompts/git/git-create-hotfix.mdc
+```
+
+---
+
+**This automated hotfix setup ensures proper environment staging, documentation, and workflow preparation for critical production fixes.**

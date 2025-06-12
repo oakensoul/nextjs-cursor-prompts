@@ -1,0 +1,383 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Prompt Creation Guide
+
+**This prompt guides the creation of new, high-quality prompts that follow established standards and integrate seamlessly with the existing prompt collection.**
+
+## 🎯 **PROMPT CREATION OBJECTIVES:**
+
+1. **CREATE standards-compliant prompts** following established guidelines
+2. **ENSURE seamless integration** with existing prompt collection
+3. **OPTIMIZE for user experience** and practical application
+4. **IMPLEMENT best practices** from project documentation
+5. **MAINTAIN consistency** across the prompt ecosystem
+
+## 📋 **PROMPT CREATION PROCESS:**
+
+### **STEP 1: Requirements Analysis**
+
+#### **Define Prompt Purpose:**
+- **Primary objective** - What specific problem does this prompt solve?
+- **Target audience** - Who will use this prompt? (developers, AI assistants, etc.)
+- **Use case scenarios** - When and why would someone need this prompt?
+- **Success criteria** - How will you know the prompt is effective?
+- **Integration points** - How does this connect to existing prompts/workflows?
+
+#### **Scope Definition:**
+- **Core functionality** - Essential features the prompt must include
+- **Boundaries** - What the prompt should NOT attempt to do
+- **Prerequisites** - What users need before using this prompt
+- **Dependencies** - What other prompts, tools, or knowledge are required
+- **Edge cases** - Unusual scenarios the prompt should handle
+
+#### **Category and Placement:**
+```
+Determine the appropriate category folder:
+- accessibility/     - WCAG compliance and inclusive design
+- api/              - API development and integration
+- code/             - Code quality, review, and improvement
+- component/        - React component development
+- deploy/           - Deployment preparation and processes
+- git/              - Git workflow and version control
+- test/             - Testing strategies and implementation
+- prompt-engineering/ - Meta-prompts for prompt development
+```
+
+### **STEP 2: Standards Integration Planning**
+
+#### **Prompt Standards Compliance (docs/standards/standards-prompt.md):**
+- **Naming convention** - Follow [category]-[action]-[target].mdc pattern
+- **Frontmatter structure** - Include all required YAML fields
+- **Content organization** - Use established section patterns
+- **Quality guidelines** - Meet clarity, completeness, and usability standards
+- **Version management** - Start with 1.0.0, plan for evolution
+
+#### **Project Standards Integration:**
+- **Coding standards** (docs/standards/standards-coding.md) - Reference current TypeScript/NextJS practices
+- **Testing standards** (docs/standards/standards-testing.md) - Include appropriate testing guidance
+- **Architecture standards** (docs/standards/standards-architecture.md) - Align with established patterns
+- **Git standards** (docs/standards/standards-git.md) - Consider workflow implications
+
+#### **Rule Compatibility:**
+- **Minimal change rule** - Consider how prompt works with surgical changes
+- **Refactoring rule** - Ensure prompt supports safe improvement practices
+- **Test-driven rule** - Include TDD considerations where appropriate
+- **Database safety rule** - Address data implications if relevant
+
+### **STEP 3: Content Development**
+
+#### **Frontmatter Creation:**
+```yaml
+---
+title: [Descriptive Title Following Naming Convention]
+description: [Clear, concise explanation of purpose and scope]
+tags: [category, action-type, target-domain, relevant-keywords]
+version: 1.0.0
+lastUpdated: [Current Date YYYY-MM-DD]
+usage: [When and how to use this prompt]
+audience: [claude, ai-assistants, other-relevant-users]
+scope: [specific-areas-this-prompt-addresses]
+---
+```
+
+#### **Opening Statement:**
+- **Purpose declaration** - Immediately clear what this prompt accomplishes
+- **Value proposition** - Why this prompt is useful and important
+- **Context setting** - How it fits into the broader development workflow
+
+#### **Core Content Structure:**
+```markdown
+# [Prompt Title]
+
+**[Brief, compelling description of what this prompt does]**
+
+## 🎯 **OBJECTIVES:**
+[Clear list of what this prompt aims to achieve]
+
+## 📋 **PROCESS/METHODOLOGY:**
+[Step-by-step approach or framework]
+
+## ✅ **REQUIREMENTS:**
+[What must be done to successfully use this prompt]
+
+## 🔍 **QUALITY STANDARDS:**
+[Specific criteria for success]
+
+## 💡 **EXAMPLES:**
+[Practical applications and use cases]
+
+## 🚨 **COMMON PITFALLS:**
+[What to avoid and how to handle problems]
+
+## 🔧 **INTEGRATION:**
+[How this works with other prompts/tools]
+```
+
+#### **Essential Sections:**
+
+**1. Clear Methodology:**
+- Provide step-by-step guidance
+- Include decision points and branching logic
+- Address common variations and edge cases
+- Offer checkpoints for quality validation
+
+**2. Practical Examples:**
+- Show real-world applications
+- Include before/after scenarios
+- Demonstrate integration with other prompts
+- Cover both simple and complex use cases
+
+**3. Quality Standards:**
+- Define success criteria
+- Include checklists for validation
+- Reference relevant project standards
+- Provide troubleshooting guidance
+
+**4. Integration Guidance:**
+- Show how to combine with other prompts
+- Reference compatible rules
+- Explain workflow positioning
+- Address dependencies and prerequisites
+
+### **STEP 4: Quality Validation**
+
+#### **Self-Review Checklist:**
+- [ ] **Purpose clarity** - Objective is immediately obvious
+- [ ] **Complete coverage** - All stated scope is addressed
+- [ ] **Actionable instructions** - Steps can be practically followed
+- [ ] **Example relevance** - Examples effectively illustrate concepts
+- [ ] **Standards alignment** - Integrates with project documentation
+- [ ] **User experience** - Easy to navigate and understand
+- [ ] **Technical accuracy** - Information is current and correct
+- [ ] **Maintenance consideration** - Likely to remain relevant
+
+#### **Standards Compliance Check:**
+- [ ] **Frontmatter complete** - All required fields present and accurate
+- [ ] **Naming convention** - Follows established pattern
+- [ ] **Content structure** - Uses recommended organization
+- [ ] **Language consistency** - Matches project tone and terminology
+- [ ] **Integration references** - Properly cites relevant standards
+- [ ] **Version tracking** - Appropriate semantic version assigned
+
+#### **Usability Testing:**
+- **Mental walkthrough** - Can you follow the instructions successfully?
+- **Edge case consideration** - Does it handle variations appropriately?
+- **Error scenario planning** - What happens when things go wrong?
+- **User journey mapping** - Is the experience smooth and logical?
+
+### **STEP 5: Documentation and Integration**
+
+#### **File Creation:**
+```bash
+# Create in appropriate category folder
+.cursor/prompts/[category]/[name].mdc
+
+# Example:
+.cursor/prompts/component/component-optimize-performance.mdc
+.cursor/prompts/api/api-create-webhook.mdc
+.cursor/prompts/test/test-create-e2e.mdc
+```
+
+#### **Integration Updates:**
+- **Category README** - Add prompt to category documentation if needed
+- **Usage examples** - Create examples showing integration with other prompts
+- **Standards updates** - Update standards docs if new patterns are established
+- **Changelog entry** - Document the addition in project changelog
+
+## 🔧 **PROMPT TYPES AND TEMPLATES:**
+
+### **Development Task Prompt Template:**
+```markdown
+# [Task Name] Guide
+
+**[Description of what this accomplishes]**
+
+## 🎯 **OBJECTIVES:**
+1. [Primary goal]
+2. [Secondary goals]
+
+## 📋 **METHODOLOGY:**
+### **STEP 1: [Phase Name]**
+- [Specific actions]
+- [Quality checks]
+
+### **STEP 2: [Phase Name]**
+- [Specific actions]
+- [Quality checks]
+
+## ✅ **REQUIREMENTS:**
+- [Technical requirements]
+- [Quality standards]
+- [Integration needs]
+
+## 💡 **EXAMPLES:**
+### **Example 1: [Scenario]**
+[Detailed example]
+
+## 🚨 **COMMON PITFALLS:**
+- [What to avoid]
+- [How to handle issues]
+
+## 🔧 **INTEGRATION:**
+- Works with: [Related prompts]
+- Apply rules: [Relevant rules]
+```
+
+### **Review/Audit Prompt Template:**
+```markdown
+# [Review Type] Guide
+
+**[What this review accomplishes]**
+
+## 🎯 **REVIEW OBJECTIVES:**
+[What the review aims to achieve]
+
+## 📋 **REVIEW PROCESS:**
+### **STEP 1: [Assessment Phase]**
+- [Evaluation criteria]
+- [Data collection methods]
+
+### **STEP 2: [Analysis Phase]**
+- [Analysis framework]
+- [Quality metrics]
+
+### **STEP 3: [Reporting Phase]**
+- [Report structure]
+- [Recommendation format]
+
+## 🔍 **EVALUATION CRITERIA:**
+[Specific standards and metrics]
+
+## 📊 **DELIVERABLES:**
+[What the review produces]
+
+## 💡 **REVIEW EXAMPLES:**
+[Sample reviews and outcomes]
+```
+
+### **Workflow Prompt Template:**
+```markdown
+# [Workflow Name] Guide
+
+**[Workflow purpose and benefits]**
+
+## 🎯 **WORKFLOW OBJECTIVES:**
+[End-to-end goals]
+
+## 📋 **WORKFLOW STEPS:**
+### **Phase 1: [Preparation]**
+[Setup and prerequisites]
+
+### **Phase 2: [Execution]**
+[Core workflow actions]
+
+### **Phase 3: [Validation]**
+[Quality checks and verification]
+
+### **Phase 4: [Completion]**
+[Finalization and documentation]
+
+## 🔄 **WORKFLOW INTEGRATION:**
+[How this fits into larger processes]
+
+## 💡 **WORKFLOW EXAMPLES:**
+[Complete workflow walkthroughs]
+```
+
+## 📊 **QUALITY METRICS FOR NEW PROMPTS:**
+
+### **Clarity Score (Target: 9/10):**
+- Instructions are unambiguous and actionable
+- Examples effectively illustrate concepts
+- Language is appropriate for target audience
+- Organization facilitates easy comprehension
+
+### **Completeness Score (Target: 9/10):**
+- All stated scope is thoroughly covered
+- Edge cases and variations are addressed
+- Prerequisites and dependencies are clear
+- Success criteria are well-defined
+
+### **Usability Score (Target: 9/10):**
+- Practical application is straightforward
+- User experience is smooth and intuitive
+- Integration with other prompts is seamless
+- Maintenance burden is reasonable
+
+### **Standards Compliance Score (Target: 10/10):**
+- Frontmatter is complete and accurate
+- Content follows established patterns
+- References to project standards are appropriate
+- Version management is properly implemented
+
+## 💡 **PROMPT CREATION EXAMPLES:**
+
+### **Example 1: Creating a Component Testing Prompt**
+```
+Create a comprehensive prompt for testing React components
+
+Following .cursor/prompts/prompt-engineering/prompt-create.mdc:
+- Category: test/
+- Name: test-create-component.mdc
+- Integration: testing standards, component standards
+- Rules compatibility: test-driven, code-change-minimal
+```
+
+### **Example 2: Creating an API Security Review Prompt**
+```
+Create a prompt for reviewing API endpoints for security vulnerabilities
+
+Following .cursor/prompts/prompt-engineering/prompt-create.mdc:
+- Category: api/
+- Name: api-review-security.mdc  
+- Integration: security standards, API standards
+- Rules compatibility: database-safe, code-change-refactor
+```
+
+### **Example 3: Creating a Deployment Checklist Prompt**
+```
+Create a comprehensive pre-deployment verification prompt
+
+Following .cursor/prompts/prompt-engineering/prompt-create.mdc:
+- Category: deploy/
+- Name: deploy-verify-production.mdc
+- Integration: all project standards
+- Rules compatibility: all safety rules
+```
+
+## 🚨 **CREATION RED FLAGS:**
+
+**Stop and reconsider if:**
+- The prompt duplicates existing functionality significantly
+- Scope is too broad to be practically useful
+- Instructions are so complex they're hard to follow
+- Integration with project standards is unclear
+- Success criteria cannot be objectively measured
+- Maintenance requirements seem excessive
+
+## 🔄 **POST-CREATION ACTIVITIES:**
+
+### **Immediate:**
+- [ ] Test the prompt with a realistic scenario
+- [ ] Verify integration with related prompts works
+- [ ] Check that all links and references are valid
+- [ ] Confirm file placement and naming are correct
+
+### **Short-term (1 week):**
+- [ ] Gather feedback from initial usage
+- [ ] Identify any missing elements or unclear instructions
+- [ ] Update based on real-world application results
+- [ ] Document any integration issues discovered
+
+### **Long-term (1 month):**
+- [ ] Assess prompt effectiveness in achieving objectives
+- [ ] Review for updates needed due to project evolution
+- [ ] Consider version updates based on lessons learned
+- [ ] Plan enhancements or related prompt development
+
+---
+
+**This creation process ensures new prompts are high-quality, standards-compliant, and seamlessly integrated with the existing prompt ecosystem.**

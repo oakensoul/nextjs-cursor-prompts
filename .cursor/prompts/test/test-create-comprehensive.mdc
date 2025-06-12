@@ -1,0 +1,131 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Create Comprehensive Test Suite
+
+**ORCHESTRATION PROMPT: This prompt executes three focused test creation prompts to provide complete test coverage.**
+
+**FOLLOW MINIMAL CHANGE PRINCIPLES: When creating tests, preserve existing code patterns and architecture. Do not modify working code - only add tests alongside existing functionality.**
+
+This prompt will create comprehensive test coverage by executing three specialized test creation prompts in sequence:
+
+1. **Unit Tests** - Core functionality testing for all components, actions, and utilities
+2. **Accessibility Tests** - WCAG compliance testing for all UI components  
+3. **Integration Tests** - End-to-end workflow testing for complex user journeys
+
+### **Phase 1: Unit Tests**
+Execute `.cursor/prompts/test/test-create-unit.mdc` for comprehensive unit test coverage:
+- Components, server actions, API routes, utilities, hooks
+- Core functionality testing with vitest framework
+- Minimum 80% coverage across all metrics
+
+### **Phase 2: Accessibility Tests**
+Execute `.cursor/prompts/test/test-create-a11y.mdc` for WCAG compliance testing:
+- All UI components that render to DOM
+- WCAG 2.1 AA compliance verification
+- Keyboard navigation and screen reader testing
+
+### **Phase 3: Integration Tests**
+Execute `.cursor/prompts/test/test-create-integration.mdc` for end-to-end workflows:
+- Complex user journeys and multi-component interactions
+- API integration testing with MSW mocking
+- State management and cross-component communication
+
+## 🧪 **EXECUTION COMMANDS**
+
+Execute these prompts in sequence for complete test coverage:
+
+```bash
+# Phase 1: Create unit tests
+Create comprehensive unit tests following .cursor/prompts/test/test-create-unit.mdc for [target files/directory]
+
+# Phase 2: Create accessibility tests  
+Create accessibility tests following .cursor/prompts/test/test-create-a11y.mdc for [target UI components]
+
+# Phase 3: Create integration tests
+Create integration tests following .cursor/prompts/test/test-create-integration.mdc for [complex workflows]
+```
+
+## 📋 **TESTING FRAMEWORK STANDARDS**
+
+All test prompts follow these consistent requirements:
+- **Framework**: vitest (NEVER Jest)
+- **DOM Environment**: happy-dom
+- **Component Testing**: @testing-library/react  
+- **User Interactions**: @testing-library/user-event
+- **Accessibility**: vitest-axe with `expectNoA11yViolations()`
+- **API Mocking**: MSW (Mock Service Worker)
+
+## 🎯 **COVERAGE TARGETS**
+
+Each phase contributes to overall coverage goals:
+- **Unit Tests**: Core functionality coverage (80% minimum)
+- **Accessibility Tests**: WCAG 2.1 AA compliance (100% UI components)
+- **Integration Tests**: Critical user workflow coverage (key journeys)
+
+## 📂 **FILE STRUCTURE STANDARDS**
+
+All test prompts follow consistent file organization:
+- **Location**: Co-located in `__tests__/` subdirectories next to components
+- **Unit Tests**: `ComponentName.test.tsx` or `function-name.test.ts`
+- **Accessibility Tests**: `ComponentName.a11y.test.tsx` (separate files)
+- **Integration Tests**: `ComponentName.integration.test.tsx`
+
+## 🎯 **MINIMAL CHANGE COMPLIANCE**
+
+All test creation follows minimal change principles:
+- **PRESERVE**: Existing component implementations and functionality
+- **ADD ONLY**: Test files and minimal test utilities
+- **DO NOT MODIFY**: Working code, interfaces, or business logic
+
+## 🚀 **EXECUTION WORKFLOW**
+
+### **Option 1: Execute All Phases (Recommended)**
+For complete test coverage, execute all three phases in sequence:
+
+```bash
+# Create all test types for comprehensive coverage
+Create comprehensive test coverage following .cursor/prompts/test/test-create-comprehensive.mdc for [target files/directory]
+```
+
+### **Option 2: Execute Individual Phases**
+For focused testing, execute specific phases as needed:
+
+```bash
+# Unit tests only
+Create unit tests following .cursor/prompts/test/test-create-unit.mdc for [target files]
+
+# Accessibility tests only  
+Create accessibility tests following .cursor/prompts/test/test-create-a11y.mdc for [UI components]
+
+# Integration tests only
+Create integration tests following .cursor/prompts/test/test-create-integration.mdc for [workflows]
+```
+
+## 📝 **VALIDATION REQUIREMENTS**
+
+After executing all phases, verify:
+- [ ] All tests pass execution (`npm run test`)
+- [ ] Coverage targets met (`npm run test:coverage`)
+- [ ] Accessibility compliance verified (`npm run test:a11y`)
+- [ ] Integration workflows complete successfully
+
+## 💡 **USAGE EXAMPLES**
+
+```
+Create comprehensive test coverage following .cursor/prompts/test/test-create-comprehensive.mdc for src/components/ui/Button.tsx
+```
+
+```
+Create complete test suite following .cursor/prompts/test/test-create-comprehensive.mdc for all files in src/actions/auth/
+```
+
+```
+Create comprehensive test coverage following .cursor/prompts/test/test-create-comprehensive.mdc for the user dashboard feature in src/components/dashboard/
+```
+
+---
+
+**Goal: Provide focused, modular testing with the option for comprehensive coverage through orchestrated execution of specialized test creation prompts.**

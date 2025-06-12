@@ -1,0 +1,511 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Git Release Branch Execution Guide
+
+**This prompt handles the execution phase of release workflow - creating release branches, finalizing versions, executing deployments, and managing the complete release lifecycle.**
+
+## 🎯 **RELEASE EXECUTION OBJECTIVES:**
+
+1. **EXECUTE release branch creation** from prepared release plan
+2. **FINALIZE version numbers** and apply tags properly
+3. **MERGE release branches** to main and develop following workflow
+4. **DEPLOY to production** with proper validation and monitoring
+5. **COMPLETE release lifecycle** with documentation and cleanup
+
+## 📋 **RELEASE EXECUTION PROCESS:**
+
+### **STEP 1: Pre-execution Validation**
+
+#### **Release Readiness Verification:**
+```bash
+# Verify release preparation completed
+echo "Validating release readiness..."
+
+# Check that release plan exists
+if [ ! -f "docs/releases/release-v[VERSION]-plan.md" ]; then
+  echo "❌ Release plan not found. Run git-prep-release.mdc first"
+  exit 1
+fi
+
+# Verify develop branch is ready
+git checkout develop
+git pull origin develop
+
+# Confirm all planned features are merged
+git log --oneline --since="1 month ago" | grep -E "(feat|fix|docs):"
+
+# Check CI/CD status
+echo "✅ Develop branch ready for release"
+```
+
+#### **Environment and Dependencies Check:**
+```bash
+# Verify all dependencies are secure and up to date
+npm audit                           # Security audit
+npm outdated                       # Check for outdated packages
+
+# Run comprehensive test suite
+npm run test:full                  # All tests including integration
+npm run test:e2e                   # End-to-end tests
+npm run test:accessibility         # A11y compliance tests
+
+# Verify build process
+npm run build                      # Production build
+npm run build:analysis            # Bundle analysis
+
+echo "✅ All quality gates passed"
+```
+
+### **STEP 2: Release Branch Creation and Configuration**
+
+#### **Release Branch Creation:**
+```bash
+# Set release variables
+RELEASE_VERSION="[VERSION]"  # e.g., "1.2.0"
+RELEASE_BRANCH="release/v$RELEASE_VERSION"
+CURRENT_DATE=$(date +%Y-%m-%d)
+
+echo "Creating release branch: $RELEASE_BRANCH"
+
+# Create release branch from develop
+git checkout develop
+git pull origin develop
+git checkout -b $RELEASE_BRANCH
+
+# Push release branch to remote
+git push -u origin $RELEASE_BRANCH
+
+echo "✅ Release branch $RELEASE_BRANCH created"
+```
+
+#### **Version Finalization:**
+```bash
+# Update version in package.json
+npm version $RELEASE_VERSION --no-git-tag-version
+
+# Update version references across codebase
+sed -i "s/version.*[0-9]\+\.[0-9]\+\.[0-9]\+/version: \"$RELEASE_VERSION\"/g" \
+  README.md \
+  docs/api.md \
+  src/config/version.ts
+
+# Update Docker image tags
+sed -i "s/image:.*:[0-9]\+\.[0-9]\+\.[0-9]\+/image: myapp:$RELEASE_VERSION/g" \
+  docker-compose.yml \
+  kubernetes/deployment.yaml
+
+# Commit version updates
+git add .
+git commit -m "chore(release): bump version to $RELEASE_VERSION"
+git push origin $RELEASE_BRANCH
+```
+
+#### **Release Documentation Finalization:**
+```markdown
+## Release v[VERSION] - [DATE]
+
+### Release Summary
+- **Version**: [VERSION]
+- **Type**: [MAJOR/MINOR/PATCH]
+- **Release Date**: [DATE]
+- **Release Manager**: [NAME]
+
+### Changes Included
+#### Features
+- [Feature 1]: [Description and impact]
+- [Feature 2]: [Description and impact]
+
+#### Bug Fixes  
+- [Fix 1]: [Issue resolved and impact]
+- [Fix 2]: [Issue resolved and impact]
+
+#### Breaking Changes
+- [Change 1]: [Migration required]
+- [Change 2]: [Migration required]
+
+### Deployment Notes
+- [Special deployment consideration 1]
+- [Special deployment consideration 2]
+
+### Post-Release Monitoring
+- [Metric 1]: Expected behavior
+- [Metric 2]: Expected behavior
+```
+
+### **STEP 3: Release Branch Testing and Validation**
+
+#### **Release Candidate Testing:**
+```bash
+# Deploy to staging environment
+npm run deploy:staging             # Deploy release candidate
+
+# Run comprehensive validation
+npm run test:staging               # Staging environment tests
+npm run test:performance          # Performance benchmarks
+npm run test:security             # Security validation
+
+# Manual testing checklist
+echo "Manual testing required:"
+echo "- [ ] User authentication flow"
+echo "- [ ] Critical user paths"
+echo "- [ ] Payment processing (if applicable)"
+echo "- [ ] Admin functionality"
+echo "- [ ] Mobile responsiveness"
+echo "- [ ] Accessibility compliance"
+```
+
+#### **Stakeholder Sign-off:**
+```markdown
+## Release Approval Checklist
+
+### Technical Validation
+- [x] All automated tests passing
+- [x] Performance benchmarks met
+- [x] Security scans clean
+- [x] Accessibility compliance verified
+- [x] Browser compatibility confirmed
+
+### Business Validation
+- [ ] Product Owner approval: [Name, Date]
+- [ ] QA Team approval: [Name, Date]
+- [ ] Security Team approval: [Name, Date]
+- [ ] DevOps Team approval: [Name, Date]
+
+### Production Readiness
+- [ ] Deployment scripts tested
+- [ ] Database migrations verified
+- [ ] Environment variables configured
+- [ ] Monitoring and alerts configured
+- [ ] Rollback plan prepared and tested
+```
+
+### **STEP 4: Production Release Execution**
+
+#### **Release Branch Merge to Main:**
+```bash
+# Switch to main branch
+git checkout main
+git pull origin main
+
+# Merge release branch (no-ff to preserve history)
+git merge --no-ff $RELEASE_BRANCH -m "Release v$RELEASE_VERSION
+
+$(cat docs/releases/release-v$RELEASE_VERSION-notes.md)"
+
+# Create and push release tag
+git tag -a "v$RELEASE_VERSION" -m "Release v$RELEASE_VERSION"
+git push origin main
+git push origin "v$RELEASE_VERSION"
+
+echo "✅ Release v$RELEASE_VERSION tagged and ready for deployment"
+```
+
+#### **Production Deployment:**
+```bash
+# Deploy to production
+echo "Deploying v$RELEASE_VERSION to production..."
+
+# Trigger production deployment (method depends on your setup)
+# Option 1: CI/CD pipeline trigger
+gh workflow run deploy-production.yml -f version=$RELEASE_VERSION
+
+# Option 2: Direct deployment
+npm run deploy:production
+
+# Option 3: Container deployment
+docker build -t myapp:$RELEASE_VERSION .
+docker push myregistry/myapp:$RELEASE_VERSION
+kubectl set image deployment/myapp app=myregistry/myapp:$RELEASE_VERSION
+
+echo "✅ Production deployment initiated"
+```
+
+#### **Deployment Verification:**
+```bash
+# Wait for deployment to complete
+sleep 300  # Wait 5 minutes for deployment
+
+# Verify production health
+curl -f https://myapp.com/health || {
+  echo "❌ Health check failed!"
+  echo "Execute rollback plan immediately"
+  exit 1
+}
+
+# Run production smoke tests
+npm run test:production-smoke
+
+# Check key metrics
+echo "Monitoring key metrics for 15 minutes..."
+# Monitor error rates, response times, user activity
+```
+
+### **STEP 5: Post-Release Activities**
+
+#### **Merge Back to Develop:**
+```bash
+# Merge release branch back to develop
+git checkout develop
+git pull origin develop
+git merge --no-ff $RELEASE_BRANCH -m "Merge release v$RELEASE_VERSION back to develop"
+git push origin develop
+
+# Update develop with any hotfixes made during release
+echo "✅ Release changes merged back to develop"
+```
+
+#### **Release Branch Cleanup:**
+```bash
+# Delete release branch (locally and remotely)
+git branch -d $RELEASE_BRANCH
+git push origin --delete $RELEASE_BRANCH
+
+# Clean up any temporary files
+rm -f docs/releases/release-v$RELEASE_VERSION-plan.md
+git add . && git commit -m "chore: clean up release artifacts"
+git push origin develop
+
+echo "✅ Release branch cleanup completed"
+```
+
+#### **Release Communication:**
+```markdown
+## Release v[VERSION] - Deployment Complete 🚀
+
+### Deployment Summary
+- **Version**: v[VERSION]
+- **Deployed**: [TIMESTAMP]
+- **Status**: ✅ Successful
+- **Downtime**: [DURATION]
+
+### What's New
+- [Feature highlights for users]
+- [Bug fixes that affect users]
+- [Performance improvements]
+
+### For Developers
+- [API changes]
+- [New dependencies]
+- [Configuration updates needed]
+
+### Monitoring
+- Error rates: [CURRENT_RATE] (target: <0.1%)
+- Response times: [CURRENT_TIME] (target: <200ms)
+- User satisfaction: Monitoring for 24h
+
+### Support
+- Documentation: [LINK]
+- Known issues: [LINK]
+- Support contact: [CONTACT]
+```
+
+## 🔍 **RELEASE EXECUTION STANDARDS:**
+
+### **Pre-deployment Checklist:**
+- [ ] **Release branch** created from stable develop
+- [ ] **Version numbers** updated across all files
+- [ ] **Changelog** complete and accurate
+- [ ] **Tests passing** in all environments
+- [ ] **Security scans** completed and clean
+- [ ] **Performance benchmarks** meet requirements
+- [ ] **Database migrations** tested and ready
+- [ ] **Rollback plan** prepared and tested
+
+### **Deployment Quality Gates:**
+- [ ] **Automated tests** pass in production environment
+- [ ] **Health checks** return successful responses
+- [ ] **Key metrics** within acceptable ranges
+- [ ] **User authentication** functioning correctly
+- [ ] **Critical paths** validated manually
+- [ ] **Error monitoring** shows no anomalies
+
+### **Post-deployment Validation:**
+- [ ] **Application performance** meets benchmarks
+- [ ] **Database integrity** verified
+- [ ] **External integrations** functioning
+- [ ] **Monitoring alerts** configured and working
+- [ ] **User feedback** channels active
+- [ ] **Support team** notified and prepared
+
+## 📊 **RELEASE EXECUTION DELIVERABLES:**
+
+### **REQUIRED OUTPUTS:**
+
+#### **1. Release Execution Report:**
+```markdown
+## Release v[VERSION] Execution Report
+
+### Timeline
+- Release branch created: [TIMESTAMP]
+- Testing completed: [TIMESTAMP]
+- Production deployment: [TIMESTAMP]
+- Validation completed: [TIMESTAMP]
+- Total execution time: [DURATION]
+
+### Quality Metrics
+- Tests run: [NUMBER] (100% pass rate)
+- Security scans: ✅ Clean
+- Performance: [METRICS]
+- Accessibility: ✅ WCAG AA compliant
+
+### Deployment Details
+- Deployment method: [METHOD]
+- Downtime: [DURATION]
+- Database migrations: [COUNT]
+- Environment updates: [LIST]
+
+### Issues Encountered
+- [Issue 1]: [Resolution]
+- [Issue 2]: [Resolution]
+
+### Post-Release Health
+- Error rate: [RATE]
+- Response time: [TIME]
+- User activity: [METRICS]
+```
+
+#### **2. Release Notes (Public):**
+```markdown
+# Release v[VERSION] - [DATE]
+
+We're excited to announce the release of version [VERSION]! This update includes new features, bug fixes, and performance improvements.
+
+## ✨ New Features
+- **[Feature 1]**: [User-facing description]
+- **[Feature 2]**: [User-facing description]
+
+## 🐛 Bug Fixes
+- Fixed [issue description] that affected [user impact]
+- Resolved [problem] in [component/feature]
+
+## 🚀 Improvements
+- [Performance improvement]: [measurable benefit]
+- [UX enhancement]: [user benefit]
+
+## 🔧 Technical Updates
+- Updated [dependency] to [version] for improved security
+- Optimized [component] for better performance
+
+## 📚 Documentation
+- Updated [documentation section]
+- Added [new guide/tutorial]
+
+## 🆙 Upgrade Instructions
+1. [Step 1 if manual action needed]
+2. [Step 2 if configuration change needed]
+
+For technical questions, contact [support]. For feature feedback, visit [feedback-url].
+```
+
+#### **3. Development Team Summary:**
+```markdown
+## Release v[VERSION] - Development Summary
+
+### Development Metrics
+- Commits included: [COUNT]
+- Contributors: [LIST]
+- Development time: [DURATION]
+- Code changes: +[LINES] additions, -[LINES] deletions
+
+### Technical Debt
+- Debt reduced: [MEASURES]
+- New debt introduced: [MEASURES]
+- Overall debt trend: [IMPROVING/STABLE/CONCERNING]
+
+### Test Coverage
+- Unit test coverage: [PERCENTAGE]
+- Integration test coverage: [PERCENTAGE]
+- E2E test coverage: [PERCENTAGE]
+
+### Performance Impact
+- Bundle size change: [DELTA]
+- Load time impact: [DELTA]
+- Memory usage: [DELTA]
+
+### Next Sprint Planning
+- Hotfix potential: [ASSESSMENT]
+- Follow-up work needed: [LIST]
+- User feedback to monitor: [AREAS]
+```
+
+## 🚨 **EMERGENCY ROLLBACK PROCEDURES:**
+
+### **Rollback Decision Criteria:**
+```markdown
+## Rollback Triggers
+
+**IMMEDIATE ROLLBACK:**
+- [ ] Application completely down
+- [ ] Data corruption detected
+- [ ] Security breach identified
+- [ ] Critical business function broken
+
+**URGENT ROLLBACK:**
+- [ ] Error rate >1% for >10 minutes
+- [ ] Performance degraded >50%
+- [ ] Key user path broken
+- [ ] Payment processing issues
+
+**PLANNED ROLLBACK:**
+- [ ] User satisfaction metrics declining
+- [ ] Non-critical but widespread issues
+- [ ] Stakeholder decision to revert
+```
+
+### **Rollback Execution:**
+```bash
+# Emergency rollback procedure
+PREVIOUS_VERSION="[PREVIOUS_TAG]"
+echo "Executing emergency rollback to $PREVIOUS_VERSION"
+
+# Option 1: Git rollback (for simple deployments)
+git checkout main
+git reset --hard $PREVIOUS_VERSION
+git push --force-with-lease origin main
+
+# Option 2: Container rollback
+kubectl rollout undo deployment/myapp
+
+# Option 3: CI/CD rollback
+gh workflow run rollback.yml -f target_version=$PREVIOUS_VERSION
+
+# Verify rollback
+curl -f https://myapp.com/health
+npm run test:production-smoke
+
+echo "✅ Rollback completed. Monitor for 30 minutes."
+```
+
+## ⚡ **RELEASE AUTOMATION OPPORTUNITIES:**
+
+### **Automated Release Script:**
+```bash
+#!/bin/bash
+# automated-release.sh
+
+set -e  # Exit on any error
+
+VERSION=$1
+if [ -z "$VERSION" ]; then
+  echo "Usage: $0 <version>"
+  exit 1
+fi
+
+echo "🚀 Starting automated release for v$VERSION"
+
+# Execute all release steps
+./scripts/validate-release-readiness.sh
+./scripts/create-release-branch.sh $VERSION
+./scripts/update-versions.sh $VERSION
+./scripts/run-release-tests.sh
+./scripts/deploy-to-staging.sh
+./scripts/validate-staging.sh
+
+echo "✅ Release v$VERSION ready for production deployment"
+echo "Run: ./scripts/deploy-to-production.sh $VERSION"
+```
+
+This comprehensive release execution guide ensures smooth, reliable deployments while maintaining all quality gates and providing clear rollback procedures.

@@ -1,0 +1,328 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Architecture Documentation Update Guide
+
+**This prompt systematically updates architecture documentation to reflect current system design, architectural decisions, and technical evolution while maintaining comprehensive technical documentation standards.**
+
+## 🎯 **OBJECTIVES:**
+
+1. **UPDATE system architecture** to reflect current design and implementation
+2. **MAINTAIN architectural decision records** with current context and rationale
+3. **SYNCHRONIZE technical diagrams** with actual system implementation
+4. **ENSURE design consistency** across architecture documentation
+5. **VALIDATE architectural alignment** with current development practices
+
+## 📋 **ARCHITECTURE UPDATE PROCESS:**
+
+### **STEP 1: Current Architecture Assessment**
+
+#### **System State Analysis:**
+```bash
+echo "🏗️ Current Architecture Assessment"
+echo "================================"
+
+# Analyze current system structure
+echo "Project Structure Analysis:"
+find src/ -type d -maxdepth 3 | sort
+
+# Check architecture-related files
+echo "Architecture Documentation:"
+find docs/ -name "*architecture*" -o -name "*design*" -o -name "*adr*"
+
+# Verify technology stack
+echo "Current Technology Stack:"
+grep -E "(dependencies|devDependencies)" package.json -A 20
+
+# Check for architectural patterns
+echo "Architectural Patterns in Use:"
+find src/ -name "*.ts" -o -name "*.tsx" | head -10 | xargs grep -l "interface\|class\|type"
+```
+
+#### **Architecture Change Detection:**
+- **New system components** added since last documentation update
+- **Technology stack changes** affecting architectural decisions
+- **Design patterns** that have evolved or been introduced
+- **Integration points** that have been added or modified
+- **Performance considerations** that have changed system design
+
+#### **Documentation Gap Analysis:**
+- **Missing architectural decisions** not yet documented
+- **Outdated diagrams** not reflecting current system design
+- **Incomplete component descriptions** missing current functionality
+- **Broken architectural patterns** no longer accurately described
+- **Integration documentation** not reflecting current connections
+
+### **STEP 2: Architectural Decision Record (ADR) Updates**
+
+#### **ADR Review and Updates:**
+```markdown
+## ADR Update Process:
+
+### Current ADRs Review:
+- [ ] **Technology choices** - Verify current technology selections
+- [ ] **Design patterns** - Confirm current architectural patterns
+- [ ] **Integration decisions** - Update service integration approaches
+- [ ] **Data architecture** - Reflect current data flow and storage
+- [ ] **Security architecture** - Update security design decisions
+
+### New ADRs Required:
+- [ ] **Recent technology adoptions** requiring new ADRs
+- [ ] **Architectural changes** not previously documented
+- [ ] **Design pattern evolution** requiring decision documentation
+- [ ] **Performance optimizations** affecting system architecture
+- [ ] **Security updates** changing architectural approach
+```
+
+#### **ADR Template Update:**
+```markdown
+# ADR-XXX: [Decision Title]
+
+## Status
+[Proposed | Accepted | Superseded | Deprecated]
+
+## Context
+[Current context requiring this architectural decision]
+
+## Decision
+[The architectural decision and rationale]
+
+## Consequences
+### Positive:
+- [Benefits of this decision]
+
+### Negative:
+- [Trade-offs and limitations]
+
+### Neutral:
+- [Other considerations]
+
+## Implementation
+[How this decision is being implemented]
+
+## Validation
+[How success of this decision will be measured]
+```
+
+### **STEP 3: System Architecture Documentation**
+
+#### **Architecture Diagram Updates:**
+
+##### **C4 Model Documentation:**
+```markdown
+## C4 Model Updates Required:
+
+### Level 1: System Context
+- [ ] **External systems** - Update external service integrations
+- [ ] **User types** - Reflect current user personas and access patterns
+- [ ] **System boundaries** - Update system scope and responsibilities
+- [ ] **Data flows** - Update high-level data movement patterns
+
+### Level 2: Container Diagram
+- [ ] **Application containers** - Update current application structure
+- [ ] **Database containers** - Reflect current data storage architecture
+- [ ] **External services** - Update third-party service integrations
+- [ ] **Communication protocols** - Update inter-container communication
+
+### Level 3: Component Diagram
+- [ ] **Component structure** - Update current component organization
+- [ ] **Component responsibilities** - Reflect current component purposes
+- [ ] **Component interfaces** - Update current API and integration points
+- [ ] **Component dependencies** - Update current dependency relationships
+
+### Level 4: Code Structure
+- [ ] **Implementation details** - Update critical code architecture
+- [ ] **Design patterns** - Reflect current pattern implementations
+- [ ] **Code organization** - Update current file and module structure
+- [ ] **Key algorithms** - Update critical algorithmic implementations
+```
+
+#### **Technical Architecture Updates:**
+```typescript
+// System architecture validation
+interface ArchitectureValidation {
+  systemBoundaries: boolean;
+  componentStructure: boolean;
+  dataFlow: boolean;
+  integrationPoints: boolean;
+  securityArchitecture: boolean;
+  performanceConsiderations: boolean;
+}
+
+// Architecture documentation sections to update
+const architectureSections = [
+  'system-overview',
+  'component-architecture', 
+  'data-architecture',
+  'integration-architecture',
+  'security-architecture',
+  'deployment-architecture'
+];
+```
+
+### **STEP 4: Technical Design Documentation**
+
+#### **Design Pattern Documentation:**
+- **Current patterns in use** - Document actually implemented patterns
+- **Pattern evolution** - Track how patterns have changed over time
+- **Pattern decisions** - Explain why specific patterns were chosen
+- **Pattern implementation** - Show how patterns are actually implemented
+- **Pattern validation** - Demonstrate pattern effectiveness
+
+#### **Component Architecture Updates:**
+```markdown
+## Component Architecture Updates:
+
+### Component Hierarchy:
+- [ ] **Component organization** - Update current folder structure
+- [ ] **Component types** - Document client vs server components
+- [ ] **Component patterns** - Update reusable component patterns
+- [ ] **Component composition** - Update how components work together
+
+### Component Interfaces:
+- [ ] **Props interfaces** - Update current component prop definitions
+- [ ] **Event interfaces** - Update component event handling
+- [ ] **State interfaces** - Update component state management
+- [ ] **Context interfaces** - Update shared state and context usage
+```
+
+### **STEP 5: Integration Architecture Updates**
+
+#### **External Integration Documentation:**
+```bash
+# Document current integrations
+echo "🔗 Integration Architecture Review"
+echo "================================"
+
+# API integrations
+echo "External API Integrations:"
+grep -r "api\|fetch\|axios" src/ | head -5
+
+# Database integrations
+echo "Database Connections:"
+find src/ -name "*db*" -o -name "*database*" -o -name "*prisma*"
+
+# Third-party services
+echo "Third-party Service Integrations:"
+grep -r "stripe\|auth0\|vercel\|supabase" . --exclude-dir=node_modules | head -5
+```
+
+#### **Data Architecture Updates:**
+- **Data flow documentation** - Update how data moves through system
+- **Storage architecture** - Update current data storage approaches
+- **Caching strategies** - Document current caching implementations
+- **Data transformation** - Update data processing and transformation logic
+- **Data security** - Update data protection and privacy implementations
+
+## ✅ **UPDATE REQUIREMENTS:**
+
+### **Architecture Accuracy:**
+- **Current system reflection** - Documentation matches actual implementation
+- **Technology alignment** - All technology choices accurately documented
+- **Pattern documentation** - All architectural patterns properly explained
+- **Decision tracking** - All architectural decisions recorded and current
+- **Integration completeness** - All system integrations properly documented
+
+### **Documentation Quality:**
+- **Visual clarity** - All diagrams clear and professionally presented
+- **Technical accuracy** - All technical information verified and correct
+- **Comprehensive coverage** - All architectural aspects properly documented
+- **Accessibility compliance** - All documentation meets accessibility standards
+- **Maintenance sustainability** - Documentation structured for easy updates
+
+### **Stakeholder Value:**
+- **Developer utility** - Documentation helps developers understand system
+- **Decision support** - Documentation aids architectural decision making
+- **Onboarding effectiveness** - New team members can understand architecture
+- **Change management** - Documentation supports system evolution
+- **Technical communication** - Architecture clearly communicable to stakeholders
+
+## 🔍 **VALIDATION METHODOLOGY:**
+
+### **Architecture Validation:**
+```bash
+echo "✅ Architecture Documentation Validation"
+echo "======================================"
+
+# Verify diagram accuracy
+echo "Validating architectural diagrams..."
+# [Check diagrams reflect current system]
+
+# Validate technical decisions
+echo "Checking ADR currency..."
+# [Verify ADRs reflect current decisions]
+
+# Test integration documentation
+echo "Validating integration documentation..."
+# [Verify integration docs match implementation]
+
+# Check component documentation
+echo "Validating component architecture..."
+# [Verify component docs match actual structure]
+```
+
+### **Implementation Alignment:**
+- **Code review** - Compare documentation to actual implementation
+- **Pattern validation** - Verify documented patterns are actually used
+- **Integration testing** - Test documented integrations work as described
+- **Performance validation** - Verify performance characteristics match documentation
+
+## 💡 **INTEGRATION EXAMPLES:**
+
+### **After Major Architecture Changes:**
+```
+Update architecture documentation after microservices migration using .cursor/prompts/documentation/documentation-update-architecture.mdc
+
+We migrated from monolith to microservices - need complete architecture documentation update.
+```
+
+### **Technology Stack Updates:**
+```
+Update architecture docs after Next.js 15 upgrade using documentation-update-architecture.mdc
+
+Apply .cursor/rules/code-change-minimal.mdc - preserve existing architectural decisions while updating technology-specific details.
+```
+
+### **New Integration Documentation:**
+```
+Update architecture documentation for new Stripe integration using documentation-update-architecture.mdc
+
+Focus on: Payment processing architecture, data flow diagrams, and integration security patterns.
+```
+
+## 🚨 **CRITICAL UPDATE TRIGGERS:**
+
+### **Immediate Update Required:**
+- **Major architectural changes** - Significant system design modifications
+- **Technology stack updates** - Changes affecting architectural decisions
+- **Security architecture changes** - Updates affecting system security design
+- **Performance architecture changes** - Modifications affecting system performance
+- **Integration changes** - New or modified external system integrations
+
+### **Quality Gates:**
+Before completing architecture documentation update:
+- [ ] All diagrams reflect current system design
+- [ ] All ADRs are current and accurate
+- [ ] All technical decisions are properly documented
+- [ ] All integration points are accurately described
+- [ ] All documentation is technically validated
+
+## 🔧 **MAINTENANCE INTEGRATION:**
+
+### **Regular Reviews:**
+- **Monthly architecture reviews** - Regular validation of documentation accuracy
+- **Technology update reviews** - Updates when technology stack changes
+- **Integration reviews** - Updates when external integrations change
+- **Performance reviews** - Updates when performance architecture changes
+
+### **Success Criteria:**
+- **Technical accuracy** - All architecture documentation reflects actual system
+- **Decision transparency** - All architectural decisions clearly documented
+- **Integration clarity** - All system integrations properly explained
+- **Visual effectiveness** - All diagrams clear and professionally presented
+
+---
+
+**This prompt ensures architecture documentation remains current, accurate, and valuable for technical decision-making and system understanding.**

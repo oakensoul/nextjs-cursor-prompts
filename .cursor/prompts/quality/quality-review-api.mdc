@@ -1,0 +1,196 @@
+---
+description: API Endpoint Review & Creation - Comprehensive prompt for creating and reviewing API routes following Next.js 15 App Router standards
+globs: 
+alwaysApply: false
+---
+---
+title: API Endpoint Review & Creation
+description: Comprehensive prompt for creating and reviewing API routes following Next.js 15 App Router standards
+tags: [prompt, api-routes, next.js, typescript, testing, security, validation]
+version: 1.0.0
+lastUpdated: 2025-06-02
+usage: Use for creating new API endpoints or reviewing existing ones
+audience: [claude, ai-assistants]
+scope: [api-design, security, validation, testing, error-handling, documentation]
+---
+
+# API Endpoint Review & Creation Request
+
+Please create or review API endpoints following our Next.js 15 App Router standards and security best practices:
+
+## API Design Requirements
+
+### 1. Route Structure
+- Use App Router convention: `app/api/[endpoint]/route.ts`
+- Follow RESTful patterns where appropriate
+- Use descriptive, resource-based URLs
+- Implement proper HTTP methods (GET, POST, PUT, DELETE, PATCH)
+
+### 2. Request Handling
+- Implement proper request validation using Zod schemas
+- Handle all supported HTTP methods explicitly
+- Parse request bodies, query parameters, and path parameters correctly
+- Implement proper content-type handling
+
+### 3. Response Format
+- Return consistent response structures
+- Use appropriate HTTP status codes
+- Include proper error messages and details
+- Implement standardized success/error response format
+
+## Security Implementation
+
+### 4. Authentication & Authorization
+- Implement JWT token validation where required
+- Check user permissions for protected endpoints
+- Handle unauthenticated and unauthorized requests properly
+- Validate token expiration and integrity
+
+### 5. Input Validation & Sanitization
+- Validate all input parameters using Zod schemas
+- Sanitize user input to prevent XSS attacks
+- Implement rate limiting where appropriate
+- Protect against SQL injection and other common attacks
+### 6. CORS & Headers
+- Set appropriate CORS headers
+- Implement security headers (CSP, etc.)
+- Handle preflight OPTIONS requests
+- Set proper cache control headers
+
+## Error Handling
+
+### 7. Comprehensive Error Management
+- Handle all possible error scenarios
+- Return user-friendly error messages
+- Log errors appropriately for debugging
+- Implement proper error boundaries
+- Handle database connection errors
+- Manage external API failures gracefully
+
+### 8. Response Standards
+```typescript
+// Success Response
+{
+  success: true,
+  data: any,
+  message?: string
+}
+
+// Error Response
+{
+  success: false,
+  error: {
+    code: string,
+    message: string,
+    details?: any
+  }
+}
+```
+
+## Testing Requirements
+
+### 9. Unit Tests (mandatory)
+- Test all HTTP methods supported by the endpoint
+- Test successful request/response cycles
+- Test input validation (valid and invalid inputs)
+- Test authentication and authorization
+- Test error scenarios and edge cases
+
+### 10. Integration Tests (mandatory for API routes)
+- Test with real database connections
+- Test external API integrations
+- Test end-to-end request/response flows
+- Test with different user roles and permissions
+- Test rate limiting and security measures
+
+### 11. Security Tests
+- Test authentication bypass attempts
+- Test input validation with malicious payloads
+- Test authorization with different user roles
+- Test rate limiting effectiveness
+
+## Documentation Requirements
+
+### 12. API Documentation
+- Document all endpoints with JSDoc comments
+- Specify request/response schemas
+- Document authentication requirements
+- Include example requests and responses
+- Document error codes and meanings
+
+### 13. README.md (for complex API modules)
+- Create if the API module is substantial
+- Include: purpose, endpoints, authentication, examples
+- Document any special setup or configuration
+
+## Performance Considerations
+
+### 14. Optimization
+- Implement proper caching strategies
+- Use database indexes appropriately
+- Implement pagination for large data sets
+- Consider response compression
+- Optimize database queries
+
+### 15. Monitoring & Logging
+- Log important events and errors
+- Implement performance monitoring
+- Track API usage and metrics
+- Set up error alerting
+
+## Standards Compliance
+
+- Use TypeScript throughout
+- Follow Next.js 15 App Router conventions
+- Use Zod for all input validation
+- Implement consistent error handling
+- Use our Strapi client architecture where applicable
+- Follow security best practices
+
+## File Structure
+
+```
+app/api/endpoint-name/
+├── route.ts                    # Main API route
+├── __tests__/                  # Test directory
+│   ├── route.test.ts          # Unit tests
+│   └── route.integration.test.ts # Integration tests
+├── schemas.ts                  # Zod validation schemas
+└── README.md                   # API documentation (if complex)
+```
+
+## Deliverables
+
+Please provide:
+
+- [ ] Complete API route implementation with proper TypeScript
+- [ ] Comprehensive input validation using Zod
+- [ ] Proper authentication and authorization
+- [ ] Complete error handling and logging
+- [ ] Unit test suite covering all scenarios
+- [ ] Integration test suite with real data flows
+- [ ] Security test coverage
+- [ ] API documentation with examples
+- [ ] README.md (if API module is complex)
+- [ ] Summary of:
+  - Endpoints created/reviewed
+  - Security measures implemented
+  - Testing approach and coverage
+  - Performance considerations
+
+## Usage Examples
+
+```
+Create a new API endpoint for user profile management with CRUD operations.
+Apply the API endpoint review prompt.
+```
+
+```
+Review the authentication API routes for security vulnerabilities and testing coverage.
+Apply the API endpoint review prompt.
+```
+
+```
+Create API endpoints for character management with proper validation and authorization.
+Apply the API endpoint review prompt.
+```

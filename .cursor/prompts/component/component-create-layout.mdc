@@ -1,0 +1,462 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Layout Component Creation Request
+
+Please create a new layout component following our responsive design patterns and composition standards:
+
+## 🎯 **LAYOUT COMPONENT CREATION OBJECTIVES:**
+
+1. **IMPLEMENT responsive design** with mobile-first approach and breakpoint consistency
+2. **PROVIDE flexible composition** with slot-based architecture and content organization
+3. **ENSURE accessibility** with proper landmark roles and semantic structure
+4. **INTEGRATE with NextJS patterns** including app router layouts and server components
+5. **FOLLOW project standards** for performance, accessibility, and component architecture
+
+## 📋 **LAYOUT DEVELOPMENT METHODOLOGY:**
+
+### **STEP 1: Layout Planning and Architecture**
+
+#### **Determine Layout Type and Location:**
+- **Server Component**: `src/components/server/layout/` - Static layout structures, SEO-focused
+- **Client Component**: `src/components/client/layout/` - Interactive layout elements
+- **App Router Integration**: Layouts that integrate with NextJS app directory structure
+- **Layout Categories**:
+  - **Page Layouts**: Full page structure templates (`page/`)
+  - **Section Layouts**: Content area organization (`section/`)
+  - **Navigation Layouts**: Header, sidebar, footer structures (`navigation/`)
+  - **Content Layouts**: Article, grid, list organization (`content/`)
+
+#### **Layout Composition Assessment:**
+- **Container Strategy**: Fixed width, fluid, or hybrid container patterns
+- **Grid System**: CSS Grid, Flexbox, or hybrid layout approach
+- **Responsive Breakpoints**: Mobile, tablet, desktop, and large screen considerations
+- **Content Slots**: Named areas for flexible content placement
+
+### **STEP 2: Responsive Design System**
+
+#### **Breakpoint Strategy:**
+```typescript
+// Define responsive breakpoint system
+const breakpoints = {
+  xs: '0px',     // Mobile portrait
+  sm: '640px',   // Mobile landscape
+  md: '768px',   // Tablet
+  lg: '1024px',  // Desktop
+  xl: '1280px',  // Large desktop
+  '2xl': '1536px' // Extra large
+} as const;
+
+// Responsive layout variants
+interface ResponsiveLayoutProps {
+  /** Layout behavior on mobile */
+  mobile?: 'stack' | 'scroll' | 'collapse';
+  /** Layout behavior on tablet */
+  tablet?: 'stack' | 'grid' | 'sidebar';
+  /** Layout behavior on desktop */
+  desktop?: 'grid' | 'sidebar' | 'columns';
+  /** Maximum content width */
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
+  /** Padding configuration */
+  padding?: 'none' | 'sm' | 'md' | 'lg' | 'responsive';
+}
+```
+
+#### **Grid and Flexbox Patterns:**
+```typescript
+// CSS Grid layout patterns
+const gridLayouts = {
+  'single-column': 'grid-cols-1',
+  'two-column': 'grid-cols-1 md:grid-cols-2',
+  'three-column': 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+  'sidebar-content': 'grid-cols-1 lg:grid-cols-[250px_1fr]',
+  'content-sidebar': 'grid-cols-1 lg:grid-cols-[1fr_250px]',
+  'three-section': 'grid-cols-1 lg:grid-cols-[250px_1fr_250px]'
+};
+
+// Flexbox layout patterns
+const flexLayouts = {
+  'header-content-footer': 'flex flex-col min-h-screen',
+  'sidebar-main': 'flex flex-col lg:flex-row',
+  'centered-content': 'flex items-center justify-center min-h-screen'
+};
+```
+
+### **STEP 3: Component Implementation Requirements**
+
+#### **Layout Component Interface:**
+```typescript
+interface LayoutComponentProps {
+  /** Main content area */
+  children: React.ReactNode;
+  /** Optional header content */
+  header?: React.ReactNode;
+  /** Optional sidebar content */
+  sidebar?: React.ReactNode;
+  /** Optional footer content */
+  footer?: React.ReactNode;
+  /** Layout variant */
+  variant?: 'default' | 'centered' | 'sidebar' | 'full-width' | 'contained';
+  /** Responsive behavior */
+  responsive?: ResponsiveLayoutProps;
+  /** Background styling */
+  background?: 'none' | 'subtle' | 'pattern' | 'gradient';
+  /** Additional CSS classes */
+  className?: string;
+  /** Semantic HTML tag */
+  as?: 'div' | 'main' | 'section' | 'article' | 'aside';
+  /** Test identifier */
+  'data-testid'?: string;
+}
+
+// Implement layout with composition pattern
+export const LayoutComponent = ({
+  children,
+  header,
+  sidebar,
+  footer,
+  variant = 'default',
+  responsive,
+  background = 'none',
+  className,
+  as: Component = 'div',
+  ...props
+}: LayoutComponentProps) => {
+  return (
+    <Component
+      className={cn(
+        layoutVariants({ variant, background }),
+        responsive && getResponsiveClasses(responsive),
+        className
+      )}
+      {...props}
+    >
+      {header && (
+        <header className="layout-header" role="banner">
+          {header}
+        </header>
+      )}
+      
+      <div className="layout-content">
+        {sidebar && (
+          <aside className="layout-sidebar" role="complementary">
+            {sidebar}
+          </aside>
+        )}
+        
+        <main className="layout-main" role="main">
+          {children}
+        </main>
+      </div>
+      
+      {footer && (
+        <footer className="layout-footer" role="contentinfo">
+          {footer}
+        </footer>
+      )}
+    </Component>
+  );
+};
+```
+
+#### **NextJS App Router Integration:**
+```typescript
+// App router layout integration
+// app/(dashboard)/layout.tsx
+import { DashboardLayout } from '@/components/server/layout/dashboard-layout';
+
+export default function DashboardLayoutWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <DashboardLayout
+      header={<DashboardHeader />}
+      sidebar={<DashboardSidebar />}
+      footer={<DashboardFooter />}
+    >
+      {children}
+    </DashboardLayout>
+  );
+}
+
+// Server component layout pattern
+export const PageLayout = async ({ 
+  children,
+  title,
+  description 
+}: PageLayoutProps) => {
+  const navigationData = await getNavigationData();
+  
+  return (
+    <LayoutContainer variant="page">
+      <PageHeader title={title} description={description} />
+      <NavigationBreadcrumbs data={navigationData} />
+      <PageContent>
+        {children}
+      </PageContent>
+    </LayoutContainer>
+  );
+};
+```
+
+### **STEP 4: Accessibility and Semantic Structure**
+
+#### **Semantic HTML and ARIA Landmarks:**
+```typescript
+// Proper semantic structure with landmarks
+<div className="app-layout" role="application">
+  {/* Skip navigation for accessibility */}
+  <a href="#main-content" className="sr-only focus:not-sr-only skip-link">
+    Skip to main content
+  </a>
+  
+  {/* Main navigation */}
+  <header role="banner">
+    <nav role="navigation" aria-label="Main navigation">
+      {navigationContent}
+    </nav>
+  </header>
+  
+  {/* Page content area */}
+  <main id="main-content" role="main" tabIndex={-1}>
+    {children}
+  </main>
+  
+  {/* Complementary content */}
+  <aside role="complementary" aria-label="Related information">
+    {sidebarContent}
+  </aside>
+  
+  {/* Site footer */}
+  <footer role="contentinfo">
+    {footerContent}
+  </footer>
+</div>
+```
+
+#### **Screen Reader Navigation:**
+- **Landmark roles**: Proper ARIA landmarks for screen reader navigation
+- **Skip links**: Allow keyboard users to skip repetitive content
+- **Heading hierarchy**: Logical heading structure (h1 → h2 → h3)
+- **Focus management**: Proper focus order and visibility
+- **Content structure**: Clear relationship between layout sections
+
+### **STEP 5: Performance and Optimization**
+
+#### **Server Component Optimization:**
+```typescript
+// Optimize server component layouts
+export const OptimizedLayout = async ({ children }: LayoutProps) => {
+  // Fetch data at layout level for better performance
+  const [navigation, footer] = await Promise.all([
+    getNavigationData(),
+    getFooterData()
+  ]);
+  
+  return (
+    <LayoutContainer>
+      <NavigationHeader data={navigation} />
+      <Suspense fallback={<ContentSkeleton />}>
+        {children}
+      </Suspense>
+      <SiteFooter data={footer} />
+    </LayoutContainer>
+  );
+};
+
+// Streaming and progressive rendering
+export const StreamingLayout = ({ children }: LayoutProps) => {
+  return (
+    <LayoutContainer>
+      <StaticHeader />
+      <Suspense fallback={<MainContentSkeleton />}>
+        <main>{children}</main>
+      </Suspense>
+      <Suspense fallback={<FooterSkeleton />}>
+        <DynamicFooter />
+      </Suspense>
+    </LayoutContainer>
+  );
+};
+```
+
+#### **CSS and Performance Considerations:**
+- **CSS Grid vs Flexbox**: Choose based on layout complexity and browser support
+- **Container queries**: Use for component-level responsive design
+- **CSS custom properties**: Use for dynamic spacing and theming
+- **Minimize layout shifts**: Stable layout structure to prevent CLS
+
+## ✅ **LAYOUT IMPLEMENTATION REQUIREMENTS:**
+
+### **File Structure:**
+```
+layout-name/
+├── LayoutName.tsx                 # Main layout component
+├── __tests__/
+│   ├── LayoutName.test.tsx        # Unit tests
+│   ├── LayoutName.a11y.test.tsx   # Accessibility tests
+│   └── LayoutName.responsive.test.tsx # Responsive behavior tests
+├── components/
+│   ├── LayoutHeader.tsx           # Header component
+│   ├── LayoutSidebar.tsx          # Sidebar component
+│   └── LayoutFooter.tsx           # Footer component
+├── styles/
+│   └── layout-variants.ts         # Layout variant definitions
+└── README.md                      # Layout documentation
+```
+
+### **Component Requirements:**
+- [ ] **TypeScript Interface**: Comprehensive props with responsive configuration
+- [ ] **Responsive Design**: Mobile-first approach with consistent breakpoints
+- [ ] **Semantic Structure**: Proper HTML landmarks and accessibility
+- [ ] **Composition Pattern**: Flexible slot-based content organization
+- [ ] **NextJS Integration**: Proper app router and server component patterns
+- [ ] **Performance Optimization**: Streaming, suspense, and loading states
+- [ ] **Documentation**: Clear usage examples and responsive behavior
+
+### **Testing Requirements:**
+- [ ] **Layout Rendering**: Test all layout variants and configurations
+- [ ] **Responsive Behavior**: Test breakpoint transitions and mobile layouts
+- [ ] **Accessibility Testing**: Landmark navigation and screen reader compatibility
+- [ ] **Performance Testing**: Layout shift measurement and optimization
+- [ ] **Integration Testing**: NextJS app router integration and data fetching
+- [ ] **Visual Testing**: Cross-browser layout consistency
+
+## 🔍 **LAYOUT QUALITY STANDARDS:**
+
+### **Responsive Design Quality:**
+- **Mobile-first**: Design starts with mobile and enhances for larger screens
+- **Breakpoint Consistency**: Use established breakpoint system across layouts
+- **Content Priority**: Important content accessible on all screen sizes
+- **Touch Targets**: Appropriate sizing for mobile interaction
+
+### **Performance Standards:**
+- **Layout Stability**: Minimal Cumulative Layout Shift (CLS < 0.1)
+- **Rendering Speed**: Fast initial page load and layout painting
+- **Resource Efficiency**: Optimized CSS and minimal JavaScript for layouts
+- **Progressive Enhancement**: Layouts work without JavaScript
+
+### **Accessibility Standards:**
+- **Landmark Navigation**: Proper ARIA landmarks for screen readers
+- **Skip Links**: Navigation shortcuts for keyboard users
+- **Heading Structure**: Logical heading hierarchy
+- **Focus Management**: Clear focus indicators and logical tab order
+
+## 💡 **LAYOUT COMPONENT EXAMPLES:**
+
+### **Dashboard Layout with Sidebar:**
+```typescript
+<DashboardLayout
+  variant="sidebar"
+  responsive={{
+    mobile: 'stack',
+    desktop: 'sidebar'
+  }}
+  header={<DashboardHeader />}
+  sidebar={<DashboardSidebar />}
+  footer={<DashboardFooter />}
+>
+  <DashboardContent />
+</DashboardLayout>
+```
+
+### **Marketing Page Layout:**
+```typescript
+<MarketingLayout
+  variant="full-width"
+  background="gradient"
+  header={<MarketingHeader />}
+  footer={<MarketingFooter />}
+>
+  <HeroSection />
+  <FeaturesSection />
+  <TestimonialsSection />
+</MarketingLayout>
+```
+
+### **Article Layout with Table of Contents:**
+```typescript
+<ArticleLayout
+  variant="content-sidebar"
+  responsive={{
+    mobile: 'stack',
+    tablet: 'stack',
+    desktop: 'sidebar'
+  }}
+  sidebar={<TableOfContents />}
+>
+  <ArticleContent />
+</ArticleLayout>
+```
+
+## 🚨 **COMMON LAYOUT PITFALLS:**
+
+### **Responsive Design Pitfalls:**
+- **Inconsistent breakpoints**: Use established breakpoint system
+- **Mobile-last thinking**: Start with mobile, enhance for desktop
+- **Fixed dimensions**: Avoid fixed heights that break on content changes
+- **Overlap issues**: Test component overlap at all breakpoint transitions
+
+### **Accessibility Pitfalls:**
+- **Missing landmarks**: Always include proper ARIA landmark roles
+- **Poor heading hierarchy**: Maintain logical h1 → h2 → h3 structure
+- **No skip links**: Provide navigation shortcuts for keyboard users
+- **Focus traps**: Ensure focus doesn't get trapped in layout sections
+
+### **Performance Pitfalls:**
+- **Layout thrashing**: Avoid layouts that cause frequent reflows
+- **Heavy nesting**: Keep DOM structure as flat as practical
+- **Unused CSS**: Remove unnecessary grid and flex styles
+- **Missing loading states**: Provide skeleton layouts for async content
+
+## 🔧 **INTEGRATION WITH PROJECT STANDARDS:**
+
+### **Component Architecture Integration:**
+- Follows server/client component patterns appropriately
+- Integrates with NextJS app router layout structure
+- Uses proper composition and slot-based architecture
+- Implements co-located testing strategy
+
+### **Standards Compliance:**
+- **Coding Standards**: TypeScript interfaces, responsive patterns
+- **Testing Standards**: Unit, accessibility, and responsive tests
+- **Architecture Standards**: Server component optimization patterns
+- **Design Standards**: Consistent spacing, typography, and visual hierarchy
+
+### **Related Prompts:**
+- Use `component-create-guide.mdc` for general component patterns
+- Use `component-create-ui.mdc` for interactive layout elements
+- Use `component-update-layout.mdc` for enhancing existing layouts
+
+## 📋 **LAYOUT CREATION DELIVERABLES:**
+
+Please provide:
+
+- [ ] **Complete layout component** with responsive configuration and TypeScript interfaces
+- [ ] **Responsive implementation** with mobile-first approach and breakpoint consistency
+- [ ] **Accessibility implementation** with proper landmarks and semantic structure
+- [ ] **NextJS integration** with app router patterns and server component optimization
+- [ ] **Comprehensive test suite** including unit, accessibility, and responsive tests
+- [ ] **Documentation** with usage examples and responsive behavior demonstrations
+- [ ] **Implementation summary** with design decisions and performance considerations
+
+## 📖 **USAGE EXAMPLES:**
+
+```
+Create a dashboard layout with collapsible sidebar, responsive navigation, and content areas for data visualization.
+Apply the layout component creation prompt.
+```
+
+```
+Create a blog article layout with table of contents sidebar, reading progress, and related content sections.
+Apply the layout component creation prompt.
+```
+
+```
+Create a marketing page layout with hero section, feature grid, and full-width content areas with sticky navigation.
+Apply the layout component creation prompt.
+```

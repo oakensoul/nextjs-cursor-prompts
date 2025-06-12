@@ -1,0 +1,601 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Navigation Component Update Request
+
+**Please enhance the existing navigation component with performance optimizations, accessibility improvements, mobile experience upgrades, and advanced navigation features.**
+
+## 🎯 **NAVIGATION UPDATE OBJECTIVES:**
+
+1. **OPTIMIZE performance** with efficient rendering, lazy loading, and state management improvements
+2. **ENHANCE accessibility** with advanced ARIA patterns, keyboard navigation, and screen reader support
+3. **IMPROVE mobile experience** with touch interactions, responsive patterns, and progressive enhancement
+4. **ADD advanced features** like analytics integration, dynamic navigation, and user preferences
+5. **MAINTAIN backward compatibility** while implementing modern navigation patterns
+
+## 📋 **NAVIGATION ENHANCEMENT METHODOLOGY:**
+
+### **STEP 1: Current Navigation Assessment**
+
+#### **Performance Analysis:**
+- **Rendering efficiency**: Identify unnecessary re-renders and optimization opportunities
+- **Bundle size impact**: Analyze navigation component size and lazy loading potential
+- **State management**: Review current state patterns and optimization opportunities
+- **Memory usage**: Check for memory leaks in navigation interactions
+
+#### **Accessibility Audit:**
+- **WCAG compliance**: Verify current WCAG 2.1 AA compliance level
+- **Keyboard navigation**: Test comprehensive keyboard accessibility
+- **Screen reader compatibility**: Validate screen reader announcements and navigation
+- **Focus management**: Review focus indicators and logical tab order
+
+#### **Mobile Experience Review:**
+- **Touch target sizing**: Ensure minimum 44px touch targets
+- **Responsive behavior**: Test navigation across different screen sizes
+- **Performance on mobile**: Analyze mobile-specific performance issues
+- **Gesture support**: Evaluate touch gesture implementation
+
+### **STEP 2: Performance Optimization Strategies**
+
+#### **Rendering Optimization:**
+```typescript
+// Memoized navigation component for performance
+const NavigationComponent = memo(({ items, currentPath, ...props }) => {
+  // Memoize active state calculations
+  const activeStates = useMemo(() => 
+    calculateActiveStates(items, currentPath), 
+    [items, currentPath]
+  )
+
+  // Memoize navigation items with stable references
+  const memoizedItems = useMemo(() => 
+    items.map(item => ({
+      ...item,
+      isActive: activeStates[item.href],
+      children: item.children?.map(child => ({
+        ...child,
+        isActive: activeStates[child.href]
+      }))
+    })), 
+    [items, activeStates]
+  )
+
+  return (
+    <NavigationContainer 
+      items={memoizedItems}
+      {...props}
+    />
+  )
+})
+```
+
+#### **Lazy Loading Implementation:**
+```typescript
+// Lazy load complex navigation components
+const MegaMenu = lazy(() => import('./components/MegaMenu'))
+const MobileDrawer = lazy(() => import('./components/MobileDrawer'))
+
+const NavigationWrapper = ({ isMobile, showMegaMenu }) => {
+  return (
+    <nav>
+      {/* Always render basic navigation */}
+      <BasicNavigation />
+      
+      {/* Lazy load complex components */}
+      <Suspense fallback={<NavigationSkeleton />}>
+        {isMobile && <MobileDrawer />}
+        {showMegaMenu && <MegaMenu />}
+      </Suspense>
+    </nav>
+  )
+}
+```
+
+#### **State Management Optimization:**
+```typescript
+// Efficient navigation state management
+const useNavigationState = () => {
+  const [state, setState] = useState({
+    isMobileMenuOpen: false,
+    activeDropdown: null,
+    focusedItem: null
+  })
+
+  // Batch state updates to prevent unnecessary re-renders
+  const updateState = useCallback((updates) => {
+    setState(prevState => ({ ...prevState, ...updates }))
+  }, [])
+
+  // Debounced mobile detection
+  const isMobile = useDebounce(useMediaQuery('(max-width: 768px)'), 100)
+
+  return { state, updateState, isMobile }
+}
+```
+
+### **STEP 3: Accessibility Enhancements**
+
+#### **Advanced ARIA Implementation:**
+```typescript
+// Enhanced accessibility with live regions and announcements
+const AccessibleNavigation = ({ items, announcements = true }) => {
+  const [announcement, setAnnouncement] = useState('')
+
+  const announceNavigation = useCallback((message) => {
+    if (announcements) {
+      setAnnouncement(message)
+      // Clear announcement after screen reader processes it
+      setTimeout(() => setAnnouncement(''), 1000)
+    }
+  }, [announcements])
+
+  const handleMenuToggle = (menuLabel, isOpen) => {
+    announceNavigation(
+      `${menuLabel} menu ${isOpen ? 'opened' : 'closed'}`
+    )
+  }
+
+  return (
+    <>
+      <nav 
+        aria-label="Primary navigation"
+        role="navigation"
+      >
+        {/* Enhanced skip links with multiple targets */}
+        <div className="skip-links">
+          <a href="#main-content" className="skip-link">
+            Skip to main content
+          </a>
+          <a href="#search" className="skip-link">
+            Skip to search
+          </a>
+          <a href="#footer" className="skip-link">
+            Skip to footer
+          </a>
+        </div>
+
+        {/* Navigation with enhanced ARIA */}
+        <ul role="menubar" aria-orientation="horizontal">
+          {items.map((item, index) => (
+            <NavigationItem
+              key={item.href}
+              item={item}
+              position={index + 1}
+              total={items.length}
+              onAnnounce={announceNavigation}
+            />
+          ))}
+        </ul>
+      </nav>
+
+      {/* Live region for announcements */}
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+    </>
+  )
+}
+```
+
+#### **Enhanced Keyboard Navigation:**
+```typescript
+// Advanced keyboard navigation with roving tabindex
+const useRovingTabIndex = (items) => {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const itemRefs = useRef([])
+
+  const handleKeyDown = useCallback((event, index) => {
+    let newIndex = activeIndex
+
+    switch (event.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        event.preventDefault()
+        newIndex = (activeIndex + 1) % items.length
+        break
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        event.preventDefault()
+        newIndex = activeIndex === 0 ? items.length - 1 : activeIndex - 1
+        break
+      case 'Home':
+        event.preventDefault()
+        newIndex = 0
+        break
+      case 'End':
+        event.preventDefault()
+        newIndex = items.length - 1
+        break
+    }
+
+    if (newIndex !== activeIndex) {
+      setActiveIndex(newIndex)
+      itemRefs.current[newIndex]?.focus()
+    }
+  }, [activeIndex, items.length])
+
+  return { activeIndex, setActiveIndex, handleKeyDown, itemRefs }
+}
+```
+
+### **STEP 4: Mobile Experience Improvements**
+
+#### **Enhanced Touch Interactions:**
+```typescript
+// Improved mobile navigation with touch gestures
+const MobileNavigation = ({ items, onClose }) => {
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragDistance, setDragDistance] = useState(0)
+  const startX = useRef(0)
+
+  const handleTouchStart = (event) => {
+    startX.current = event.touches[0].clientX
+    setIsDragging(true)
+  }
+
+  const handleTouchMove = (event) => {
+    if (!isDragging) return
+    
+    const currentX = event.touches[0].clientX
+    const distance = currentX - startX.current
+    setDragDistance(distance)
+
+    // Provide visual feedback during drag
+    if (distance > 100) {
+      // Show close hint
+    }
+  }
+
+  const handleTouchEnd = () => {
+    if (dragDistance > 150) {
+      onClose()
+    }
+    setIsDragging(false)
+    setDragDistance(0)
+  }
+
+  return (
+    <div
+      className={cn(
+        "mobile-navigation",
+        isDragging && "dragging"
+      )}
+      style={{ 
+        transform: `translateX(${Math.max(0, dragDistance)}px)` 
+      }}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      <NavigationContent items={items} />
+    </div>
+  )
+}
+```
+
+#### **Progressive Enhancement:**
+```typescript
+// Progressive enhancement for mobile features
+const ProgressiveNavigation = ({ items }) => {
+  const [supportsTouch, setSupportsTouch] = useState(false)
+  const [supportsHover, setSupportsHover] = useState(false)
+
+  useEffect(() => {
+    // Feature detection
+    setSupportsTouch('ontouchstart' in window)
+    setSupportsHover(window.matchMedia('(hover: hover)').matches)
+  }, [])
+
+  return (
+    <Navigation
+      items={items}
+      touchOptimized={supportsTouch}
+      hoverEnabled={supportsHover}
+      enhancedInteractions={supportsTouch && supportsHover}
+    />
+  )
+}
+```
+
+### **STEP 5: Advanced Navigation Features**
+
+#### **Analytics Integration:**
+```typescript
+// Navigation analytics and tracking
+const useNavigationAnalytics = () => {
+  const trackNavigation = useCallback((event, data) => {
+    // Track navigation events
+    analytics.track('Navigation Event', {
+      event_type: event,
+      ...data,
+      timestamp: new Date().toISOString()
+    })
+  }, [])
+
+  const trackMenuInteraction = useCallback((menuLabel, action) => {
+    trackNavigation('menu_interaction', {
+      menu: menuLabel,
+      action: action
+    })
+  }, [trackNavigation])
+
+  const trackLinkClick = useCallback((href, label) => {
+    trackNavigation('link_click', {
+      destination: href,
+      link_text: label,
+      source: 'navigation'
+    })
+  }, [trackNavigation])
+
+  return { trackMenuInteraction, trackLinkClick }
+}
+```
+
+#### **Dynamic Navigation Updates:**
+```typescript
+// Dynamic navigation with real-time updates
+const DynamicNavigation = ({ baseItems, userId }) => {
+  const [navigationItems, setNavigationItems] = useState(baseItems)
+  const [notifications, setNotifications] = useState({})
+
+  // Real-time navigation updates
+  useEffect(() => {
+    const unsubscribe = subscribeToNavigationUpdates(userId, (updates) => {
+      setNavigationItems(prevItems => 
+        mergeNavigationUpdates(prevItems, updates)
+      )
+    })
+
+    return unsubscribe
+  }, [userId])
+
+  // Real-time notification counts
+  useEffect(() => {
+    const unsubscribe = subscribeToNotifications(userId, (counts) => {
+      setNotifications(counts)
+    })
+
+    return unsubscribe
+  }, [userId])
+
+  const enhancedItems = useMemo(() => 
+    navigationItems.map(item => ({
+      ...item,
+      badge: notifications[item.href],
+      children: item.children?.map(child => ({
+        ...child,
+        badge: notifications[child.href]
+      }))
+    })), 
+    [navigationItems, notifications]
+  )
+
+  return <Navigation items={enhancedItems} />
+}
+```
+
+#### **User Preferences Integration:**
+```typescript
+// Navigation with user preferences
+const PersonalizedNavigation = ({ items, userId }) => {
+  const [preferences, setPreferences] = useState({
+    compactMode: false,
+    pinnedItems: [],
+    hiddenItems: [],
+    recentItems: []
+  })
+
+  // Load user preferences
+  useEffect(() => {
+    loadUserNavigationPreferences(userId)
+      .then(setPreferences)
+  }, [userId])
+
+  // Save preferences when they change
+  const updatePreference = useCallback(async (key, value) => {
+    const newPreferences = { ...preferences, [key]: value }
+    setPreferences(newPreferences)
+    await saveUserNavigationPreferences(userId, newPreferences)
+  }, [preferences, userId])
+
+  const personalizedItems = useMemo(() => {
+    return organizeNavigationItems(items, preferences)
+  }, [items, preferences])
+
+  return (
+    <Navigation
+      items={personalizedItems}
+      compact={preferences.compactMode}
+      onPreferenceChange={updatePreference}
+    />
+  )
+}
+```
+
+## ✅ **NAVIGATION UPDATE REQUIREMENTS:**
+
+### **Performance Enhancements:**
+- [ ] **Memoization**: Implement React.memo and useMemo for expensive calculations
+- [ ] **Lazy Loading**: Code-split complex navigation components
+- [ ] **State Optimization**: Efficient state updates and management
+- [ ] **Bundle Analysis**: Minimize navigation component bundle size
+
+### **Accessibility Improvements:**
+- [ ] **Enhanced ARIA**: Advanced ARIA patterns and live regions
+- [ ] **Keyboard Navigation**: Roving tabindex and comprehensive keyboard support
+- [ ] **Screen Reader**: Improved announcements and navigation context
+- [ ] **Focus Management**: Enhanced focus indicators and logical flow
+
+### **Mobile Experience:**
+- [ ] **Touch Optimization**: Improved touch targets and gesture support
+- [ ] **Progressive Enhancement**: Feature detection and graceful degradation
+- [ ] **Performance**: Mobile-specific performance optimizations
+- [ ] **Responsive Design**: Enhanced responsive navigation patterns
+
+### **Advanced Features:**
+- [ ] **Analytics Integration**: Navigation tracking and user behavior analysis
+- [ ] **Dynamic Updates**: Real-time navigation updates and notifications
+- [ ] **Personalization**: User preferences and customizable navigation
+- [ ] **Offline Support**: Progressive Web App navigation patterns
+
+## 🔍 **NAVIGATION UPDATE PATTERNS:**
+
+### **Performance Monitoring:**
+```typescript
+// Navigation performance monitoring
+const useNavigationPerformance = () => {
+  const [metrics, setMetrics] = useState({
+    renderTime: 0,
+    interactionTime: 0,
+    memoryUsage: 0
+  })
+
+  useEffect(() => {
+    const observer = new PerformanceObserver((list) => {
+      const entries = list.getEntries()
+      entries.forEach((entry) => {
+        if (entry.name.includes('navigation')) {
+          setMetrics(prev => ({
+            ...prev,
+            [entry.entryType]: entry.duration
+          }))
+        }
+      })
+    })
+
+    observer.observe({ entryTypes: ['measure', 'navigation'] })
+    return () => observer.disconnect()
+  }, [])
+
+  return metrics
+}
+```
+
+### **Accessibility Testing Integration:**
+```typescript
+// Built-in accessibility testing
+const NavigationWithA11yMonitoring = ({ items, ...props }) => {
+  const navigationRef = useRef(null)
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      import('vitest-axe').then(({ expectNoA11yViolations }) => {
+        if (navigationRef.current) {
+          expectNoA11yViolations(navigationRef.current)
+        }
+      })
+    }
+  }, [])
+
+  return (
+    <nav ref={navigationRef}>
+      <Navigation items={items} {...props} />
+    </nav>
+  )
+}
+```
+
+## 💡 **NAVIGATION UPDATE EXAMPLES:**
+
+### **Example 1: Performance-Optimized Header Navigation**
+```typescript
+const OptimizedHeaderNavigation = memo(({ items, currentPath }) => {
+  const memoizedActiveStates = useMemo(() => 
+    calculateActiveStates(items, currentPath), 
+    [items, currentPath]
+  )
+
+  const { trackLinkClick } = useNavigationAnalytics()
+
+  return (
+    <Navigation
+      items={items}
+      activeStates={memoizedActiveStates}
+      onLinkClick={trackLinkClick}
+      performanceOptimized={true}
+    />
+  )
+})
+```
+
+### **Example 2: Enhanced Mobile Navigation**
+```typescript
+const EnhancedMobileNavigation = ({ items, isOpen, onClose }) => {
+  const { activeIndex, handleKeyDown } = useRovingTabIndex(items)
+  const supportsTouch = useFeatureDetection('touch')
+
+  return (
+    <MobileDrawer
+      isOpen={isOpen}
+      onClose={onClose}
+      touchOptimized={supportsTouch}
+    >
+      <Navigation
+        items={items}
+        activeIndex={activeIndex}
+        onKeyDown={handleKeyDown}
+        enhancedAccessibility={true}
+      />
+    </MobileDrawer>
+  )
+}
+```
+
+### **Example 3: Analytics-Enabled Navigation**
+```typescript
+const AnalyticsNavigation = ({ items, userId }) => {
+  const { trackMenuInteraction, trackLinkClick } = useNavigationAnalytics()
+  
+  return (
+    <Navigation
+      items={items}
+      onMenuToggle={trackMenuInteraction}
+      onLinkClick={trackLinkClick}
+      userId={userId}
+      analyticsEnabled={true}
+    />
+  )
+}
+```
+
+## 🚨 **COMMON UPDATE PITFALLS:**
+
+### **Performance Issues:**
+- **Over-optimization** - Don't memoize everything; profile first
+- **Memory leaks** - Clean up event listeners and subscriptions
+- **Bundle bloat** - Avoid importing entire libraries for small features
+- **Premature optimization** - Measure performance before optimizing
+
+### **Accessibility Regressions:**
+- **Breaking existing patterns** - Test thoroughly when updating accessibility
+- **Over-engineering ARIA** - Keep ARIA simple and purposeful
+- **Focus trap issues** - Ensure focus management doesn't break user flow
+- **Screen reader confusion** - Test with actual screen readers
+
+### **Mobile Experience:**
+- **Touch target sizing** - Maintain minimum 44px touch targets
+- **Performance degradation** - Monitor mobile performance closely
+- **Gesture conflicts** - Ensure custom gestures don't conflict with system gestures
+- **Responsive breakpoints** - Test across wide range of devices
+
+## 🔧 **INTEGRATION WITH OTHER UPDATE PROMPTS:**
+
+### **Layout Update Integration:**
+- Use with `component-update-layout.mdc` for complete page navigation updates
+- Coordinate header and layout changes for consistent user experience
+
+### **UI Update Integration:**
+- Leverage `component-update-ui.mdc` for navigation component styling updates
+- Maintain design system consistency across navigation elements
+
+### **Performance Integration:**
+- Consider navigation updates in context of overall application performance
+- Coordinate with other component optimizations for maximum impact
+
+**This navigation update prompt ensures systematic enhancement of navigation components while maintaining performance, accessibility, and user experience standards.**

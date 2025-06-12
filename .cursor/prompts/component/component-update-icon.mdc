@@ -1,0 +1,806 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Icon Component Update Request
+
+**Please enhance the existing icon component with performance optimizations, accessibility improvements, design system integration, and advanced icon management features.**
+
+## 🎯 **ICON UPDATE OBJECTIVES:**
+
+1. **OPTIMIZE performance** with improved SVG optimization, bundle efficiency, and rendering performance
+2. **ENHANCE accessibility** with better ARIA support, semantic usage, and screen reader compatibility
+3. **INTEGRATE design system** improvements with consistent theming, sizing, and visual harmony
+4. **ADD advanced features** like dynamic icon loading, sprite optimization, and caching strategies
+5. **MAINTAIN backward compatibility** while implementing modern icon management patterns
+
+## 📋 **ICON ENHANCEMENT METHODOLOGY:**
+
+### **STEP 1: Current Icon System Assessment**
+
+#### **Performance Analysis:**
+- **Bundle size impact**: Analyze current icon library usage and bundle contribution
+- **Runtime performance**: Review icon rendering efficiency and memory usage
+- **SVG optimization**: Audit current SVG optimization levels and opportunities
+- **Loading strategy**: Evaluate current icon loading patterns and caching
+
+#### **Accessibility Audit:**
+- **ARIA compliance**: Verify proper ARIA attribute usage and semantic structure
+- **Screen reader testing**: Test icon announcements and navigation patterns
+- **Keyboard interaction**: Review keyboard accessibility for interactive icons
+- **Color contrast**: Ensure sufficient contrast across theme variations
+
+#### **Design System Review:**
+- **Size consistency**: Audit icon sizing across components and themes
+- **Visual alignment**: Review icon alignment with text and other elements
+- **Theme compatibility**: Test icons across light/dark themes and variants
+- **Brand consistency**: Ensure icon style consistency with brand guidelines
+
+### **STEP 2: Advanced SVG Optimization**
+
+#### **Enhanced SVG Processing:**
+```typescript
+// Advanced SVG optimization with modern techniques
+export class AdvancedSVGOptimizer {
+  private optimizationCache = new Map()
+  private performanceMetrics = new Map()
+
+  async optimizeSVG(svgContent: string, options?: OptimizationOptions): Promise<OptimizedSVG> {
+    const cacheKey = this.generateCacheKey(svgContent, options)
+    
+    if (this.optimizationCache.has(cacheKey)) {
+      return this.optimizationCache.get(cacheKey)
+    }
+
+    const startTime = performance.now()
+    
+    const optimized = await this.performOptimization(svgContent, {
+      removeComments: true,
+      removeMetadata: true,
+      removeEmptyElements: true,
+      convertPathData: true,
+      mergePaths: true,
+      removeUselessStrokeAndFill: true,
+      removeHiddenElements: true,
+      ...options
+    })
+
+    const optimizationTime = performance.now() - startTime
+    this.performanceMetrics.set(cacheKey, {
+      originalSize: svgContent.length,
+      optimizedSize: optimized.content.length,
+      compressionRatio: optimized.content.length / svgContent.length,
+      optimizationTime
+    })
+
+    this.optimizationCache.set(cacheKey, optimized)
+    return optimized
+  }
+
+  private async performOptimization(svg: string, options: OptimizationOptions) {
+    // Multi-pass optimization for maximum compression
+    let content = svg
+
+    // Pass 1: Remove unnecessary elements
+    content = this.removeUnnecessaryElements(content)
+    
+    // Pass 2: Optimize paths and shapes
+    content = this.optimizePaths(content)
+    
+    // Pass 3: Minify and clean up
+    content = this.minifySVG(content)
+
+    return {
+      content,
+      viewBox: this.extractViewBox(content),
+      paths: this.extractPaths(content),
+      metadata: this.extractMetadata(content)
+    }
+  }
+
+  getPerformanceMetrics(cacheKey: string) {
+    return this.performanceMetrics.get(cacheKey)
+  }
+}
+```
+
+#### **Smart Icon Caching:**
+```typescript
+// Intelligent icon caching with LRU and performance monitoring
+class SmartIconCache {
+  private cache = new Map()
+  private accessTimes = new Map()
+  private performanceData = new Map()
+  private maxSize = 100
+  private cleanupInterval: NodeJS.Timeout
+
+  constructor(maxSize = 100) {
+    this.maxSize = maxSize
+    this.startCleanupInterval()
+  }
+
+  async getIcon(iconKey: string, loader: () => Promise<IconData>): Promise<IconData> {
+    const startTime = performance.now()
+
+    // Check cache first
+    if (this.cache.has(iconKey)) {
+      this.accessTimes.set(iconKey, Date.now())
+      this.recordCacheHit(iconKey, performance.now() - startTime)
+      return this.cache.get(iconKey)
+    }
+
+    // Load and cache
+    try {
+      const iconData = await loader()
+      this.setIcon(iconKey, iconData)
+      this.recordCacheMiss(iconKey, performance.now() - startTime)
+      return iconData
+    } catch (error) {
+      this.recordLoadError(iconKey, error)
+      throw error
+    }
+  }
+
+  private setIcon(key: string, data: IconData) {
+    // Implement LRU eviction if cache is full
+    if (this.cache.size >= this.maxSize) {
+      this.evictLeastRecentlyUsed()
+    }
+
+    this.cache.set(key, data)
+    this.accessTimes.set(key, Date.now())
+  }
+
+  private evictLeastRecentlyUsed() {
+    let oldestKey = null
+    let oldestTime = Date.now()
+
+    for (const [key, time] of this.accessTimes.entries()) {
+      if (time < oldestTime) {
+        oldestTime = time
+        oldestKey = key
+      }
+    }
+
+    if (oldestKey) {
+      this.cache.delete(oldestKey)
+      this.accessTimes.delete(oldestKey)
+      this.performanceData.delete(oldestKey)
+    }
+  }
+
+  private startCleanupInterval() {
+    this.cleanupInterval = setInterval(() => {
+      this.cleanupExpiredEntries()
+      this.reportPerformanceMetrics()
+    }, 300000) // 5 minutes
+  }
+
+  getPerformanceStats() {
+    const totalRequests = Array.from(this.performanceData.values())
+      .reduce((total, data) => total + data.hits + data.misses, 0)
+    
+    const cacheHits = Array.from(this.performanceData.values())
+      .reduce((total, data) => total + data.hits, 0)
+
+    return {
+      hitRate: totalRequests > 0 ? cacheHits / totalRequests : 0,
+      cacheSize: this.cache.size,
+      totalRequests,
+      averageLoadTime: this.calculateAverageLoadTime()
+    }
+  }
+}
+```
+
+### **STEP 3: Enhanced Accessibility Features**
+
+#### **Advanced Screen Reader Support:**
+```typescript
+// Enhanced accessibility with context-aware announcements
+const useEnhancedIconAccessibility = () => {
+  const [announcements, setAnnouncements] = useState<string[]>([])
+  
+  const announceIconChange = useCallback((iconContext: IconAccessibilityContext) => {
+    const announcement = generateContextualAnnouncement(iconContext)
+    
+    setAnnouncements(prev => [...prev.slice(-4), announcement])
+    
+    // Clear old announcements
+    setTimeout(() => {
+      setAnnouncements(prev => prev.slice(1))
+    }, 3000)
+  }, [])
+
+  const generateContextualAnnouncement = (context: IconAccessibilityContext) => {
+    const { iconType, action, previousState, newState, context: pageContext } = context
+    
+    switch (iconType) {
+      case 'status':
+        return `Status changed from ${previousState} to ${newState}`
+      case 'toggle':
+        return `${action} ${newState ? 'activated' : 'deactivated'}`
+      case 'navigation':
+        return `Navigation: ${action}`
+      default:
+        return `${iconType}: ${action}`
+    }
+  }
+
+  return { announceIconChange, announcements }
+}
+
+// Comprehensive accessibility wrapper
+const AccessibilityEnhancedIcon = ({ 
+  name,
+  role = 'img',
+  interactive = false,
+  contextualInfo,
+  ...props 
+}) => {
+  const { announceIconChange } = useEnhancedIconAccessibility()
+  const iconRef = useRef<SVGSVGElement>(null)
+  
+  // Enhanced keyboard navigation for interactive icons
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (!interactive) return
+
+    switch (event.key) {
+      case 'Enter':
+      case ' ':
+        event.preventDefault()
+        props.onClick?.()
+        announceIconChange({
+          iconType: 'interactive',
+          action: 'activated',
+          context: contextualInfo
+        })
+        break
+      case 'Escape':
+        iconRef.current?.blur()
+        break
+    }
+  }, [interactive, props.onClick, announceIconChange, contextualInfo])
+
+  // Screen reader optimized rendering
+  return (
+    <svg
+      ref={iconRef}
+      role={role}
+      tabIndex={interactive ? 0 : -1}
+      onKeyDown={handleKeyDown}
+      aria-describedby={contextualInfo ? `${name}-description` : undefined}
+      className={cn(
+        'enhanced-icon',
+        interactive && 'enhanced-icon-interactive'
+      )}
+      {...props}
+    >
+      {/* Icon content */}
+      <IconContent name={name} />
+      
+      {/* Contextual description for screen readers */}
+      {contextualInfo && (
+        <desc id={`${name}-description`}>
+          {contextualInfo}
+        </desc>
+      )}
+    </svg>
+  )
+}
+```
+
+#### **High Contrast and Theme Support:**
+```typescript
+// Advanced theme support with high contrast detection
+const useAccessibleIconTheme = () => {
+  const [isHighContrast, setIsHighContrast] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
+  const theme = useTheme()
+
+  useEffect(() => {
+    // Detect high contrast mode
+    const highContrastQuery = window.matchMedia('(prefers-contrast: high)')
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    
+    setIsHighContrast(highContrastQuery.matches)
+    setReducedMotion(motionQuery.matches)
+
+    const handleHighContrastChange = (e: MediaQueryListEvent) => {
+      setIsHighContrast(e.matches)
+    }
+
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      setReducedMotion(e.matches)
+    }
+
+    highContrastQuery.addEventListener('change', handleHighContrastChange)
+    motionQuery.addEventListener('change', handleMotionChange)
+
+    return () => {
+      highContrastQuery.removeEventListener('change', handleHighContrastChange)
+      motionQuery.removeEventListener('change', handleMotionChange)
+    }
+  }, [])
+
+  const getAccessibleIconStyles = useCallback((baseColor: string, size: string) => {
+    return {
+      color: isHighContrast ? 
+        theme.colors.highContrast.foreground : 
+        baseColor,
+      width: theme.iconSizes[size],
+      height: theme.iconSizes[size],
+      transition: reducedMotion ? 'none' : theme.transitions.icon,
+      filter: isHighContrast ? 'contrast(1.5)' : 'none'
+    }
+  }, [isHighContrast, reducedMotion, theme])
+
+  return {
+    isHighContrast,
+    reducedMotion,
+    getAccessibleIconStyles
+  }
+}
+```
+
+### **STEP 4: Design System Integration Enhancements**
+
+#### **Advanced Theme Integration:**
+```typescript
+// Comprehensive design system integration
+const useAdvancedIconTheme = () => {
+  const theme = useTheme()
+  const [customizations, setCustomizations] = useState({})
+
+  // Load user customizations
+  useEffect(() => {
+    const loadCustomizations = async () => {
+      try {
+        const userCustomizations = await getUserIconCustomizations()
+        setCustomizations(userCustomizations)
+      } catch (error) {
+        console.warn('Failed to load icon customizations')
+      }
+    }
+
+    loadCustomizations()
+  }, [])
+
+  const getThemeAwareIconProps = useCallback((iconConfig: IconConfig) => {
+    const {
+      size = 'md',
+      color = 'current',
+      variant = 'default',
+      emphasis = 'normal'
+    } = iconConfig
+
+    // Apply theme-aware sizing
+    const sizeValue = customizations.sizes?.[size] || theme.iconSizes[size]
+    
+    // Apply semantic color mapping
+    const colorValue = getSemanticColor(color, theme, emphasis)
+    
+    // Apply variant-specific styling
+    const variantStyles = theme.iconVariants[variant] || {}
+
+    return {
+      width: sizeValue,
+      height: sizeValue,
+      color: colorValue,
+      ...variantStyles,
+      // Apply user customizations
+      ...customizations.overrides?.[iconConfig.name]
+    }
+  }, [theme, customizations])
+
+  const getSemanticColor = (color: string, theme: Theme, emphasis: string) => {
+    const emphasisMap = {
+      'subtle': 0.6,
+      'normal': 1,
+      'strong': 1.2
+    }
+
+    const opacity = emphasisMap[emphasis] || 1
+
+    switch (color) {
+      case 'current':
+        return 'currentColor'
+      case 'primary':
+        return theme.colors.primary.main
+      case 'secondary':
+        return theme.colors.secondary.main
+      case 'success':
+        return `rgba(${theme.colors.success.rgb}, ${opacity})`
+      case 'warning':
+        return `rgba(${theme.colors.warning.rgb}, ${opacity})`
+      case 'error':
+        return `rgba(${theme.colors.error.rgb}, ${opacity})`
+      default:
+        return color
+    }
+  }
+
+  return { getThemeAwareIconProps }
+}
+```
+
+#### **Icon System Consistency:**
+```typescript
+// Advanced icon system consistency checking
+class IconSystemValidator {
+  private violations: ConsistencyViolation[] = []
+
+  validateIconConsistency(icons: IconUsage[]): ConsistencyReport {
+    this.violations = []
+
+    // Check size consistency
+    this.validateSizeConsistency(icons)
+    
+    // Check color usage
+    this.validateColorConsistency(icons)
+    
+    // Check semantic usage
+    this.validateSemanticConsistency(icons)
+    
+    // Check accessibility compliance
+    this.validateAccessibilityConsistency(icons)
+
+    return {
+      violations: this.violations,
+      score: this.calculateConsistencyScore(),
+      recommendations: this.generateRecommendations()
+    }
+  }
+
+  private validateSizeConsistency(icons: IconUsage[]) {
+    const sizeUsage = new Map()
+    
+    icons.forEach(icon => {
+      const context = icon.context || 'general'
+      if (!sizeUsage.has(context)) {
+        sizeUsage.set(context, new Set())
+      }
+      sizeUsage.get(context).add(icon.size)
+    })
+
+    // Flag contexts with inconsistent sizing
+    for (const [context, sizes] of sizeUsage.entries()) {
+      if (sizes.size > 2) {
+        this.violations.push({
+          type: 'size_inconsistency',
+          context,
+          message: `Context "${context}" uses ${sizes.size} different icon sizes`,
+          severity: 'warning',
+          suggestion: 'Standardize icon sizes within context'
+        })
+      }
+    }
+  }
+
+  private validateColorConsistency(icons: IconUsage[]) {
+    const semanticColorUsage = new Map()
+    
+    icons.forEach(icon => {
+      const semantic = icon.semanticMeaning
+      if (!semanticColorUsage.has(semantic)) {
+        semanticColorUsage.set(semantic, new Set())
+      }
+      semanticColorUsage.get(semantic).add(icon.color)
+    })
+
+    // Flag semantic meanings with inconsistent colors
+    for (const [semantic, colors] of semanticColorUsage.entries()) {
+      if (colors.size > 1) {
+        this.violations.push({
+          type: 'color_inconsistency',
+          semantic,
+          message: `Semantic meaning "${semantic}" uses multiple colors`,
+          severity: 'error',
+          suggestion: 'Use consistent colors for same semantic meanings'
+        })
+      }
+    }
+  }
+}
+```
+
+### **STEP 5: Advanced Performance Optimizations**
+
+#### **Icon Preloading and Predictive Loading:**
+```typescript
+// Intelligent icon preloading based on usage patterns
+class PredictiveIconLoader {
+  private usagePatterns = new Map()
+  private preloadQueue = new Set()
+  private loadingPromises = new Map()
+
+  trackIconUsage(iconName: string, context: string, timestamp = Date.now()) {
+    const key = `${iconName}:${context}`
+    
+    if (!this.usagePatterns.has(key)) {
+      this.usagePatterns.set(key, [])
+    }
+    
+    this.usagePatterns.get(key).push({
+      timestamp,
+      context,
+      sessionData: this.getCurrentSessionData()
+    })
+
+    // Trigger predictive loading
+    this.updatePredictions(iconName, context)
+  }
+
+  private updatePredictions(currentIcon: string, context: string) {
+    // Analyze patterns to predict next likely icons
+    const predictions = this.analyzeUsagePatterns(currentIcon, context)
+    
+    predictions.forEach(prediction => {
+      if (prediction.confidence > 0.7 && !this.preloadQueue.has(prediction.iconName)) {
+        this.preloadIcon(prediction.iconName)
+      }
+    })
+  }
+
+  private analyzeUsagePatterns(currentIcon: string, context: string) {
+    // Machine learning-style pattern analysis
+    const patterns = Array.from(this.usagePatterns.entries())
+      .filter(([key]) => key.includes(context))
+      .map(([key, usages]) => ({
+        iconName: key.split(':')[0],
+        frequency: usages.length,
+        recency: Math.max(...usages.map(u => u.timestamp)),
+        context: key.split(':')[1]
+      }))
+
+    // Calculate prediction confidence based on patterns
+    return patterns.map(pattern => ({
+      iconName: pattern.iconName,
+      confidence: this.calculatePredictionConfidence(pattern, currentIcon, context)
+    }))
+  }
+
+  async preloadIcon(iconName: string): Promise<void> {
+    if (this.loadingPromises.has(iconName)) {
+      return this.loadingPromises.get(iconName)
+    }
+
+    const loadPromise = this.loadIconInBackground(iconName)
+    this.loadingPromises.set(iconName, loadPromise)
+    this.preloadQueue.add(iconName)
+
+    try {
+      await loadPromise
+      analytics.track('Icon Preloaded', {
+        iconName,
+        preloadTime: performance.now()
+      })
+    } catch (error) {
+      console.warn(`Failed to preload icon: ${iconName}`, error)
+    } finally {
+      this.preloadQueue.delete(iconName)
+    }
+  }
+}
+```
+
+#### **Runtime Performance Monitoring:**
+```typescript
+// Comprehensive performance monitoring for icons
+const useIconPerformanceMonitoring = () => {
+  const [performanceData, setPerformanceData] = useState({
+    renderTimes: [],
+    cacheHitRate: 0,
+    totalIcons: 0,
+    avgLoadTime: 0
+  })
+
+  useEffect(() => {
+    const performanceObserver = new PerformanceObserver((list) => {
+      const iconEntries = list.getEntries()
+        .filter(entry => entry.name.includes('icon'))
+
+      iconEntries.forEach(entry => {
+        trackIconPerformance({
+          name: entry.name,
+          duration: entry.duration,
+          size: entry.transferSize,
+          cached: entry.transferSize === 0
+        })
+      })
+    })
+
+    performanceObserver.observe({ 
+      entryTypes: ['resource', 'measure', 'navigation'] 
+    })
+
+    return () => performanceObserver.disconnect()
+  }, [])
+
+  const trackIconPerformance = (metrics: IconPerformanceMetrics) => {
+    setPerformanceData(prev => ({
+      renderTimes: [...prev.renderTimes.slice(-50), metrics.duration],
+      cacheHitRate: calculateCacheHitRate(metrics.cached),
+      totalIcons: prev.totalIcons + 1,
+      avgLoadTime: calculateAverageLoadTime(metrics.duration)
+    }))
+
+    // Alert on performance degradation
+    if (metrics.duration > 100) { // 100ms threshold
+      console.warn(`Slow icon render detected: ${metrics.name} (${metrics.duration}ms)`)
+      
+      analytics.track('Icon Performance Warning', {
+        iconName: metrics.name,
+        duration: metrics.duration,
+        threshold: 100
+      })
+    }
+  }
+
+  return { performanceData, trackIconPerformance }
+}
+```
+
+## ✅ **ICON UPDATE REQUIREMENTS:**
+
+### **Performance Enhancements:**
+- [ ] **SVG Optimization**: Advanced compression and minification
+- [ ] **Caching Strategy**: LRU cache with performance monitoring
+- [ ] **Predictive Loading**: ML-based icon preloading
+- [ ] **Bundle Optimization**: Tree shaking and code splitting improvements
+
+### **Accessibility Improvements:**
+- [ ] **Enhanced ARIA**: Context-aware announcements and descriptions
+- [ ] **High Contrast**: Automatic high contrast mode detection
+- [ ] **Keyboard Navigation**: Improved interactive icon accessibility
+- [ ] **Screen Reader**: Better semantic usage and announcements
+
+### **Design System Integration:**
+- [ ] **Theme Consistency**: Advanced theme-aware styling
+- [ ] **Customization**: User preference integration
+- [ ] **Consistency Validation**: Automated consistency checking
+- [ ] **Semantic Usage**: Improved semantic color and size mapping
+
+### **Advanced Features:**
+- [ ] **Performance Monitoring**: Real-time performance tracking
+- [ ] **Usage Analytics**: Icon usage pattern analysis
+- [ ] **Dynamic Loading**: Smart loading based on usage patterns
+- [ ] **Sprite Generation**: Automated sprite optimization
+
+## 🔍 **ICON UPDATE PATTERNS:**
+
+### **Performance-Optimized Icon Loading:**
+```typescript
+const PerformanceOptimizedIcon = ({ name, ...props }) => {
+  const { iconData, isLoading } = useDynamicIcon(name)
+  const { trackIconPerformance } = useIconPerformanceMonitoring()
+  const startTime = useRef(performance.now())
+
+  useEffect(() => {
+    if (iconData && !isLoading) {
+      const loadTime = performance.now() - startTime.current
+      trackIconPerformance({
+        name,
+        duration: loadTime,
+        cached: loadTime < 10 // Likely cached if very fast
+      })
+    }
+  }, [iconData, isLoading, name, trackIconPerformance])
+
+  if (isLoading) {
+    return <IconSkeleton {...props} />
+  }
+
+  return <OptimizedIcon data={iconData} {...props} />
+}
+```
+
+### **Accessibility-Enhanced Icon System:**
+```typescript
+const AccessibilityEnhancedIconSystem = ({ children }) => {
+  const { announcements } = useEnhancedIconAccessibility()
+  
+  return (
+    <IconSystemProvider>
+      {children}
+      
+      {/* Live region for icon announcements */}
+      <div
+        aria-live="polite"
+        aria-atomic="false"
+        className="sr-only"
+      >
+        {announcements.map((announcement, index) => (
+          <div key={index}>{announcement}</div>
+        ))}
+      </div>
+    </IconSystemProvider>
+  )
+}
+```
+
+## 💡 **ICON UPDATE EXAMPLES:**
+
+### **Example 1: Performance-Monitored Icon Button**
+```typescript
+const MonitoredIconButton = ({ icon, ...props }) => {
+  const { trackIconPerformance } = useIconPerformanceMonitoring()
+  const { getThemeAwareIconProps } = useAdvancedIconTheme()
+  
+  const iconProps = getThemeAwareIconProps({
+    name: icon,
+    size: 'md',
+    color: 'primary'
+  })
+
+  return (
+    <IconButton
+      icon={icon}
+      iconProps={iconProps}
+      onPerformanceTrack={trackIconPerformance}
+      {...props}
+    />
+  )
+}
+```
+
+### **Example 2: Accessibility-Enhanced Status Icons**
+```typescript
+const EnhancedStatusIcons = ({ status, message }) => {
+  const { announceIconChange } = useEnhancedIconAccessibility()
+  
+  useEffect(() => {
+    announceIconChange({
+      iconType: 'status',
+      action: 'status changed',
+      newState: status,
+      context: 'application status'
+    })
+  }, [status, announceIconChange])
+
+  return (
+    <AccessibilityEnhancedIcon
+      name={`status:${status}`}
+      contextualInfo={`Current status: ${status}. ${message}`}
+      role="img"
+    />
+  )
+}
+```
+
+## 🚨 **COMMON UPDATE PITFALLS:**
+
+### **Performance Regressions:**
+- **Over-optimization** - Don't optimize without measuring impact first
+- **Cache complexity** - Keep caching logic simple and maintainable
+- **Bundle bloat** - Monitor bundle size impact of new optimizations
+- **Memory leaks** - Clean up observers and event listeners properly
+
+### **Accessibility Issues:**
+- **Over-announcing** - Don't announce every icon state change
+- **Focus management** - Ensure focus behavior remains predictable
+- **High contrast** - Test across different contrast modes and themes
+- **Screen reader** - Validate with actual screen reader software
+
+### **Design System Conflicts:**
+- **Theme inconsistency** - Ensure updates work across all theme variants
+- **Breaking changes** - Maintain backward compatibility with existing usage
+- **Customization complexity** - Keep customization API simple and intuitive
+- **Visual regression** - Test visual consistency across all icon usages
+
+## 🔧 **INTEGRATION WITH OTHER UPDATE PROMPTS:**
+
+### **UI Update Integration:**
+- Coordinate icon updates with broader UI component improvements
+- Ensure icon changes align with design system updates
+
+### **Navigation Update Integration:**
+- Synchronize navigation icon improvements with navigation component updates
+- Maintain consistent iconography across navigation elements
+
+### **Performance Integration:**
+- Align icon optimizations with overall application performance improvements
+- Coordinate bundle optimization efforts across all component types
+
+**This icon update prompt ensures systematic enhancement of icon components with focus on performance, accessibility, and design system consistency while maintaining visual harmony and technical excellence.**
